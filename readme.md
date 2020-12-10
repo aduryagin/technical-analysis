@@ -16,3 +16,29 @@ Technical indicators with possibility of update/add last item (candle) of result
 * Stochastic
 * True range
 * VWAP
+
+## Example
+```js script
+const candles = [
+    { time: 0, close: 12.2 },
+    { time: 1, close: 12.4 },
+    { time: 2, close: 13 }
+  ];
+  const period = 1;
+  const rsi = RSI(candles, period);
+  console.log(rsi);
+  /*
+    {
+      result: [
+        { time: 1, value: 100, candle: { time: 1, close: 12.4 } },
+        { time: 2, value: 100, candle: { time: 1, close: 12.4 } }
+      ],
+      update: [Function: update]
+    }
+  */
+  const rsiResult = rsi.update({ time: 2, close: 1 });
+  console.log(rsiResult);
+  /*
+    { time: 2, value: 0, candle: { time: 2, close: 15 } }
+  */
+```
