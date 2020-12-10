@@ -10,15 +10,15 @@ var _averageGain = require("./averageGain");
 var _averageLoss = require("./averageLoss");
 
 function RSI(candles, period) {
-  let result = [];
-  const avgGain = (0, _averageGain.averageGain)([], period);
-  const avgLoss = (0, _averageLoss.averageLoss)([], period);
+  var result = [];
+  var avgGain = (0, _averageGain.averageGain)([], period);
+  var avgLoss = (0, _averageLoss.averageLoss)([], period);
 
   function calculate(candle) {
-    let currentRSI;
-    let RS;
-    const lastAvgLoss = avgLoss.update(candle);
-    const lastAvgGain = avgGain.update(candle);
+    var currentRSI;
+    var RS;
+    var lastAvgLoss = avgLoss.update(candle);
+    var lastAvgGain = avgGain.update(candle);
 
     if (lastAvgGain && lastAvgLoss) {
       if (lastAvgLoss.value === 0) {
@@ -35,25 +35,25 @@ function RSI(candles, period) {
       return {
         time: candle.time,
         value: currentRSI,
-        candle
+        candle: candle
       };
     }
 
     return undefined;
   }
 
-  candles.forEach(candle => {
-    const item = calculate(candle);
+  candles.forEach(function (candle) {
+    var item = calculate(candle);
     if (item) result.push(item);
   });
   return {
-    result,
-    update: candle => {
+    result: result,
+    update: function update(candle) {
       if (result.length && result[result.length - 1].time === candle.time) {
         result = result.slice(0, -1);
       }
 
-      const item = calculate(candle);
+      var item = calculate(candle);
       if (item) result.push(item);
       return item;
     }

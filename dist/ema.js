@@ -8,13 +8,15 @@ exports.EMA = EMA;
 var _sma = require("./sma");
 
 function EMA(candles, period) {
-  let result = [];
-  const sma = (0, _sma.SMA)([], period);
-  const exponent = 2 / (period + 1);
-  let prevPrevEma;
-  let prevEma;
+  var result = [];
+  var sma = (0, _sma.SMA)([], period);
+  var exponent = 2 / (period + 1);
+  var prevPrevEma;
+  var prevEma;
 
   function calculate(candle) {
+    var _sma$update;
+
     prevPrevEma = prevEma;
 
     if (prevEma !== undefined) {
@@ -25,7 +27,7 @@ function EMA(candles, period) {
       };
     }
 
-    prevEma = sma.update(candle)?.value;
+    prevEma = (_sma$update = sma.update(candle)) === null || _sma$update === void 0 ? void 0 : _sma$update.value;
     if (prevEma !== undefined) return {
       value: prevEma,
       time: candle.time
@@ -33,19 +35,19 @@ function EMA(candles, period) {
     return undefined;
   }
 
-  candles.forEach(item => {
-    const res = calculate(item);
+  candles.forEach(function (item) {
+    var res = calculate(item);
     if (res) result.push(res);
   });
   return {
-    result,
-    update: candle => {
+    result: result,
+    update: function update(candle) {
       if (result.length && result[result.length - 1].time === candle.time) {
         result = result.slice(0, -1);
         prevEma = prevPrevEma;
       }
 
-      const item = calculate(candle);
+      var item = calculate(candle);
       if (item) result.push(item);
       return item;
     }

@@ -7,10 +7,10 @@ exports.trueRange = trueRange;
 
 /* eslint-disable no-restricted-globals */
 function trueRange(candles) {
-  let result = [];
-  let previousClose;
-  let prevPrevClose;
-  let trueRangeResult;
+  var result = [];
+  var previousClose;
+  var prevPrevClose;
+  var trueRangeResult;
 
   function calculate(candle) {
     if (previousClose === undefined) {
@@ -30,19 +30,19 @@ function trueRange(candles) {
     };
   }
 
-  candles.forEach(item => {
-    const res = calculate(item);
+  candles.forEach(function (item) {
+    var res = calculate(item);
     if (res) result.push(res);
   });
   return {
-    result,
-    update: candle => {
+    result: result,
+    update: function update(candle) {
       if (result.length && result[result.length - 1].time === candle.time) {
         result = result.slice(0, -1);
         previousClose = prevPrevClose;
       }
 
-      const item = calculate(candle);
+      var item = calculate(candle);
       if (item) result.push(item);
       return item;
     }

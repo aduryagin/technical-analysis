@@ -5,79 +5,79 @@ Object.defineProperty(exports, "__esModule", {
 });
 Object.defineProperty(exports, "ATR", {
   enumerable: true,
-  get: function () {
+  get: function get() {
     return _atr.ATR;
   }
 });
 Object.defineProperty(exports, "averageGain", {
   enumerable: true,
-  get: function () {
+  get: function get() {
     return _averageGain.averageGain;
   }
 });
 Object.defineProperty(exports, "averageLoss", {
   enumerable: true,
-  get: function () {
+  get: function get() {
     return _averageLoss.averageLoss;
   }
 });
 Object.defineProperty(exports, "bollingerBands", {
   enumerable: true,
-  get: function () {
+  get: function get() {
     return _bollingerBands.bollingerBands;
   }
 });
 Object.defineProperty(exports, "EMA", {
   enumerable: true,
-  get: function () {
+  get: function get() {
     return _ema.EMA;
   }
 });
 Object.defineProperty(exports, "PMax", {
   enumerable: true,
-  get: function () {
+  get: function get() {
     return _pmax.PMax;
   }
 });
 Object.defineProperty(exports, "RMA", {
   enumerable: true,
-  get: function () {
+  get: function get() {
     return _rma.RMA;
   }
 });
 Object.defineProperty(exports, "RSI", {
   enumerable: true,
-  get: function () {
+  get: function get() {
     return _rsi.RSI;
   }
 });
 Object.defineProperty(exports, "SMA", {
   enumerable: true,
-  get: function () {
+  get: function get() {
     return _sma.SMA;
   }
 });
 Object.defineProperty(exports, "STDEV", {
   enumerable: true,
-  get: function () {
+  get: function get() {
     return _stdev.STDEV;
   }
 });
 Object.defineProperty(exports, "stochastic", {
   enumerable: true,
-  get: function () {
+  get: function get() {
     return _stochastic.stochastic;
   }
 });
 Object.defineProperty(exports, "trueRange", {
   enumerable: true,
-  get: function () {
+  get: function get() {
     return _trueRange.trueRange;
   }
 });
 Object.defineProperty(exports, "VWAP", {
   enumerable: true,
-  get: function () {
+  get: function get() {
     return _vwap.VWAP;
   }
 });

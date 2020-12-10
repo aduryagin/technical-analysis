@@ -9,16 +9,18 @@ var _sma = require("./sma");
 
 /* eslint-disable no-restricted-globals */
 function RMA(candles, period) {
-  let result = [];
-  let prevPrevSum;
-  let prevSum;
-  let sum = 0;
-  const sma = (0, _sma.SMA)([], period);
-  const exponent = 1 / period;
+  var result = [];
+  var prevPrevSum;
+  var prevSum;
+  var sum = 0;
+  var sma = (0, _sma.SMA)([], period);
+  var exponent = 1 / period;
 
   function calculate(candle) {
     if (isNaN(prevSum) || prevSum === undefined) {
-      sum = sma.update(candle)?.value;
+      var _sma$update;
+
+      sum = (_sma$update = sma.update(candle)) === null || _sma$update === void 0 ? void 0 : _sma$update.value;
     } else {
       sum = exponent * candle.close + (1 - exponent) * (prevSum || 0);
     }
@@ -31,19 +33,19 @@ function RMA(candles, period) {
     } : sum;
   }
 
-  candles.forEach(item => {
-    const res = calculate(item);
+  candles.forEach(function (item) {
+    var res = calculate(item);
     if (res) result.push(res);
   });
   return {
-    result,
-    update: candle => {
+    result: result,
+    update: function update(candle) {
       if (result.length && result[result.length - 1].time === candle.time) {
         result = result.slice(0, -1);
         prevSum = prevPrevSum;
       }
 
-      const item = calculate(candle);
+      var item = calculate(candle);
       if (item) result.push(item);
       return item;
     }

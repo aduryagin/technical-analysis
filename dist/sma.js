@@ -6,16 +6,16 @@ Object.defineProperty(exports, "__esModule", {
 exports.SMA = SMA;
 
 function SMA(candles, period) {
-  let result = [];
-  const list = [0];
-  let counter = 1;
-  let sum = 0;
-  let shifted;
-  let prevSum;
-  let lastCandle;
+  var result = [];
+  var list = [0];
+  var counter = 1;
+  var sum = 0;
+  var shifted;
+  var prevSum;
+  var lastCandle;
 
   function calculate(candle) {
-    const current = candle.close;
+    var current = candle.close;
     lastCandle = candle;
 
     if (counter < period) {
@@ -36,13 +36,13 @@ function SMA(candles, period) {
     return undefined;
   }
 
-  candles.forEach(item => {
-    const res = calculate(item);
+  candles.forEach(function (item) {
+    var res = calculate(item);
     if (res) result.push(res);
   });
   return {
-    result,
-    update: candle => {
+    result: result,
+    update: function update(candle) {
       if (result.length && result[result.length - 1].time === candle.time) {
         result = result.slice(0, -1);
         list.pop();
@@ -56,7 +56,7 @@ function SMA(candles, period) {
         }
       }
 
-      const item = calculate(candle);
+      var item = calculate(candle);
       if (item) result.push(item);
       return item;
     }
