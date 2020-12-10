@@ -31,7 +31,7 @@ const candles = [
     {
       result: [
         { time: 1, value: 100, candle: { time: 1, close: 12.4 } },
-        { time: 2, value: 100, candle: { time: 1, close: 12.4 } }
+        { time: 2, value: 100, candle: { time: 2, close: 13 } }
       ],
       update: [Function: update]
     }
@@ -39,6 +39,6 @@ const candles = [
   const rsiResult = rsi.update({ time: 2, close: 1 });
   console.log(rsiResult);
   /*
-    { time: 2, value: 0, candle: { time: 2, close: 15 } }
+    { time: 2, value: 0, candle: { time: 2, close: 1 } }
   */
 ```
