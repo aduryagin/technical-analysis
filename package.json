@@ -11,7 +11,7 @@
   "keywords": [],
   "types": "./types",
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@babel/cli": "^7.12.10",
     "@babel/core": "^7.12.10",
