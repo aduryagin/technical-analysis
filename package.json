@@ -2,16 +2,18 @@
   "name": "technical-indicators",
   "version": "1.0.0",
   "description": "",
-  "main": "atr.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "jest",
-    "dts:generate": "tsc *.js --declaration --allowJs --emitDeclarationOnly --outDir types"
+    "dts:generate": "tsc src/*.js --declaration --allowJs --emitDeclarationOnly --outDir types",
+    "build": "babel src/*.js --ignore 'src/*.spec.js','src/*.test.js' --out-dir dist"
   },
   "keywords": [],
   "types": "./types",
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/cli": "^7.12.10",
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.10",
     "babel-jest": "^26.6.3",
