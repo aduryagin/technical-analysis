@@ -16,6 +16,7 @@ Technical indicators with possibility of update/add last item (candle) of result
 * Stochastic
 * True range
 * VWAP
+* T3
 
 ## Example
 ```js script
