@@ -81,6 +81,12 @@ Object.defineProperty(exports, "VWAP", {
     return _vwap.VWAP;
   }
 });
+Object.defineProperty(exports, "T3", {
+  enumerable: true,
+  get: function get() {
+    return _t.T3;
+  }
+});
 
 var _atr = require("./atr");
 
@@ -107,3 +113,5 @@ var _stochastic = require("./stochastic");
 var _trueRange = require("./trueRange");
 
 var _vwap = require("./vwap");
+
+var _t = require("./t3");

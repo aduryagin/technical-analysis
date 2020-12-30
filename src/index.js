@@ -11,3 +11,4 @@ export { STDEV } from './stdev';
 export { stochastic } from './stochastic';
 export { trueRange } from './trueRange';
 export { VWAP } from './vwap';
+export { T3 } from './t3';
