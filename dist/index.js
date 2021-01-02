@@ -90,7 +90,7 @@ Object.defineProperty(exports, "T3", {
 Object.defineProperty(exports, "PMaxRSI", {
   enumerable: true,
   get: function get() {
-    return _pmaxRSIs.PMaxRSI;
+    return _pmaxRSI.PMaxRSI;
   }
 });
 
@@ -122,4 +122,4 @@ var _vwap = require("./vwap");
 
 var _t = require("./t3");
 
-var _pmaxRSIs = require("./pmaxRSIs");
+var _pmaxRSI = require("./pmaxRSI");
