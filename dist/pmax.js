@@ -24,7 +24,10 @@ function PMax(_ref) {
       _ref$multiplier = _ref.multiplier,
       multiplier = _ref$multiplier === void 0 ? 3 : _ref$multiplier;
   var result = [];
-  var ema = (0, _ema.EMA)([], emaPeriod);
+  var ema = (0, _ema.EMA)({
+    candles: [],
+    period: emaPeriod
+  });
   var atr = (0, _atr.ATR)([], atrPeriod); // stacks
 
   var longStopPrev;

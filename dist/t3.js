@@ -12,12 +12,30 @@ function T3(_ref) {
       period = _ref.period,
       volumeFactor = _ref.volumeFactor;
   var result = [];
-  var T3e1 = (0, _ema.EMA)([], period);
-  var T3e2 = (0, _ema.EMA)([], period);
-  var T3e3 = (0, _ema.EMA)([], period);
-  var T3e4 = (0, _ema.EMA)([], period);
-  var T3e5 = (0, _ema.EMA)([], period);
-  var T3e6 = (0, _ema.EMA)([], period);
+  var T3e1 = (0, _ema.EMA)({
+    candles: [],
+    period: period
+  });
+  var T3e2 = (0, _ema.EMA)({
+    candles: [],
+    period: period
+  });
+  var T3e3 = (0, _ema.EMA)({
+    candles: [],
+    period: period
+  });
+  var T3e4 = (0, _ema.EMA)({
+    candles: [],
+    period: period
+  });
+  var T3e5 = (0, _ema.EMA)({
+    candles: [],
+    period: period
+  });
+  var T3e6 = (0, _ema.EMA)({
+    candles: [],
+    period: period
+  });
 
   function calculate(candle) {
     var T3e1Result = T3e1.update(candle);

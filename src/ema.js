@@ -1,6 +1,6 @@
 import { SMA } from './sma';
 
-export function EMA(candles, period) {
+export function EMA({ candles, period }) {
   let result = [];
   const sma = SMA([], period);
   const exponent = 2 / (period + 1);

@@ -9,7 +9,9 @@ var _averageGain = require("./averageGain");
 
 var _averageLoss = require("./averageLoss");
 
-function RSI(candles, period) {
+function RSI(_ref) {
+  var candles = _ref.candles,
+      period = _ref.period;
   var result = [];
   var avgGain = (0, _averageGain.averageGain)([], period);
   var avgLoss = (0, _averageLoss.averageLoss)([], period);

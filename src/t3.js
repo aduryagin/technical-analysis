@@ -2,12 +2,12 @@ import { EMA } from './ema';
 
 export function T3({ candles, period, volumeFactor }) {
   let result = [];
-  const T3e1 = EMA([], period);
-  const T3e2 = EMA([], period);
-  const T3e3 = EMA([], period);
-  const T3e4 = EMA([], period);
-  const T3e5 = EMA([], period);
-  const T3e6 = EMA([], period);
+  const T3e1 = EMA({ candles: [], period });
+  const T3e2 = EMA({ candles: [], period });
+  const T3e3 = EMA({ candles: [], period });
+  const T3e4 = EMA({ candles: [], period });
+  const T3e5 = EMA({ candles: [], period });
+  const T3e6 = EMA({ candles: [], period });
 
   function calculate(candle) {
     const T3e1Result = T3e1.update(candle)

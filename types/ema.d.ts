@@ -1,4 +1,7 @@
-export function EMA(candles: any, period: any): {
+export function EMA({ candles, period }: {
+    candles: any;
+    period: any;
+}): {
     result: any[];
     update: (candle: any) => {
         value: any;

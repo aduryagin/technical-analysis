@@ -7,7 +7,9 @@ exports.EMA = EMA;
 
 var _sma = require("./sma");
 
-function EMA(candles, period) {
+function EMA(_ref) {
+  var candles = _ref.candles,
+      period = _ref.period;
   var result = [];
   var sma = (0, _sma.SMA)([], period);
   var exponent = 2 / (period + 1);

@@ -8,7 +8,7 @@ export function PMax({
   multiplier = 3,
 }) {
   let result = [];
-  const ema = EMA([], emaPeriod);
+  const ema = EMA({ candles: [], period: emaPeriod });
   const atr = ATR([], atrPeriod);
 
   // stacks

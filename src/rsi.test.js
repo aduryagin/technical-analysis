@@ -63,11 +63,11 @@ const expectedResult = [
 }));
 
 it('rsi', () => {
-  expect(RSI(inputRSI, 14).result).toEqual(expectedResult);
+  expect(RSI({ candles: inputRSI, period: 14 }).result).toEqual(expectedResult);
 });
 
 it('rsi update', () => {
-  const rsi = RSI(inputRSI, 14);
+  const rsi = RSI({ candles: inputRSI, period: 14 });
   const firstResult = rsi.update({ time: 32, close: 45 });
   expect(firstResult).toEqual({
     time: 32,
@@ -84,7 +84,7 @@ it('rsi update', () => {
 });
 
 it('rsi add when update', () => {
-  const rsi = RSI([], 14);
+  const rsi = RSI({ candles: [], period: 14 });
   const result = [];
 
   inputRSI.forEach((item) => {

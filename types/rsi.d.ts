@@ -1,4 +1,7 @@
-export function RSI(candles: any, period: any): {
+export function RSI({ candles, period }: {
+    candles: any;
+    period: any;
+}): {
     result: any[];
     update: (candle: any) => {
         time: any;

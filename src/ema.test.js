@@ -36,10 +36,10 @@ const expectedOutput = [
 
 it('ema', () => {
   expect(
-    EMA(
-      close.map((item, index) => ({ close: item, time: index })),
+    EMA({
+      candles: close.map((item, index) => ({ close: item, time: index })),
       period,
-    ).result,
+    }).result,
   ).toEqual(
     expectedOutput.map((item, index) => ({
       time: index + period - 1,
@@ -50,7 +50,7 @@ it('ema', () => {
 
 it('ema add', () => {
   const result = [];
-  const ema = EMA([], period);
+  const ema = EMA({ candles: [], period });
   close.forEach((item, index) => {
     const res = ema.update({ close: item, time: index });
     if (res) result.push(res);
@@ -66,7 +66,7 @@ it('ema add', () => {
 
 it('ema update', () => {
   const result = [];
-  const ema = EMA([], period);
+  const ema = EMA({ candles: [], period });
   close.forEach((item, index) => {
     const res = ema.update({ close: item, time: index });
     if (res) result.push(res);
