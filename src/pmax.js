@@ -61,6 +61,8 @@ export function PMax({
       time: candle.time,
       ema: emaResult.value,
       pmax: dir === 1 ? longStop : shortStop,
+      pmaxLong: longStop,
+      pmaxShort: shortStop,
     };
   }
 
