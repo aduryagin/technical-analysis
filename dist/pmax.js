@@ -62,6 +62,7 @@ function PMax(_ref) {
       time: candle.time,
       ema: emaResult.value,
       pmax: dir === 1 ? longStop : shortStop,
+      pmaxReverse: dir === 1 ? shortStop : longStop,
       pmaxLong: longStop,
       pmaxShort: shortStop
     };

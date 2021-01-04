@@ -10,6 +10,7 @@ export function PMax({ candles, emaPeriod, atrPeriod, multiplier, }: {
         time: any;
         ema: any;
         pmax: any;
+        pmaxReverse: any;
         pmaxLong: number;
         pmaxShort: any;
     };
