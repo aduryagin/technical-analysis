@@ -133,6 +133,7 @@ export function PMaxRSI({
       rsi: rsi1,
       t3: t3Result.value,
       pmax: dir === 1 ? longStop : shortStop,
+      pmaxReverse: dir === 1 ? shortStop : longStop,
     };
   }
 

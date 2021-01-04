@@ -11,5 +11,6 @@ export function PMaxRSI({ candles, rsi, t3, atr, }: {
         rsi: number;
         t3: number;
         pmax: number;
+        pmaxReverse: number;
     };
 };

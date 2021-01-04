@@ -165,7 +165,8 @@ function PMaxRSI(_ref2) {
       time: candle.time,
       rsi: rsi1,
       t3: t3Result.value,
-      pmax: dir === 1 ? longStop : shortStop
+      pmax: dir === 1 ? longStop : shortStop,
+      pmaxReverse: dir === 1 ? shortStop : longStop
     };
   }
 
