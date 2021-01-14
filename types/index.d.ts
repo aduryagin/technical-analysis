@@ -13,3 +13,4 @@ export { trueRange } from "./trueRange";
 export { VWAP } from "./vwap";
 export { T3 } from "./t3";
 export { PMaxRSI } from "./pmaxRSI";
+export { VWMA } from "./vwma";

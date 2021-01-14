@@ -17,6 +17,8 @@ Technical indicators with possibility of update/add last item (candle) of result
 * True range
 * VWAP
 * T3
+* VWMA
+* FBB - https://www.tradingview.com/script/qIKR3tbN-Fibonacci-Bollinger-Bands/
 
 ## Example
 ```js script

@@ -93,6 +93,12 @@ Object.defineProperty(exports, "PMaxRSI", {
     return _pmaxRSI.PMaxRSI;
   }
 });
+Object.defineProperty(exports, "VWMA", {
+  enumerable: true,
+  get: function get() {
+    return _vwma.VWMA;
+  }
+});
 
 var _atr = require("./atr");
 
@@ -123,3 +129,5 @@ var _vwap = require("./vwap");
 var _t = require("./t3");
 
 var _pmaxRSI = require("./pmaxRSI");
+
+var _vwma = require("./vwma");
