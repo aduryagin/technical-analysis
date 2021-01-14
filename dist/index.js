@@ -99,6 +99,12 @@ Object.defineProperty(exports, "VWMA", {
     return _vwma.VWMA;
   }
 });
+Object.defineProperty(exports, "FBB", {
+  enumerable: true,
+  get: function get() {
+    return _fbb.FBB;
+  }
+});
 
 var _atr = require("./atr");
 
@@ -131,3 +137,5 @@ var _t = require("./t3");
 var _pmaxRSI = require("./pmaxRSI");
 
 var _vwma = require("./vwma");
+
+var _fbb = require("./fbb");
