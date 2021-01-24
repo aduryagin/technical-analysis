@@ -15,3 +15,6 @@ export { T3 } from "./t3";
 export { PMaxRSI } from "./pmaxRSI";
 export { VWMA } from "./vwma";
 export { FBB } from "./fbb";
+export { WWMA } from "./wwma";
+export { VAR } from "./var";
+export { OTT } from "./ott";

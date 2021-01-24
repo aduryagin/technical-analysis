@@ -21,44 +21,11 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function WWMA(_ref) {
-  var source = _ref.source,
-      period = _ref.period;
-  var result = [];
-  var wwalpha = 1 / period;
-
-  function calculate(src) {
-    var _result;
-
-    return {
-      value: wwalpha * src.value + (1 - wwalpha) * (((_result = result[result.length - 1]) === null || _result === void 0 ? void 0 : _result.value) || 0),
-      time: src.time
-    };
-  }
-
-  source.forEach(function (item) {
-    var res = calculate(item);
-    if (res) result.push(res);
-  });
-  return {
-    update: function update(src) {
-      if (result.length && result[result.length - 1].time === src.time) {
-        result = result.slice(0, -1);
-      }
-
-      var item = calculate(src);
-      if (item) result.push(item);
-      return item;
-    },
-    result: result
-  };
-}
-
-function PMaxRSI(_ref2) {
-  var candles = _ref2.candles,
-      rsi = _ref2.rsi,
-      t3 = _ref2.t3,
-      atr = _ref2.atr;
+function PMaxRSI(_ref) {
+  var candles = _ref.candles,
+      rsi = _ref.rsi,
+      t3 = _ref.t3,
+      atr = _ref.atr;
   candles = candles || [];
   rsi = rsi || {
     period: 14
@@ -100,7 +67,7 @@ function PMaxRSI(_ref2) {
   var shortStopStack = [];
 
   function calculate(candle, index) {
-    var _result2, _result3;
+    var _result, _result2;
 
     if (!candleStack[index - 1]) return undefined;
     var i = candle.close >= candleStack[index - 1].close ? candle.close - candleStack[index - 1].close : 0;
@@ -136,7 +103,7 @@ function PMaxRSI(_ref2) {
     var rsih = rsh === -1 ? 0 : 100 - 100 / (1 + rsh);
     var rsl = AvgUpL / AvgDownL;
     var rsil = rsl === -1 ? 0 : 100 - 100 / (1 + rsl);
-    var TR = Math.max(rsih - rsil, Math.abs(rsih - (((_result2 = result[result.length - 1]) === null || _result2 === void 0 ? void 0 : _result2.rsi) || 0)), Math.abs(rsil - (((_result3 = result[result.length - 1]) === null || _result3 === void 0 ? void 0 : _result3.rsi) || 0)));
+    var TR = Math.max(rsih - rsil, Math.abs(rsih - (((_result = result[result.length - 1]) === null || _result === void 0 ? void 0 : _result.rsi) || 0)), Math.abs(rsil - (((_result2 = result[result.length - 1]) === null || _result2 === void 0 ? void 0 : _result2.rsi) || 0)));
     var ATRResult = ATR.update({
       time: candle.time,
       close: TR

@@ -105,6 +105,24 @@ Object.defineProperty(exports, "FBB", {
     return _fbb.FBB;
   }
 });
+Object.defineProperty(exports, "WWMA", {
+  enumerable: true,
+  get: function get() {
+    return _wwma.WWMA;
+  }
+});
+Object.defineProperty(exports, "VAR", {
+  enumerable: true,
+  get: function get() {
+    return _var.VAR;
+  }
+});
+Object.defineProperty(exports, "OTT", {
+  enumerable: true,
+  get: function get() {
+    return _ott.OTT;
+  }
+});
 
 var _atr = require("./atr");
 
@@ -139,3 +157,9 @@ var _pmaxRSI = require("./pmaxRSI");
 var _vwma = require("./vwma");
 
 var _fbb = require("./fbb");
+
+var _wwma = require("./wwma");
+
+var _var = require("./var");
+
+var _ott = require("./ott");

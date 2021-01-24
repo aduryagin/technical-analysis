@@ -19,6 +19,9 @@ Technical indicators with possibility of update/add last item (candle) of result
 * T3
 * VWMA
 * FBB - https://www.tradingview.com/script/qIKR3tbN-Fibonacci-Bollinger-Bands/
+* WWMA
+* VAR
+* OTT - https://www.tradingview.com/script/zVhoDQME/
 
 ## Example
 ```js script
@@ -28,7 +31,7 @@ const candles = [
     { time: 2, close: 13 }
   ];
   const period = 1;
-  const rsi = RSI(candles, period);
+  const rsi = RSI({ candles, period });
   console.log(rsi);
   /*
     {
