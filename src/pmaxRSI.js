@@ -1,5 +1,6 @@
 import { SMA } from './sma';
 import { T3 } from './t3';
+import { WWMA } from './wwma'
 
 export function PMaxRSI({
   candles,
