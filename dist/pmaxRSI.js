@@ -9,6 +9,8 @@ var _sma = require("./sma");
 
 var _t = require("./t3");
 
+var _wwma = require("./wwma");
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -47,11 +49,11 @@ function PMaxRSI(_ref) {
     period: t3.period,
     volumeFactor: t3.volumeFactor
   });
-  var AvUp = WWMA({
+  var AvUp = (0, _wwma.WWMA)({
     source: [],
     period: rsi.period
   });
-  var AvDown = WWMA({
+  var AvDown = (0, _wwma.WWMA)({
     source: [],
     period: rsi.period
   });
