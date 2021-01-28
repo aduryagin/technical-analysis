@@ -3,5 +3,6 @@ export function SMA(candles: any, period: any): {
     update: (candle: any) => {
         time: any;
         value: number;
+        candle: any;
     };
 };

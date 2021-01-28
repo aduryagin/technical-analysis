@@ -20,7 +20,7 @@ export function SMA(candles, period) {
       shifted = list.shift();
       sum = sum - shifted + current;
       list.push(current);
-      return { time: candle.time, value: sum / period };
+      return { time: candle.time, value: sum / period, candle };
     }
 
     return undefined;

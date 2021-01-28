@@ -29,7 +29,8 @@ function SMA(candles, period) {
       list.push(current);
       return {
         time: candle.time,
-        value: sum / period
+        value: sum / period,
+        candle: candle
       };
     }
 

@@ -16,14 +16,17 @@ it('sma', () => {
     {
       time: 2,
       value: 5,
+      candle: { time: 2, close: 5 }
     },
     {
       time: 3,
       value: 4,
+      candle: { time: 3, close: 2 }
     },
     {
       time: 4,
       value: 3,
+      candle: { time: 4, close: 2 }
     },
   ]);
 });
@@ -42,26 +45,32 @@ it('sma calculate in update', () => {
     {
       time: 3,
       value: 0.002,
+      candle: { time: 3, close: 0.003 }
     },
     {
       time: 4,
       value: 0.00275,
+      candle: { time: 4, close: 0.004 }
     },
     {
       time: 5,
       value: 0.0025,
+      candle: { time: 5, close: 0.002 }
     },
     {
       time: 6,
       value: 0.003,
+      candle: { time: 6, close: 0.003 }
     },
     {
       time: 7,
       value: 0.003,
+      candle: { time: 7, close: 0.003 }
     },
     {
       time: 8,
       value: 0.0025,
+      candle: { time: 8, close: 0.002 }
     },
   ]);
 });
@@ -78,7 +87,7 @@ it('sma update', () => {
     3,
   );
 
-  expect(sma.update({ time: 4, close: 5 })).toEqual({ time: 4, value: 4 });
-  expect(sma.update({ time: 5, close: 5 })).toEqual({ time: 5, value: 4 });
-  expect(sma.update({ time: 6, close: 5 })).toEqual({ time: 6, value: 5 });
+  expect(sma.update({ time: 4, close: 5 })).toEqual({ time: 4, value: 4, candle: { time: 4, close: 5 } });
+  expect(sma.update({ time: 5, close: 5 })).toEqual({ time: 5, value: 4, candle: { time: 5, close: 5 } });
+  expect(sma.update({ time: 6, close: 5 })).toEqual({ time: 6, value: 5, candle: { time: 6, close: 5 } });
 });
