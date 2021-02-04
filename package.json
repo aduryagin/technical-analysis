@@ -1,6 +1,6 @@
 {
-  "name": "technical-indicators",
-  "version": "1.0.0",
+  "name": "@aduryagin/technical-indicators",
+  "version": "0.0.1",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
