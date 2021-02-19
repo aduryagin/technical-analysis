@@ -26,7 +26,7 @@ function sum(arr, length) {
 function VAR(_ref) {
   var candles = _ref.candles,
       period = _ref.period;
-  var result = [];
+  var _result2 = [];
 
   var candlesStack = _toConsumableArray(candles);
 
@@ -43,7 +43,7 @@ function VAR(_ref) {
     var vUD = sum(vud1, 9);
     var vDD = sum(vdd1, 9);
     var vCMO = (vUD - vDD) / (vUD + vDD) || 0;
-    var VAR = valpha * Math.abs(vCMO) * candle.close + (1 - valpha * Math.abs(vCMO)) * (((_result = result[result.length - 1]) === null || _result === void 0 ? void 0 : _result.value) || 0);
+    var VAR = valpha * Math.abs(vCMO) * candle.close + (1 - valpha * Math.abs(vCMO)) * (((_result = _result2[_result2.length - 1]) === null || _result === void 0 ? void 0 : _result.value) || 0);
     return {
       value: VAR,
       time: candle.time
@@ -52,12 +52,12 @@ function VAR(_ref) {
 
   candlesStack.forEach(function (item, index) {
     var res = calculate(item, index);
-    if (res) result.push(res);
+    if (res) _result2.push(res);
   });
   return {
     update: function update(candle) {
-      if (result.length && result[result.length - 1].time === candle.time) {
-        result = result.slice(0, -1);
+      if (_result2.length && _result2[_result2.length - 1].time === candle.time) {
+        _result2 = _result2.slice(0, -1);
         candlesStack = candlesStack.slice(0, -1);
         vud1 = vud1.slice(0, -1);
         vdd1 = vdd1.slice(0, -1);
@@ -65,9 +65,11 @@ function VAR(_ref) {
 
       candlesStack.push(candle);
       var item = calculate(candle, candlesStack.length - 1);
-      if (item) result.push(item);
+      if (item) _result2.push(item);
       return item;
     },
-    result: result
+    result: function result() {
+      return _result2;
+    }
   };
 }

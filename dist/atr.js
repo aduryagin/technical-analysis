@@ -10,7 +10,7 @@ var _rma = require("./rma");
 var _trueRange = require("./trueRange");
 
 function ATR(candles, period) {
-  var result = [];
+  var _result = [];
   var tr = (0, _trueRange.trueRange)([]);
   var rma = (0, _rma.RMA)([], period);
 
@@ -30,17 +30,19 @@ function ATR(candles, period) {
 
   candles.forEach(function (item) {
     var res = calculate(item);
-    if (res) result.push(res);
+    if (res) _result.push(res);
   });
   return {
-    result: result,
+    result: function result() {
+      return _result;
+    },
     update: function update(candle) {
-      if (result.length && result[result.length - 1].time === candle.time) {
-        result = result.slice(0, -1);
+      if (_result.length && _result[_result.length - 1].time === candle.time) {
+        _result = _result.slice(0, -1);
       }
 
       var item = calculate(candle);
-      if (item) result.push(item);
+      if (item) _result.push(item);
       return item;
     }
   };

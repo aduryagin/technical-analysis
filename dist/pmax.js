@@ -23,7 +23,7 @@ function PMax(_ref) {
       atrPeriod = _ref$atrPeriod === void 0 ? 10 : _ref$atrPeriod,
       _ref$multiplier = _ref.multiplier,
       multiplier = _ref$multiplier === void 0 ? 3 : _ref$multiplier;
-  var result = [];
+  var _result = [];
   var ema = (0, _ema.EMA)({
     candles: [],
     period: emaPeriod
@@ -70,20 +70,22 @@ function PMax(_ref) {
 
   candles.forEach(function (item) {
     var res = calculate(item);
-    if (res) result.push(res);
+    if (res) _result.push(res);
   });
   return {
-    result: result,
+    result: function result() {
+      return _result;
+    },
     update: function update(candle) {
-      if (result.length && result[result.length - 1].time === candle.time) {
-        result = result.slice(0, -1);
+      if (_result.length && _result[_result.length - 1].time === candle.time) {
+        _result = _result.slice(0, -1);
         longStopStack = [longStopPrev];
         dirStack = [dirStackPrev];
         shortStopStack = [shortStopPrev];
       }
 
       var item = calculate(candle);
-      if (item) result.push(item);
+      if (item) _result.push(item);
       return item;
     }
   };

@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.VWAP = VWAP;
 
 function VWAP(candles) {
-  var result = [];
+  var _result = [];
   var cumulativeTotal = 0;
   var cumulativeVolume = 0;
   var lastCumulativeTotal = 0;
@@ -27,19 +27,21 @@ function VWAP(candles) {
 
   candles.forEach(function (item) {
     var res = calculate(item);
-    if (res) result.push(res);
+    if (res) _result.push(res);
   });
   return {
-    result: result,
+    result: function result() {
+      return _result;
+    },
     update: function update(candle) {
-      if (result.length && result[result.length - 1].time === candle.time) {
-        result = result.slice(0, -1);
+      if (_result.length && _result[_result.length - 1].time === candle.time) {
+        _result = _result.slice(0, -1);
         cumulativeVolume = lastCumulativeVolume;
         cumulativeTotal = lastCumulativeTotal;
       }
 
       var item = calculate(candle);
-      if (item) result.push(item);
+      if (item) _result.push(item);
       return item;
     }
   };

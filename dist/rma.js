@@ -9,7 +9,7 @@ var _sma = require("./sma");
 
 /* eslint-disable no-restricted-globals */
 function RMA(candles, period) {
-  var result = [];
+  var _result = [];
   var prevPrevSum;
   var prevSum;
   var sum = 0;
@@ -35,18 +35,20 @@ function RMA(candles, period) {
 
   candles.forEach(function (item) {
     var res = calculate(item);
-    if (res) result.push(res);
+    if (res) _result.push(res);
   });
   return {
-    result: result,
+    result: function result() {
+      return _result;
+    },
     update: function update(candle) {
-      if (result.length && result[result.length - 1].time === candle.time) {
-        result = result.slice(0, -1);
+      if (_result.length && _result[_result.length - 1].time === candle.time) {
+        _result = _result.slice(0, -1);
         prevSum = prevPrevSum;
       }
 
       var item = calculate(candle);
-      if (item) result.push(item);
+      if (item) _result.push(item);
       return item;
     }
   };

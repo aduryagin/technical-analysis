@@ -3,7 +3,7 @@ export function OTT({ candles, period, percent }: {
     period: any;
     percent: any;
 }): {
-    result: any[];
+    result: () => any[];
     update: (candle: any) => {
         candle: any;
         var: number;

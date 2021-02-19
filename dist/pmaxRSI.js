@@ -40,7 +40,7 @@ function PMaxRSI(_ref) {
     multiplier: 3,
     period: 10
   };
-  var result = [];
+  var _result3 = [];
 
   var candleStack = _toConsumableArray(candles);
 
@@ -105,7 +105,7 @@ function PMaxRSI(_ref) {
     var rsih = rsh === -1 ? 0 : 100 - 100 / (1 + rsh);
     var rsl = AvgUpL / AvgDownL;
     var rsil = rsl === -1 ? 0 : 100 - 100 / (1 + rsl);
-    var TR = Math.max(rsih - rsil, Math.abs(rsih - (((_result = result[result.length - 1]) === null || _result === void 0 ? void 0 : _result.rsi) || 0)), Math.abs(rsil - (((_result2 = result[result.length - 1]) === null || _result2 === void 0 ? void 0 : _result2.rsi) || 0)));
+    var TR = Math.max(rsih - rsil, Math.abs(rsih - (((_result = _result3[_result3.length - 1]) === null || _result === void 0 ? void 0 : _result.rsi) || 0)), Math.abs(rsil - (((_result2 = _result3[_result3.length - 1]) === null || _result2 === void 0 ? void 0 : _result2.rsi) || 0)));
     var ATRResult = ATR.update({
       time: candle.time,
       close: TR
@@ -141,13 +141,15 @@ function PMaxRSI(_ref) {
 
   candleStack.forEach(function (item, index) {
     var res = calculate(item, index);
-    if (res) result.push(res);
+    if (res) _result3.push(res);
   });
   return {
-    result: result,
+    result: function result() {
+      return _result3;
+    },
     update: function update(candle) {
-      if (result.length && result[result.length - 1].time === candle.time) {
-        result = result.slice(0, -1);
+      if (_result3.length && _result3[_result3.length - 1].time === candle.time) {
+        _result3 = _result3.slice(0, -1);
         candleStack = candleStack.slice(0, -1);
         longStopStack = [longStopPrev];
         dirStack = [dirStackPrev];
@@ -156,7 +158,7 @@ function PMaxRSI(_ref) {
 
       candleStack.push(candle);
       var item = calculate(candle, candleStack.length - 1);
-      if (item) result.push(item);
+      if (item) _result3.push(item);
       return item;
     }
   };

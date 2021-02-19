@@ -24,7 +24,7 @@ function averageGain(candles, period) {
 
   var candlesStack = _toConsumableArray(candles);
 
-  var result = [];
+  var _result = [];
 
   function calculate(candle, lastCandle) {
     var currentValue = candle.close;
@@ -38,7 +38,7 @@ function averageGain(candles, period) {
 
     if (counter < period) {
       counter += 1;
-    } else if (result.length === 0) {
+    } else if (_result.length === 0) {
       return {
         time: candle.time,
         value: gainSum / period
@@ -46,7 +46,7 @@ function averageGain(candles, period) {
     } else {
       return {
         time: candle.time,
-        value: (result[result.length - 1].value * (period - 1) + gain) / period
+        value: (_result[_result.length - 1].value * (period - 1) + gain) / period
       };
     }
 
@@ -56,22 +56,24 @@ function averageGain(candles, period) {
   candlesStack.forEach(function (candle, index) {
     if (index !== 0) {
       var item = calculate(candle, candlesStack[index - 1]);
-      if (item) result.push(item);
+      if (item) _result.push(item);
     }
   });
   return {
-    result: result,
+    result: function result() {
+      return _result;
+    },
     update: function update(candle) {
-      if (result.length && result[result.length - 1].time === candle.time) {
+      if (_result.length && _result[_result.length - 1].time === candle.time) {
         gainSum -= gain;
-        result = result.slice(0, -1);
+        _result = _result.slice(0, -1);
         candlesStack = candlesStack.slice(0, -1);
       }
 
       if (candlesStack.length) {
         var item = calculate(candle, candlesStack[candlesStack.length - 1]);
         candlesStack.push(candle);
-        if (item) result.push(item);
+        if (item) _result.push(item);
         return item;
       }
 

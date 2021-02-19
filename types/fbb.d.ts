@@ -3,7 +3,7 @@ export function FBB({ candles, period, multiplier }: {
     period: any;
     multiplier: any;
 }): {
-    result: any[];
+    result: () => any[];
     update: (candle: any) => {
         time: any;
         basis: number;

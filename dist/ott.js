@@ -13,7 +13,7 @@ function OTT(_ref) {
       percent = _ref.percent;
   period = period || 2;
   percent = percent || 1.4;
-  var result = [];
+  var _result = [];
   var varInstance = (0, _var.VAR)({
     candles: [],
     period: period
@@ -58,18 +58,20 @@ function OTT(_ref) {
 
   candles.forEach(function (item) {
     var res = calculate(item);
-    if (res) result.push(res);
+    if (res) _result.push(res);
   });
   return {
-    result: result,
+    result: function result() {
+      return _result;
+    },
     update: function update(candle) {
-      if (result.length && result[result.length - 1].time === candle.time) {
-        result = result.slice(0, -1);
+      if (_result.length && _result[_result.length - 1].time === candle.time) {
+        _result = _result.slice(0, -1);
         ottStack = ottStack.slice(0, -1);
       }
 
       var item = calculate(candle);
-      if (item) result.push(item);
+      if (item) _result.push(item);
       return item;
     }
   };

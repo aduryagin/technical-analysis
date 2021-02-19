@@ -2,7 +2,7 @@ export function STDEV({ candles, period }: {
     candles: any;
     period: any;
 }): {
-    result: any[];
+    result: () => any[];
     update: (candle: any) => {
         time: any;
         value: number;

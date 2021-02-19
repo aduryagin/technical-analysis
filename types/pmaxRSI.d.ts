@@ -4,7 +4,7 @@ export function PMaxRSI({ candles, rsi, t3, atr, }: {
     t3: any;
     atr: any;
 }): {
-    result: any[];
+    result: () => any[];
     update: (candle: any) => {
         candle: any;
         time: any;

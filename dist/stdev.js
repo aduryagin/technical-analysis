@@ -22,7 +22,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function STDEV(_ref) {
   var candles = _ref.candles,
       period = _ref.period;
-  var result = [];
+  var _result = [];
 
   var candlesStack = _toConsumableArray(candles);
 
@@ -65,19 +65,21 @@ function STDEV(_ref) {
 
   candlesStack.forEach(function (item, index) {
     var res = calculate(item, index);
-    if (res) result.push(res);
+    if (res) _result.push(res);
   });
   return {
-    result: result,
+    result: function result() {
+      return _result;
+    },
     update: function update(candle) {
-      if (result.length && result[result.length - 1].time === candle.time) {
-        result = result.slice(0, -1);
+      if (_result.length && _result[_result.length - 1].time === candle.time) {
+        _result = _result.slice(0, -1);
         candlesStack = candlesStack.slice(0, -1);
       }
 
       candlesStack.push(candle);
       var item = calculate(candle, candlesStack.length - 1);
-      if (item) result.push(item);
+      if (item) _result.push(item);
       return item;
     }
   };

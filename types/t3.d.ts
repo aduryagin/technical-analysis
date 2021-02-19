@@ -3,7 +3,7 @@ export function T3({ candles, period, volumeFactor }: {
     period: any;
     volumeFactor: any;
 }): {
-    result: any[];
+    result: () => any[];
     update: (candle: any) => {
         value: number;
         time: any;

@@ -6,5 +6,5 @@ export function VAR({ candles, period }: {
         value: number;
         time: any;
     };
-    result: any[];
+    result: () => any[];
 };

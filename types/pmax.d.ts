@@ -4,7 +4,7 @@ export function PMax({ candles, emaPeriod, atrPeriod, multiplier, }: {
     atrPeriod?: number;
     multiplier?: number;
 }): {
-    result: any[];
+    result: () => any[];
     update: (candle: any) => {
         candle: any;
         time: any;
