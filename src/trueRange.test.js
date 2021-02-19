@@ -28,7 +28,7 @@ const expectedResult = [
 
 it('trueRange', () => {
   const range = trueRange(candles);
-  expect(range.result).toEqual(expectedResult);
+  expect(range.result()).toEqual(expectedResult);
 });
 
 it('trueRange add', () => {

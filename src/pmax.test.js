@@ -13,19 +13,19 @@ const candles = [
   { time: 10, close: 15.92, high: 18.48, low: 14.35 },
 ];
 const expectedResult = [
-  { candle: candles[2], time: 3, ema: 18.07, pmax: 10.82 },
-  { candle: candles[3], time: 4, ema: 19.44, pmax: 12.87 },
-  { candle: candles[4], time: 5, ema: 22.05, pmax: 14.26 },
-  { candle: candles[5], time: 6, ema: 23.45, pmax: 15.52 },
-  { candle: candles[6], time: 7, ema: 20.35, pmax: 15.52 },
-  { candle: candles[7], time: 8, ema: 17.3, pmax: 15.52 },
-  { candle: candles[8], time: 9, ema: 15.47, pmax: 20.88 },
-  { candle: candles[9], time: 10, ema: 15.94, pmax: 20.88 },
+  { candle: candles[2], time: 3, ema: 18.07, pmax: 10.82, pmaxLong: 10.816666666666666, pmaxShort: 25.323333333333334, pmaxReverse: 25.323333333333334 },
+  { candle: candles[3], time: 4, ema: 19.44, pmax: 12.87, pmaxLong: 12.872777777777781, pmaxShort: 25.323333333333334, pmaxReverse: 25.323333333333334 },
+  { candle: candles[4], time: 5, ema: 22.05, pmax: 14.26, pmaxLong: 14.25851851851852, pmaxShort: 25.323333333333334, pmaxReverse: 25.323333333333334 },
+  { candle: candles[5], time: 6, ema: 23.45, pmax: 15.52, pmaxLong: 15.51651234567901, pmaxShort: 25.323333333333334, pmaxReverse: 25.323333333333334 },
+  { candle: candles[6], time: 7, ema: 20.35, pmax: 15.52, pmaxLong: 15.51651234567901, pmaxShort: 25.323333333333334, pmaxReverse: 25.323333333333334 },
+  { candle: candles[7], time: 8, ema: 17.3, pmax: 15.52, pmaxLong: 15.51651234567901, pmaxShort: 23.29995284636488, pmaxReverse: 23.29995284636488 },
+  { candle: candles[8], time: 9, ema: 15.47, pmax: 20.88, pmaxLong: 10.069927269090075, pmaxShort: 20.87569773090992, pmaxReverse: 10.069927269090075 },
+  { candle: candles[9], time: 10, ema: 15.94, pmax: 20.88, pmaxLong: 10.965316096060048, pmaxShort: 20.87569773090992, pmaxReverse: 10.965316096060048},
 ];
 
 it('PMax', () => {
   expect(
-    PMax({ candles, emaPeriod: 3, atrPeriod: 3, multiplier: 1 }).result.map(
+    PMax({ candles, emaPeriod: 3, atrPeriod: 3, multiplier: 1 }).result().map(
       (item) => ({
         ...item,
         time: item.time,
@@ -61,6 +61,9 @@ it('PMax update', () => {
     time: 10,
     ema: 12.736406249999998,
     pmax: 18.24832973727328,
+    pmaxLong: 10.069927269090075,
+    pmaxReverse: 10.069927269090075,
+    pmaxShort: 18.24832973727328,
   });
   expect(
     pmax.update({ time: 10, close: 15.92, high: 18.48, low: 14.35 }),
@@ -69,5 +72,8 @@ it('PMax update', () => {
     time: 10,
     ema: 15.943906249999998,
     pmax: 20.87569773090992,
+    pmaxLong: 10.965316096060048,
+    pmaxReverse: 10.965316096060048,
+    pmaxShort: 20.87569773090992,
   });
 });

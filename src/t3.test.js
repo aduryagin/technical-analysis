@@ -51,7 +51,7 @@ const expectedResult = [
 
 it('t3', () => {
   const t3 = T3({ candles, period: 2, volumeFactor: 0.7 });
-  expect(t3.result.map((item) => ({ ...item, value: parseFloat(item.value.toFixed(2)) }))).toEqual(expectedResult);
+  expect(t3.result().map((item) => ({ ...item, value: parseFloat(item.value.toFixed(2)) }))).toEqual(expectedResult);
 });
 
 it('t3 add', () => {

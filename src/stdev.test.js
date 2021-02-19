@@ -28,7 +28,7 @@ it('stdev', () => {
     STDEV({
       candles,
       period: 3,
-    }).result.map((item) => ({
+    }).result().map((item) => ({
       ...item,
       value: parseFloat(item.value.toFixed(2)),
     })),

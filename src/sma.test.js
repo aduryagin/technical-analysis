@@ -11,7 +11,7 @@ it('sma', () => {
         { time: 4, close: 2 },
       ],
       3,
-    ).result,
+    ).result(),
   ).toEqual([
     {
       time: 2,

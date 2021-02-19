@@ -64,7 +64,7 @@ it('VWMA', () => {
     candles,
     period: 3
   });
-  expect(vwma.result).toEqual(expected);
+  expect(vwma.result()).toEqual(expected);
 });
 
 it('VWMA update', () => {

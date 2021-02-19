@@ -37,7 +37,7 @@ export function RSI({ candles, period }) {
   });
 
   return {
-    result,
+    result: () => result,
     update: (candle) => {
       if (result.length && result[result.length - 1].time === candle.time) {
         result = result.slice(0, -1);

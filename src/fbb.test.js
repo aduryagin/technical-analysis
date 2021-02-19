@@ -99,7 +99,7 @@ it('FBB', () => {
     candles,
     period: 3
   });
-  expect(fbb.result).toEqual(expected);
+  expect(fbb.result()).toEqual(expected);
 });
 
 it('FBB update', () => {

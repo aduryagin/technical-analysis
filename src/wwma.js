@@ -22,6 +22,6 @@ export function WWMA({ source, period }) {
 
       return item;
     },
-    result,
+    result: () => result,
   }
 }

@@ -43,6 +43,6 @@ export function VAR({ candles, period }) {
 
       return item;
     },
-    result,
+    result: () => result,
   }
 }

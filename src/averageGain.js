@@ -37,7 +37,7 @@ export function averageGain(candles, period) {
   });
 
   return {
-    result,
+    result: () => result,
     update: (candle) => {
       if (result.length && result[result.length - 1].time === candle.time) {
         gainSum -= gain;

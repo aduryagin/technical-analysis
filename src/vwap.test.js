@@ -100,7 +100,7 @@ const candles = inputVWAP.high.map((item, index) => ({
 
 it('vwap', () => {
   expect(
-    VWAP(candles).result.map((item) => ({
+    VWAP(candles).result().map((item) => ({
       ...item,
       value: parseFloat(item.value.toFixed(2)),
     })),

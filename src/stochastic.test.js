@@ -195,7 +195,7 @@ const expected = [
 ];
 
 it('stochastic', () => {
-  expect(stochastic({ candles, signalPeriod, period }).result).toEqual(
+  expect(stochastic({ candles, signalPeriod, period }).result()).toEqual(
     expected,
   );
 });
@@ -218,7 +218,7 @@ it('stochastic update', () => {
     signalPeriod,
     period,
   });
-  expect(stoch.result).toEqual(expected);
+  expect(stoch.result()).toEqual(expected);
 
   expect(
     stoch.update({

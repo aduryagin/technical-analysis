@@ -63,7 +63,7 @@ const expectedResult = [
 }));
 
 it('rsi', () => {
-  expect(RSI({ candles: inputRSI, period: 14 }).result).toEqual(expectedResult);
+  expect(RSI({ candles: inputRSI, period: 14 }).result()).toEqual(expectedResult);
 });
 
 it('rsi update', () => {

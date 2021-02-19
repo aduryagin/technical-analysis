@@ -29,7 +29,7 @@ it('bb', () => {
       candles,
       period: 3,
       stdDev: 2,
-    }).result.map((item) => ({
+    }).result().map((item) => ({
       ...item,
       value: parseFloat(item.value.toFixed(2)),
     })),

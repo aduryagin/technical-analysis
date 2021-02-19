@@ -138,7 +138,7 @@ const expected = [
 
 it('OTT', () => {
   const ott = OTT({ candles });
-  expect(ott.result).toEqual(expected);
+  expect(ott.result()).toEqual(expected);
 });
 
 it('OTT update', () => {

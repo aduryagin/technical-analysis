@@ -107,7 +107,7 @@ it('pmaxRSI', () => {
       period: 2,
     }
   });
-  expect(pmax.result).toEqual(expected);
+  expect(pmax.result()).toEqual(expected);
 });
 
 it('pmaxRSI update', () => {

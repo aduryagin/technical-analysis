@@ -25,7 +25,7 @@ it('averageLoss', () => {
   ];
 
   expect(
-    result.result.map((a) => ({
+    result.result().map((a) => ({
       time: a.time,
       value: parseFloat(a.value.toFixed(2)),
     })),

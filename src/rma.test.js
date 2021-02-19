@@ -25,7 +25,7 @@ const expectedResult = [
 
 it('rma', () => {
   expect(
-    RMA(candles, 3).result.map((item) => ({
+    RMA(candles, 3).result().map((item) => ({
       time: item.time,
       value: parseFloat(item.value.toFixed(2)),
     })),

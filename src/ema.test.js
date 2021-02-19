@@ -39,7 +39,7 @@ it('ema', () => {
     EMA({
       candles: close.map((item, index) => ({ close: item, time: index })),
       period,
-    }).result,
+    }).result(),
   ).toEqual(
     expectedOutput.map((item, index) => ({
       time: index + period - 1,
