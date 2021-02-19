@@ -1,4 +1,5 @@
 # Technical indicators
+[![npm version](https://badge.fury.io/js/%40aduryagin%2Ftechnical-indicators.svg)](https://badge.fury.io/js/%40aduryagin%2Ftechnical-indicators)
 
 Technical indicators with possibility of update/add last item (candle) of result. This may be usefull when use realtime (for example WebSockets) data.
 
