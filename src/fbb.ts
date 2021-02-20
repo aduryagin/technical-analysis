@@ -1,5 +1,5 @@
 import { VWMA } from './vwma';
-import { STDEV } from './stdev';
+import { STDEV } from './stdev.ts';
 
 export function FBB({ candles, period, multiplier }) {
   multiplier = multiplier || 3
