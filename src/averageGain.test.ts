@@ -1,7 +1,7 @@
 import { averageGain } from './averageGain';
 
 it('averageGain', () => {
-  const result = averageGain(
+  const result = averageGain({ candles:
     [
       { time: 0, close: 44.3389 },
       { time: 1, close: 44.0902 },
@@ -36,8 +36,8 @@ it('averageGain', () => {
       { time: 30, close: 43.4205 },
       { time: 31, close: 42.6628 },
     ],
-    14,
-  );
+    period: 14,
+  });
 
   const expected = [
     { time: 14, value: 0.24 },

@@ -1,11 +1,17 @@
-export function averageLoss(candles, period) {
+import { Candle } from "./types";
+
+interface AverageLossInput { candles: Candle[], period: number }
+interface AverageLossResultItem { time: Candle['time'], value: number }
+type AverageLossResult = AverageLossResultItem[]
+
+export function averageLoss({ candles, period }: AverageLossInput) {
   let counter = 1;
   let lossSum = 0;
   let loss = 0;
   let candlesStack = [...candles];
-  let result = [];
+  let result: AverageLossResult = [];
 
-  function calculate(candle, lastCandle) {
+  function calculate(candle, lastCandle): AverageLossResultItem | undefined {
     const currentValue = candle.close;
     const lastValue = lastCandle.close;
 
@@ -38,7 +44,7 @@ export function averageLoss(candles, period) {
 
   return {
     result: () => result,
-    update: (candle) => {
+    update: (candle: Candle) => {
       if (result.length && result[result.length - 1].time === candle.time) {
         lossSum -= loss;
         result = result.slice(0, -1);

@@ -1,15 +1,19 @@
-/* eslint-disable no-restricted-globals */
 import { SMA } from './sma';
+import { Candle } from './types';
 
-export function RMA(candles, period) {
-  let result = [];
+interface RMAInput { candles: Candle[]; period: number }
+interface RMAResultItem { time: Candle['time']; value: number }
+type RMAResult = RMAResultItem[]
+
+export function RMA({ candles, period }: RMAInput) {
+  let result: RMAResult = [];
   let prevPrevSum;
   let prevSum;
   let sum = 0;
-  const sma = SMA([], period);
+  const sma = SMA({ candles: [], period });
   const exponent = 1 / period;
 
-  function calculate(candle) {
+  function calculate(candle: Candle): RMAResultItem | undefined {
     if (isNaN(prevSum) || prevSum === undefined) {
       sum = sma.update(candle)?.value;
     } else {
@@ -19,6 +23,7 @@ export function RMA(candles, period) {
     prevPrevSum = prevSum;
     prevSum = sum;
 
+    // @ts-ignore
     return sum ? { time: candle.time, value: sum } : sum;
   }
 
@@ -29,7 +34,7 @@ export function RMA(candles, period) {
 
   return {
     result: () => result,
-    update: (candle) => {
+    update: (candle: Candle) => {
       if (result.length && result[result.length - 1].time === candle.time) {
         result = result.slice(0, -1);
         prevSum = prevPrevSum;

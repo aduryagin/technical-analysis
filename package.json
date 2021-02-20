@@ -5,8 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "jest",
-    "dts:generate": "tsc src/*.js --declaration --allowJs --emitDeclarationOnly --outDir types",
-    "build": "babel src/*.js --ignore 'src/*.spec.js','src/*.test.js' --out-dir dist"
+    "build": "tsc --project tsconfig.json"
   },
   "keywords": [],
   "types": "./src",
@@ -16,6 +15,7 @@
     "@babel/cli": "^7.12.10",
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.10",
+    "@babel/preset-typescript": "^7.12.17",
     "@types/jest": "^26.0.20",
     "babel-jest": "^26.6.3",
     "jest": "^26.6.3",

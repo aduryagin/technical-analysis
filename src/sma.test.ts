@@ -3,15 +3,15 @@ import { SMA } from './sma';
 it('sma', () => {
   expect(
     SMA(
-      [
+      { candles: [
         { time: 0, close: 5 },
         { time: 1, close: 5 },
         { time: 2, close: 5 },
         { time: 3, close: 2 },
         { time: 4, close: 2 },
       ],
-      3,
-    ).result(),
+      period: 3,
+      }).result(),
   ).toEqual([
     {
       time: 2,
@@ -33,7 +33,7 @@ it('sma', () => {
 
 it('sma calculate in update', () => {
   const result = [];
-  const sma = SMA([], 4);
+  const sma = SMA({candles: [], period: 4 });
   [0.001, 0.003, 0.001, 0.003, 0.004, 0.002, 0.003, 0.003, 0.002].forEach(
     (item, index) => {
       const res = sma.update({ time: index, close: item });
@@ -77,15 +77,15 @@ it('sma calculate in update', () => {
 
 it('sma update', () => {
   const sma = SMA(
-    [
+    {candles: [
       { time: 0, close: 5 },
       { time: 1, close: 5 },
       { time: 2, close: 5 },
       { time: 3, close: 2 },
       { time: 4, close: 2 },
     ],
-    3,
-  );
+    period: 3,
+    });
 
   expect(sma.update({ time: 4, close: 5 })).toEqual({ time: 4, value: 4, candle: { time: 4, close: 5 } });
   expect(sma.update({ time: 5, close: 5 })).toEqual({ time: 5, value: 4, candle: { time: 5, close: 5 } });

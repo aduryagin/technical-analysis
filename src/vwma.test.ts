@@ -1,5 +1,4 @@
 import { VWMA } from "./vwma";
-import { SMA } from "./sma";
 
 const candles = [
   {

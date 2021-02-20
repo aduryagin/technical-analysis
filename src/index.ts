@@ -7,7 +7,7 @@ export { PMax } from './pmax';
 export { RMA } from './rma';
 export { RSI } from './rsi';
 export { SMA } from './sma';
-export { STDEV } from './stdev.ts';
+export { STDEV } from './stdev';
 export { stochastic } from './stochastic';
 export { trueRange } from './trueRange';
 export { VWAP } from './vwap';

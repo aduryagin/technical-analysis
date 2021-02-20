@@ -1,11 +1,17 @@
-export function VWAP(candles) {
-  let result = [];
+import { Candle } from "./types";
+
+interface VWAPInput { candles: Candle[]; }
+interface VWAPResultItem { time: Candle['time']; value: number; }
+type VWAPResult = VWAPResultItem[]
+
+export function VWAP({ candles }: VWAPInput) {
+  let result: VWAPResult = [];
   let cumulativeTotal = 0;
   let cumulativeVolume = 0;
   let lastCumulativeTotal = 0;
   let lastCumulativeVolume = 0;
 
-  function calculate(candle) {
+  function calculate(candle): VWAPResultItem {
     lastCumulativeTotal = cumulativeTotal;
     lastCumulativeVolume = cumulativeVolume;
     const typicalPrice = (candle.high + candle.low + candle.close) / 3;
@@ -23,7 +29,7 @@ export function VWAP(candles) {
 
   return {
     result: () => result,
-    update: (candle) => {
+    update: (candle: Candle) => {
       if (result.length && result[result.length - 1].time === candle.time) {
         result = result.slice(0, -1);
 

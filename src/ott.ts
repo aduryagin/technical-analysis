@@ -1,14 +1,19 @@
+import { Candle } from './types';
 import { VAR } from './var';
+
+interface OTTInput { candles: Candle[]; period?: number; percent?: number; }
+interface OTTResultItem { time: Candle['time']; var: number; ott: number; candle: Candle }
+type OTTResult = OTTResultItem[]
 
 export function OTT({
   candles,
   period,
   percent
-}) {
+}: OTTInput) {
   period = period || 2
   percent = percent || 1.4
 
-  let result = [];
+  let result: OTTResult = [];
   const varInstance = VAR({ candles: [], period });
 
   // stacks
@@ -20,7 +25,7 @@ export function OTT({
   let shortStopStack = [];
   let ottStack = []
 
-  function calculate(candle) {
+  function calculate(candle: Candle): OTTResultItem | undefined {
     const varResult = varInstance.update(candle);
     if (!varResult) return undefined;
 
@@ -73,7 +78,7 @@ export function OTT({
 
   return {
     result: () => result,
-    update: (candle) => {
+    update: (candle: Candle) => {
       if (result.length && result[result.length - 1].time === candle.time) {
         result = result.slice(0, -1);
         ottStack = ottStack.slice(0, -1);

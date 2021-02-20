@@ -1,41 +1,25 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.WWMA = WWMA;
-
-function WWMA(_ref) {
-  var source = _ref.source,
-      period = _ref.period;
-  var _result2 = [];
-  var wwalpha = 1 / period;
-
-  function calculate(src) {
-    var _result;
-
-    return {
-      value: wwalpha * src.value + (1 - wwalpha) * (((_result = _result2[_result2.length - 1]) === null || _result === void 0 ? void 0 : _result.value) || 0),
-      time: src.time
-    };
-  }
-
-  source.forEach(function (item) {
-    var res = calculate(item);
-    if (res) _result2.push(res);
-  });
-  return {
-    update: function update(src) {
-      if (_result2.length && _result2[_result2.length - 1].time === src.time) {
-        _result2 = _result2.slice(0, -1);
-      }
-
-      var item = calculate(src);
-      if (item) _result2.push(item);
-      return item;
-    },
-    result: function result() {
-      return _result2;
+export function WWMA({ source, period }) {
+    let result = [];
+    const wwalpha = 1 / period;
+    function calculate(src) {
+        var _a;
+        return { value: wwalpha * src.value + (1 - wwalpha) * (((_a = result[result.length - 1]) === null || _a === void 0 ? void 0 : _a.value) || 0), time: src.time };
     }
-  };
+    source.forEach((item) => {
+        const res = calculate(item);
+        if (res)
+            result.push(res);
+    });
+    return {
+        update: (src) => {
+            if (result.length && result[result.length - 1].time === src.time) {
+                result = result.slice(0, -1);
+            }
+            const item = calculate(src);
+            if (item)
+                result.push(item);
+            return item;
+        },
+        result: () => result,
+    };
 }

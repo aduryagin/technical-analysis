@@ -1,7 +1,7 @@
 import { averageLoss } from './averageLoss';
 
 it('averageLoss', () => {
-  const result = averageLoss(
+  const result = averageLoss({ candles: 
     [
       { time: 1, close: 1 },
       { time: 2, close: 2 },
@@ -14,8 +14,8 @@ it('averageLoss', () => {
       { time: 9, close: 9 },
       { time: 10, close: 8 },
     ],
-    6,
-  );
+    period: 6,
+  });
 
   const expected = [
     { time: 7, value: 0 },
@@ -43,7 +43,7 @@ it('averageLoss', () => {
 });
 
 it('averageLoss empty input', () => {
-  const loss = averageLoss([], 2);
+  const loss = averageLoss({ candles: [], period: 2 });
 
   expect(loss.update({ time: 0, close: 10 })).toEqual(undefined);
   expect(loss.update({ time: 1, close: 9 })).toEqual(undefined);

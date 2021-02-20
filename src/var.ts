@@ -1,17 +1,23 @@
+import { Candle } from "./types";
+
+interface VARInput { candles: Candle[]; period: number }
+interface VARResultItem { time: Candle['time']; value: number; }
+type VARResult = VARResultItem[]
+
 function sum(arr, length) {
   return arr.slice(-length).reduce((acc, item) => {
     return acc += item
   }, 0)
 }
 
-export function VAR({ candles, period }) {
-  let result = [];
+export function VAR({ candles, period }: VARInput) {
+  let result: VARResult = [];
   let candlesStack = [...candles]
   let vud1 = []
   let vdd1 = []
   const valpha = 2 / (period + 1);
 
-  function calculate(candle, index) {
+  function calculate(candle, index): VARResultItem {
     const prevCandlePrice = candlesStack[index - 1]?.close || 0
     vud1.push(candle.close > prevCandlePrice ? candle.close - prevCandlePrice : 0)  
     vdd1.push(candle.close < prevCandlePrice ? prevCandlePrice - candle.close : 0)
@@ -29,7 +35,7 @@ export function VAR({ candles, period }) {
   });
 
   return {
-    update: (candle) => {
+    update: (candle: Candle) => {
       if (result.length && result[result.length - 1].time === candle.time) {
         result = result.slice(0, -1);
         candlesStack = candlesStack.slice(0, -1);

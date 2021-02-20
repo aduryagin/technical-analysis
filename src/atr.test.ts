@@ -25,7 +25,7 @@ const expectedResult = [
 
 it('ATR', () => {
   expect(
-    ATR(candles, 3).result().map((item) => ({
+    ATR({ candles, period: 3 }).result().map((item) => ({
       time: item.time,
       value: parseFloat(item.value.toFixed(2)),
     })),
@@ -33,7 +33,7 @@ it('ATR', () => {
 });
 
 it('ATR add', () => {
-  const atr = ATR([], 3);
+  const atr = ATR({ candles: [], period: 3 });
   const result = [];
 
   candles.forEach((item) => {
@@ -45,7 +45,7 @@ it('ATR add', () => {
 });
 
 it('ATR update', () => {
-  const atr = ATR(candles, 3);
+  const atr = ATR({ candles, period: 3 });
 
   expect(atr.update({ time: 10, close: 10, high: 10, low: 10 })).toEqual({
     time: 10,

@@ -1,8 +1,13 @@
 import { SMA } from './sma';
+import { Candle } from './types';
 
-export function stochastic({ candles, signalPeriod, period }) {
-  let result = [];
-  const sma = SMA([], signalPeriod);
+interface StochasticInput { candles: Candle[]; signalPeriod: number; period: number }
+interface StochasticResultItem { time: Candle['time']; k: number; d: number }
+type StochasticResult = StochasticResultItem[]
+
+export function stochastic({ candles, signalPeriod, period }: StochasticInput) {
+  let result: StochasticResult = [];
+  const sma = SMA({ candles: [], period: signalPeriod });
   const pastHighPeriods = [];
   const pastLowPeriods = [];
   let k;
@@ -10,7 +15,7 @@ export function stochastic({ candles, signalPeriod, period }) {
   let index = 1;
   let lastCandle;
 
-  function calculate(candle) {
+  function calculate(candle): StochasticResultItem {
     lastCandle = candle;
     pastHighPeriods.push(candle.high);
     pastLowPeriods.push(candle.low);
@@ -37,7 +42,7 @@ export function stochastic({ candles, signalPeriod, period }) {
 
   return {
     result: () => result,
-    update: (candle) => {
+    update: (candle: Candle) => {
       if (result.length && result[result.length - 1].time === candle.time) {
         result = result.slice(0, -1);
       }

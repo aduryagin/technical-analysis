@@ -27,12 +27,12 @@ const expectedResult = [
 ];
 
 it('trueRange', () => {
-  const range = trueRange(candles);
+  const range = trueRange({candles});
   expect(range.result()).toEqual(expectedResult);
 });
 
 it('trueRange add', () => {
-  const range = trueRange([]);
+  const range = trueRange({candles:[]});
   const result = [];
   candles.forEach((item) => {
     const res = range.update(item);
@@ -43,7 +43,7 @@ it('trueRange add', () => {
 });
 
 it('trueRange update', () => {
-  const range = trueRange([]);
+  const range = trueRange({candles:[]});
   const result = [];
   candles.forEach((item) => {
     const res = range.update(item);

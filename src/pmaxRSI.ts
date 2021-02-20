@@ -1,13 +1,18 @@
 import { SMA } from './sma';
 import { T3 } from './t3';
+import { Candle } from './types';
 import { WWMA } from './wwma'
+
+interface PMaxRRSIInput { candles: Candle[]; rsi?: { period: number }; t3?: { period: number; volumeFactor: number }; atr?: { period: number; multiplier: number }; }
+interface PMaxRRSIResultItem { time: Candle['time']; rsi: number; t3: number; pmax: number; pmaxReverse: number; candle: Candle }
+type PMaxRRSIResult = PMaxRRSIResultItem[]
 
 export function PMaxRSI({
   candles,
   rsi,
   t3,
   atr,
-}) {
+}: PMaxRRSIInput) {
   candles = candles || []
   rsi = rsi || {
     period: 14
@@ -21,14 +26,14 @@ export function PMaxRSI({
     period: 10,
   }
 
-  let result = [];
+  let result: PMaxRRSIResult = [];
   let candleStack = [...candles];
   const t3Instance = T3({ candles: [], period: t3.period, volumeFactor: t3.volumeFactor });
   const AvUp = WWMA({ source: [], period: rsi.period });
   const AvDown = WWMA({ source: [], period: rsi.period });
-  const AvUpSMA = SMA([], rsi.period);
-  const AvDownSMA = SMA([], rsi.period);
-  const ATR = SMA([], atr.period)
+  const AvUpSMA = SMA({ candles: [], period: rsi.period });
+  const AvDownSMA = SMA({ candles: [], period: rsi.period });
+  const ATR = SMA({ candles: [], period: atr.period })
 
   // stacks
   let longStopPrev;
@@ -38,7 +43,7 @@ export function PMaxRSI({
   let shortStopPrev;
   let shortStopStack = [];
 
-  function calculate(candle, index) {
+  function calculate(candle: Candle, index): PMaxRRSIResultItem | undefined {
     if (!candleStack[index - 1]) return undefined;
 
     const i = candle.close >= candleStack[index - 1].close ? candle.close - candleStack[index - 1].close : 0
@@ -117,7 +122,7 @@ export function PMaxRSI({
 
   return {
     result: () => result,
-    update: (candle) => {
+    update: (candle: Candle) => {
       if (result.length && result[result.length - 1].time === candle.time) {
         result = result.slice(0, -1);
         candleStack = candleStack.slice(0, -1);

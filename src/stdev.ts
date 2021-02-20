@@ -1,10 +1,15 @@
 import { SMA } from './sma';
+import { Candle } from './types';
 
-export function STDEV({ candles, period }) {
-  let result = [];
+interface STDEVInput { candles: Candle[]; period: number }
+interface STDEVResultItem { time: Candle['time']; value: number; candle: Candle }
+type STDEVResult = STDEVResultItem[]
+
+export function STDEV({ candles, period }: STDEVInput) {
+  let result: STDEVResult = [];
   let candlesStack = [...candles];
 
-  const sma = SMA([], period);
+  const sma = SMA({ candles: [], period });
   function isZero(val, eps) {
     return Math.abs(val) <= eps;
   }
@@ -21,7 +26,7 @@ export function STDEV({ candles, period }) {
     return res;
   }
 
-  function calculate(candle, index) {
+  function calculate(candle: Candle, index): STDEVResultItem | undefined {
     const average = sma.update(candle);
     if (!average) return undefined;
 
@@ -43,7 +48,7 @@ export function STDEV({ candles, period }) {
 
   return {
     result: () => result,
-    update: (candle) => {
+    update: (candle: Candle) => {
       if (result.length && result[result.length - 1].time === candle.time) {
         result = result.slice(0, -1);
         candlesStack = candlesStack.slice(0, -1);

@@ -25,7 +25,7 @@ const expectedResult = [
 
 it('rma', () => {
   expect(
-    RMA(candles, 3).result().map((item) => ({
+    RMA({ candles, period: 3 }).result().map((item) => ({
       time: item.time,
       value: parseFloat(item.value.toFixed(2)),
     })),
@@ -33,7 +33,7 @@ it('rma', () => {
 });
 
 it('rma add', () => {
-  const rma = RMA([], 3);
+  const rma = RMA({ candles: [], period: 3 });
   const result = [];
 
   candles.forEach((item) => {
@@ -45,7 +45,7 @@ it('rma add', () => {
 });
 
 it('rma update', () => {
-  const rma = RMA(candles, 3);
+  const rma = RMA({ candles, period: 3 });
   expect(rma.update({ time: 10, close: 18 })).toEqual({
     time: 10,
     value: 17.051245237006558,

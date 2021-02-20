@@ -1,15 +1,20 @@
 import { EMA } from './ema';
 import { ATR } from './atr';
+import { Candle } from './types';
+
+interface PMaxInput { candles: Candle[]; emaPeriod?: number; atrPeriod?: number; multiplier?: number; }
+interface PMaxResultItem { time: Candle['time']; ema: number; pmax: number; pmaxReverse: number; pmaxLong: number; pmaxShort: number; candle: Candle }
+type PMaxResult = PMaxResultItem[]
 
 export function PMax({
   candles,
   emaPeriod = 10,
   atrPeriod = 10,
   multiplier = 3,
-}) {
-  let result = [];
+}: PMaxInput) {
+  let result: PMaxResult = [];
   const ema = EMA({ candles: [], period: emaPeriod });
-  const atr = ATR([], atrPeriod);
+  const atr = ATR({ candles: [], period: atrPeriod });
 
   // stacks
   let longStopPrev;
@@ -19,7 +24,7 @@ export function PMax({
   let shortStopPrev;
   let shortStopStack = [];
 
-  function calculate(candle) {
+  function calculate(candle: Candle): PMaxResultItem | undefined {
     const emaResult = ema.update({
       ...candle,
       close: (candle.low + candle.high) / 2,
@@ -74,7 +79,7 @@ export function PMax({
 
   return {
     result: () => result,
-    update: (candle) => {
+    update: (candle: Candle) => {
       if (result.length && result[result.length - 1].time === candle.time) {
         result = result.slice(0, -1);
         longStopStack = [longStopPrev];

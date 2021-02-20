@@ -1,55 +1,40 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.RMA = RMA;
-
-var _sma = require("./sma");
-
-/* eslint-disable no-restricted-globals */
-function RMA(candles, period) {
-  var _result = [];
-  var prevPrevSum;
-  var prevSum;
-  var sum = 0;
-  var sma = (0, _sma.SMA)([], period);
-  var exponent = 1 / period;
-
-  function calculate(candle) {
-    if (isNaN(prevSum) || prevSum === undefined) {
-      var _sma$update;
-
-      sum = (_sma$update = sma.update(candle)) === null || _sma$update === void 0 ? void 0 : _sma$update.value;
-    } else {
-      sum = exponent * candle.close + (1 - exponent) * (prevSum || 0);
+import { SMA } from './sma';
+export function RMA({ candles, period }) {
+    let result = [];
+    let prevPrevSum;
+    let prevSum;
+    let sum = 0;
+    const sma = SMA({ candles: [], period });
+    const exponent = 1 / period;
+    function calculate(candle) {
+        var _a;
+        if (isNaN(prevSum) || prevSum === undefined) {
+            sum = (_a = sma.update(candle)) === null || _a === void 0 ? void 0 : _a.value;
+        }
+        else {
+            sum = exponent * candle.close + (1 - exponent) * (prevSum || 0);
+        }
+        prevPrevSum = prevSum;
+        prevSum = sum;
+        // @ts-ignore
+        return sum ? { time: candle.time, value: sum } : sum;
     }
-
-    prevPrevSum = prevSum;
-    prevSum = sum;
-    return sum ? {
-      time: candle.time,
-      value: sum
-    } : sum;
-  }
-
-  candles.forEach(function (item) {
-    var res = calculate(item);
-    if (res) _result.push(res);
-  });
-  return {
-    result: function result() {
-      return _result;
-    },
-    update: function update(candle) {
-      if (_result.length && _result[_result.length - 1].time === candle.time) {
-        _result = _result.slice(0, -1);
-        prevSum = prevPrevSum;
-      }
-
-      var item = calculate(candle);
-      if (item) _result.push(item);
-      return item;
-    }
-  };
+    candles.forEach((item) => {
+        const res = calculate(item);
+        if (res)
+            result.push(res);
+    });
+    return {
+        result: () => result,
+        update: (candle) => {
+            if (result.length && result[result.length - 1].time === candle.time) {
+                result = result.slice(0, -1);
+                prevSum = prevPrevSum;
+            }
+            const item = calculate(candle);
+            if (item)
+                result.push(item);
+            return item;
+        },
+    };
 }

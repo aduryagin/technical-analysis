@@ -1,15 +1,20 @@
 import { VWMA } from './vwma';
-import { STDEV } from './stdev.ts';
+import { STDEV } from './stdev';
+import { Candle } from './types';
 
-export function FBB({ candles, period, multiplier }) {
+interface FBBInput { candles: Candle[]; period?: number; multiplier?: number; }
+interface FBBResultItem { time: Candle['time']; basis: number; upper1: number; upper2: number; upper3: number; upper4: number; upper5: number; upper6: number; lower1: number; lower2: number; lower3: number; lower4: number; lower5: number; lower6: number }
+type FBBResult = FBBResultItem[]
+
+export function FBB({ candles, period, multiplier }: FBBInput) {
   multiplier = multiplier || 3
   period = period || 200
 
-  let result = [];
+  let result: FBBResult = [];
   const basis = VWMA({ candles: [], period });
   const dev = STDEV({ candles: [], period })
 
-  function calculate(candle) {
+  function calculate(candle: Candle): FBBResultItem | undefined {
     const hlc3 = (candle.high + candle.close + candle.low) / 3
     const basisResult = basis.update({ ...candle, close: hlc3 })
     const devResult = dev.update({ ...candle, close: hlc3 })
@@ -40,7 +45,7 @@ export function FBB({ candles, period, multiplier }) {
 
   return {
     result: () => result,
-    update: (candle) => {
+    update: (candle: Candle) => {
       if (result.length && result[result.length - 1].time === candle.time) {
         result = result.slice(0, -1);
       }

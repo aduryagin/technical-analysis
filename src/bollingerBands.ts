@@ -1,13 +1,18 @@
 import { SMA } from './sma';
-import { STDEV } from './stdev.ts';
+import { STDEV } from './stdev';
+import { Candle } from './types'
 
-export function bollingerBands({ candles, period, stdDev }) {
-  let result = [];
+interface BBInput { candles: Candle[], period: number; stdDev: number }
+interface BBResultItem { time: Candle['time'], value: number; candle: Candle }
+type BBResult = BBResultItem[]
 
-  const sma = SMA([], period);
+export function bollingerBands({ candles, period, stdDev }: BBInput) {
+  let result: BBResult = [];
+
+  const sma = SMA({ candles: [], period });
   const stdev = STDEV({ candles: [], period });
 
-  function calculate(candle) {
+  function calculate(candle: Candle): BBResultItem | undefined {
     const basis = sma.update(candle);
     const sd = stdev.update(candle);
     if (!basis) return undefined;
@@ -27,7 +32,7 @@ export function bollingerBands({ candles, period, stdDev }) {
 
   return {
     result: () => result,
-    update: (candle) => {
+    update: (candle: Candle) => {
       if (result.length && result[result.length - 1].time === candle.time) {
         result = result.slice(0, -1);
       }

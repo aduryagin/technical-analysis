@@ -1,11 +1,16 @@
 import { SMA } from './sma';
+import { Candle } from './types';
 
-export function VWMA({ candles, period }) {
-  let result = [];
-  const sma1 = SMA([], period);
-  const sma2 = SMA([], period);
+interface VWMAInput { candles: Candle[]; period: number }
+interface VWMAResultItem { time: Candle['time']; value: number; }
+type VWMAResult = VWMAResultItem[]
 
-  function calculate(candle) {
+export function VWMA({ candles, period }: VWMAInput) {
+  let result: VWMAResult = [];
+  const sma1 = SMA({candles: [], period});
+  const sma2 = SMA({candles: [], period});
+
+  function calculate(candle): VWMAResultItem | undefined {
     const sma1Result = sma1.update({...candle, close: candle.close * candle.volume })
     const sma2Result = sma2.update({...candle, close: candle.volume })
 

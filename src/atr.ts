@@ -1,17 +1,23 @@
 import { RMA } from './rma';
 import { trueRange } from './trueRange';
+import { Candle } from './types';
 
-export function ATR(candles, period) {
-  let result = [];
-  const tr = trueRange([]);
-  const rma = RMA([], period);
+interface ATRInput { candles: Candle[], period: number }
+interface ATRResultItem { time: Candle['time'], value: number }
+type ATRResult = ATRResultItem[]
 
-  function calculate(candle) {
+export function ATR({ candles, period }: ATRInput) {
+  let result: ATRResult = [];
+  const tr = trueRange({candles:[]});
+  const rma = RMA({ candles: [], period });
+
+  function calculate(candle): ATRResultItem | undefined {
     const tRange = tr.update(candle);
     if (!tRange) return undefined;
 
     const tRangeRMA = rma.update({ time: candle.time, close: tRange.value });
     if (!tRangeRMA) return undefined;
+
     return { time: candle.time, value: tRangeRMA?.value };
   }
 
@@ -22,7 +28,7 @@ export function ATR(candles, period) {
 
   return {
     result: () => result,
-    update: (candle) => {
+    update: (candle: Candle) => {
       if (result.length && result[result.length - 1].time === candle.time) {
         result = result.slice(0, -1);
       }

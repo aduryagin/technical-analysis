@@ -1,11 +1,16 @@
-/* eslint-disable no-restricted-globals */
-export function trueRange(candles) {
-  let result = [];
+import { Candle } from "./types";
+
+interface trueRangeInput { candles: Candle[] }
+interface trueRangeResultItem { time: Candle['time']; value: number; }
+type trueRangeResult = trueRangeResultItem[]
+
+export function trueRange({ candles }: trueRangeInput) {
+  let result: trueRangeResult = [];
   let previousClose;
   let prevPrevClose;
   let trueRangeResult;
 
-  function calculate(candle) {
+  function calculate(candle: Candle): trueRangeResultItem {
     if (previousClose === undefined) {
       previousClose = candle.close;
       return { time: candle.time, value: candle.high - candle.low };

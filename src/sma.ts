@@ -1,5 +1,11 @@
-export function SMA(candles, period) {
-  let result = [];
+import { Candle } from "./types";
+
+interface SMAInput { candles: Candle[]; period: number }
+interface SMAResultItem { time: Candle['time']; value: number; candle: Candle }
+type SMAResult = SMAResultItem[]
+
+export function SMA({ candles, period }: SMAInput) {
+  let result: SMAResult = [];
   const list = [0];
   let counter = 1;
   let sum = 0;
@@ -7,7 +13,7 @@ export function SMA(candles, period) {
   let prevSum;
   let lastCandle;
 
-  function calculate(candle) {
+  function calculate(candle: Candle): SMAResultItem | undefined {
     const current = candle.close;
     lastCandle = candle;
 
@@ -33,7 +39,7 @@ export function SMA(candles, period) {
 
   return {
     result: () => result,
-    update: (candle) => {
+    update: (candle: Candle) => {
       if (result.length && result[result.length - 1].time === candle.time) {
         result = result.slice(0, -1);
         list.pop();

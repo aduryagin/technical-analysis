@@ -1,13 +1,18 @@
 import { averageGain } from './averageGain';
 import { averageLoss } from './averageLoss';
+import { Candle } from './types';
 
-export function RSI({ candles, period }) {
-  let result = [];
+interface RSIInput { candles: Candle[]; period: number }
+interface RSIResultItem { time: Candle['time']; value: number; candle: Candle }
+type RSIResult = RSIResultItem[]
 
-  const avgGain = averageGain([], period);
-  const avgLoss = averageLoss([], period);
+export function RSI({ candles, period }: RSIInput) {
+  let result: RSIResult = [];
 
-  function calculate(candle) {
+  const avgGain = averageGain({ candles: [], period });
+  const avgLoss = averageLoss({ candles: [], period });
+
+  function calculate(candle: Candle): RSIResultItem {
     let currentRSI;
     let RS;
     const lastAvgLoss = avgLoss.update(candle);
@@ -38,7 +43,7 @@ export function RSI({ candles, period }) {
 
   return {
     result: () => result,
-    update: (candle) => {
+    update: (candle: Candle) => {
       if (result.length && result[result.length - 1].time === candle.time) {
         result = result.slice(0, -1);
       }

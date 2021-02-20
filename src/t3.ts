@@ -1,7 +1,12 @@
 import { EMA } from './ema';
+import { Candle } from './types';
 
-export function T3({ candles, period, volumeFactor }) {
-  let result = [];
+interface T3Input { candles: Candle[]; volumeFactor: number; period: number }
+interface T3ResultItem { time: Candle['time']; value: number; }
+type T3Result = T3ResultItem[]
+
+export function T3({ candles, period, volumeFactor }: T3Input) {
+  let result: T3Result = [];
   const T3e1 = EMA({ candles: [], period });
   const T3e2 = EMA({ candles: [], period });
   const T3e3 = EMA({ candles: [], period });
@@ -9,7 +14,7 @@ export function T3({ candles, period, volumeFactor }) {
   const T3e5 = EMA({ candles: [], period });
   const T3e6 = EMA({ candles: [], period });
 
-  function calculate(candle) {
+  function calculate(candle): T3ResultItem | undefined {
     const T3e1Result = T3e1.update(candle)
     if (!T3e1Result) return undefined;
 
@@ -44,7 +49,7 @@ export function T3({ candles, period, volumeFactor }) {
 
   return {
     result: () => result,
-    update: (candle) => {
+    update: (candle: Candle) => {
       if (result.length && result[result.length - 1].time === candle.time) {
         result = result.slice(0, -1);
       }

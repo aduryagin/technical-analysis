@@ -1,4 +1,4 @@
-import { bollingerBands } from './bollingerBands.ts';
+import { bollingerBands } from './bollingerBands';
 
 const candles = [
   { time: 1, close: 15.27, high: 22.75, low: 13.03 },
