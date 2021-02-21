@@ -1,15 +1,15 @@
 {
   "name": "@aduryagin/technical-indicators",
   "version": "0.0.2",
-  "description": "",
+  "description": "Technical indicators with possibility of update/add last item (candle) of result. This may be useful when use realtime (for example WebSockets) data.",
   "main": "dist/index.js",
   "scripts": {
     "test": "jest",
     "build": "tsc --project tsconfig.json"
   },
-  "keywords": [],
+  "keywords": ["trading", "technical-analysis", "technical-indicators"],
   "types": "./src",
-  "author": "",
+  "author": "Alexey Duryagin <aiduryagih@gmail.com> (https://github.com/aduryagin/technical-indicators)",
   "license": "MIT",
   "devDependencies": {
     "@babel/cli": "^7.12.10",
