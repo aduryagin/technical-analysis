@@ -34,7 +34,7 @@ export function OTT({ candles, period, percent }: OTTInput) {
 
   function calculate(candle: Candle): OTTResultItem | undefined {
     // check cross
-    let cross = null;
+    let cross: Cross = null;
     if (
       result.length >= 2 &&
       candle.time !== result[result.length - 1].time &&
