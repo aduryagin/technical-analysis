@@ -6,3 +6,8 @@ export interface Candle {
   low?: number;
   volume?: number;
 }
+
+export interface Cross {
+  bullish: boolean;
+  time: Candle["time"];
+}

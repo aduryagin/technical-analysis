@@ -1,4 +1,4 @@
-import { Candle } from "./types";
+import { Candle, Cross } from "./types";
 import { VAR } from "./var";
 
 interface OTTInput {
@@ -10,6 +10,7 @@ interface OTTResultItem {
   time: Candle["time"];
   var: number;
   ott: number;
+  cross: Cross | null;
   candle: Candle;
 }
 type OTTResult = OTTResultItem[];
@@ -19,6 +20,7 @@ export function OTT({ candles, period, percent }: OTTInput) {
   percent = percent || 1.4;
 
   let result: OTTResult = [];
+  const crossResult: Cross[] = [];
   const varInstance = VAR({ candles: [], period });
 
   // stacks
@@ -31,6 +33,34 @@ export function OTT({ candles, period, percent }: OTTInput) {
   let ottStack = [];
 
   function calculate(candle: Candle): OTTResultItem | undefined {
+    // check cross
+    let cross = null;
+    if (
+      result.length >= 2 &&
+      candle.time !== result[result.length - 1].time &&
+      (!crossResult.length ||
+        crossResult[crossResult.length - 1].time !==
+          result[result.length - 1].time)
+    ) {
+      const prevResult = result[result.length - 2];
+      const currentResult = result[result.length - 1];
+
+      const short =
+        prevResult.var >= prevResult.ott &&
+        currentResult.var < currentResult.ott;
+      const long =
+        prevResult.var < prevResult.ott &&
+        currentResult.var >= currentResult.ott;
+      if (short || long) {
+        cross = {
+          long,
+          time: currentResult.time,
+        };
+        crossResult.push(cross);
+      }
+    }
+
+    // calculate
     const varResult = varInstance.update(candle);
     if (!varResult) return undefined;
 
@@ -77,6 +107,7 @@ export function OTT({ candles, period, percent }: OTTInput) {
       var: varResult.value,
       ott: OTT,
       time: candle.time,
+      cross,
     };
   }
 
@@ -86,6 +117,7 @@ export function OTT({ candles, period, percent }: OTTInput) {
   });
 
   return {
+    cross: () => crossResult,
     result: () => result,
     update: (candle: Candle) => {
       if (result.length && result[result.length - 1].time === candle.time) {

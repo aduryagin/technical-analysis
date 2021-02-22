@@ -15,6 +15,7 @@
         period = period || 2;
         percent = percent || 1.4;
         let result = [];
+        const crossResult = [];
         const varInstance = var_1.VAR({ candles: [], period });
         // stacks
         let longStopPrev;
@@ -25,6 +26,28 @@
         const shortStopStack = [];
         let ottStack = [];
         function calculate(candle) {
+            // check cross
+            let cross = null;
+            if (result.length >= 2 &&
+                candle.time !== result[result.length - 1].time &&
+                (!crossResult.length ||
+                    crossResult[crossResult.length - 1].time !==
+                        result[result.length - 1].time)) {
+                const prevResult = result[result.length - 2];
+                const currentResult = result[result.length - 1];
+                const short = prevResult.var >= prevResult.ott &&
+                    currentResult.var < currentResult.ott;
+                const long = prevResult.var < prevResult.ott &&
+                    currentResult.var >= currentResult.ott;
+                if (short || long) {
+                    cross = {
+                        long,
+                        time: currentResult.time,
+                    };
+                    crossResult.push(cross);
+                }
+            }
+            // calculate
             const varResult = varInstance.update(candle);
             if (!varResult)
                 return undefined;
@@ -64,6 +87,7 @@
                 var: varResult.value,
                 ott: OTT,
                 time: candle.time,
+                cross,
             };
         }
         candles.forEach((item) => {
@@ -72,6 +96,7 @@
                 result.push(res);
         });
         return {
+            cross: () => crossResult,
             result: () => result,
             update: (candle) => {
                 if (result.length && result[result.length - 1].time === candle.time) {

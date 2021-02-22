@@ -79,66 +79,89 @@ const expected = [
     var: 12.4,
     ott: 0,
     time: candles[0].time,
+    cross: null,
   },
   {
     candle: candles[1],
     var: 16.666666666666668,
     ott: 0,
     time: candles[1].time,
+    cross: null,
   },
   {
     candle: candles[2],
     var: 17.48999262662356,
     ott: 12.3119848,
     time: candles[2].time,
+    cross: null,
   },
   {
     candle: candles[3],
     var: 18.221461456326484,
     ott: 16.548366666666666,
     time: candles[3].time,
+    cross: null,
   },
   {
     candle: candles[4],
     var: 18.552598233754054,
     ott: 17.365848658959788,
     time: candles[4].time,
+    cross: null,
   },
   {
     candle: candles[5],
     var: 18.415889871791453,
     ott: 18.092125522909477,
     time: candles[5].time,
+    cross: null,
   },
   {
     candle: candles[6],
     var: 17.68979250164199,
     ott: 18.420911891490867,
     time: candles[6].time,
+    cross: null,
   },
   {
     candle: candles[7],
     var: 17.336052757210197,
     ott: 18.420911891490867,
     time: candles[7].time,
+    cross: {
+      long: false,
+      time: 6,
+    },
   },
   {
     candle: candles[8],
     var: 16.79198837059993,
     ott: 17.81188744948832,
     time: candles[8].time,
+    cross: null,
   },
   {
     candle: candles[9],
     var: 16.25796651075196,
     ott: 17.45570619334046,
     time: candles[9].time,
+    cross: null,
   },
 ];
 
 it("OTT", () => {
   const ott = OTT({ candles });
   expect(ott.result()).toEqual(expected);
+});
+
+it("OTT cross", () => {
+  const ott = OTT({ candles });
+  expect(ott.cross()).toEqual([
+    {
+      long: false,
+      time: 6,
+    },
+  ]);
 });
 
 it("OTT update", () => {
@@ -149,6 +172,7 @@ it("OTT update", () => {
     time: 9,
     var: 14.610227615544966,
     candle: { ...candles[9], close: 12.5 },
+    cross: null,
   });
 
   const secondResult = ott.update(candles[9]);
