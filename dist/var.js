@@ -1,6 +1,6 @@
 function sum(arr, length) {
     return arr.slice(-length).reduce((acc, item) => {
-        return acc += item;
+        return (acc += item);
     }, 0);
 }
 export function VAR({ candles, period }) {
@@ -16,8 +16,9 @@ export function VAR({ candles, period }) {
         vdd1.push(candle.close < prevCandlePrice ? prevCandlePrice - candle.close : 0);
         const vUD = sum(vud1, 9);
         const vDD = sum(vdd1, 9);
-        const vCMO = ((vUD - vDD) / (vUD + vDD)) || 0;
-        let VAR = (valpha * Math.abs(vCMO) * candle.close) + (1 - valpha * Math.abs(vCMO)) * (((_b = result[result.length - 1]) === null || _b === void 0 ? void 0 : _b.value) || 0);
+        const vCMO = (vUD - vDD) / (vUD + vDD) || 0;
+        const VAR = valpha * Math.abs(vCMO) * candle.close +
+            (1 - valpha * Math.abs(vCMO)) * (((_b = result[result.length - 1]) === null || _b === void 0 ? void 0 : _b.value) || 0);
         return { value: VAR, time: candle.time };
     }
     candlesStack.forEach((item, index) => {

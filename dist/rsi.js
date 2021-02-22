@@ -1,5 +1,5 @@
-import { averageGain } from './averageGain';
-import { averageLoss } from './averageLoss';
+import { averageGain } from "./averageGain";
+import { averageLoss } from "./averageLoss";
 export function RSI({ candles, period }) {
     let result = [];
     const avgGain = averageGain({ candles: [], period });

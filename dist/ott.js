@@ -1,4 +1,4 @@
-import { VAR } from './var';
+import { VAR } from "./var";
 export function OTT({ candles, period, percent }) {
     period = period || 2;
     percent = percent || 1.4;
@@ -6,11 +6,11 @@ export function OTT({ candles, period, percent }) {
     const varInstance = VAR({ candles: [], period });
     // stacks
     let longStopPrev;
-    let longStopStack = [];
+    const longStopStack = [];
     let dirStackPrev = 1;
-    let dirStack = [];
+    const dirStack = [];
     let shortStopPrev;
-    let shortStopStack = [];
+    const shortStopStack = [];
     let ottStack = [];
     function calculate(candle) {
         const varResult = varInstance.update(candle);
@@ -43,7 +43,9 @@ export function OTT({ candles, period, percent }) {
                     : dir;
         dirStack.push(dir);
         const MT = dir === 1 ? longStop : shortStop;
-        ottStack.push(varResult.value > MT ? MT * (200 + percent) / 200 : MT * (200 - percent) / 200);
+        ottStack.push(varResult.value > MT
+            ? (MT * (200 + percent)) / 200
+            : (MT * (200 - percent)) / 200);
         const OTT = ottStack[ottStack.length - 3] || 0;
         return {
             candle,

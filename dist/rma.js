@@ -1,4 +1,4 @@
-import { SMA } from './sma';
+import { SMA } from "./sma";
 export function RMA({ candles, period }) {
     let result = [];
     let prevPrevSum;
@@ -16,8 +16,9 @@ export function RMA({ candles, period }) {
         }
         prevPrevSum = prevSum;
         prevSum = sum;
-        // @ts-ignore
-        return sum ? { time: candle.time, value: sum } : sum;
+        if (sum) {
+            return { time: candle.time, value: sum };
+        }
     }
     candles.forEach((item) => {
         const res = calculate(item);

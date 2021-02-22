@@ -1,5 +1,5 @@
-import { VWMA } from './vwma';
-import { STDEV } from './stdev';
+import { VWMA } from "./vwma";
+import { STDEV } from "./stdev";
 export function FBB({ candles, period, multiplier }) {
     multiplier = multiplier || 3;
     period = period || 200;
@@ -13,19 +13,34 @@ export function FBB({ candles, period, multiplier }) {
         if (!basisResult || !devResult)
             return;
         const mDev = multiplier * devResult.value;
-        const upper1 = basisResult.value + (0.236 * mDev);
-        const upper2 = basisResult.value + (0.382 * mDev);
-        const upper3 = basisResult.value + (0.5 * mDev);
-        const upper4 = basisResult.value + (0.618 * mDev);
-        const upper5 = basisResult.value + (0.764 * mDev);
-        const upper6 = basisResult.value + (1 * mDev);
-        const lower1 = basisResult.value - (0.236 * mDev);
-        const lower2 = basisResult.value - (0.382 * mDev);
-        const lower3 = basisResult.value - (0.5 * mDev);
-        const lower4 = basisResult.value - (0.618 * mDev);
-        const lower5 = basisResult.value - (0.764 * mDev);
-        const lower6 = basisResult.value - (1 * mDev);
-        return { time: candle.time, basis: basisResult.value, upper1, upper2, upper3, upper4, upper5, upper6, lower1, lower2, lower3, lower4, lower5, lower6 };
+        const upper1 = basisResult.value + 0.236 * mDev;
+        const upper2 = basisResult.value + 0.382 * mDev;
+        const upper3 = basisResult.value + 0.5 * mDev;
+        const upper4 = basisResult.value + 0.618 * mDev;
+        const upper5 = basisResult.value + 0.764 * mDev;
+        const upper6 = basisResult.value + 1 * mDev;
+        const lower1 = basisResult.value - 0.236 * mDev;
+        const lower2 = basisResult.value - 0.382 * mDev;
+        const lower3 = basisResult.value - 0.5 * mDev;
+        const lower4 = basisResult.value - 0.618 * mDev;
+        const lower5 = basisResult.value - 0.764 * mDev;
+        const lower6 = basisResult.value - 1 * mDev;
+        return {
+            time: candle.time,
+            basis: basisResult.value,
+            upper1,
+            upper2,
+            upper3,
+            upper4,
+            upper5,
+            upper6,
+            lower1,
+            lower2,
+            lower3,
+            lower4,
+            lower5,
+            lower6,
+        };
     }
     candles.forEach((item) => {
         const res = calculate(item);

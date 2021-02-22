@@ -1,4 +1,4 @@
-import { SMA } from './sma';
+import { SMA } from "./sma";
 export function STDEV({ candles, period }) {
     let result = [];
     let candlesStack = [...candles];

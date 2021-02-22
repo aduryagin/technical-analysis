@@ -1,5 +1,5 @@
-import { EMA } from './ema';
-import { ATR } from './atr';
+import { EMA } from "./ema";
+import { ATR } from "./atr";
 export function PMax({ candles, emaPeriod = 10, atrPeriod = 10, multiplier = 3, }) {
     let result = [];
     const ema = EMA({ candles: [], period: emaPeriod });

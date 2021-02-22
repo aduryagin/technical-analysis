@@ -3,7 +3,11 @@ export function WWMA({ source, period }) {
     const wwalpha = 1 / period;
     function calculate(src) {
         var _a;
-        return { value: wwalpha * src.value + (1 - wwalpha) * (((_a = result[result.length - 1]) === null || _a === void 0 ? void 0 : _a.value) || 0), time: src.time };
+        return {
+            value: wwalpha * src.value +
+                (1 - wwalpha) * (((_a = result[result.length - 1]) === null || _a === void 0 ? void 0 : _a.value) || 0),
+            time: src.time,
+        };
     }
     source.forEach((item) => {
         const res = calculate(item);

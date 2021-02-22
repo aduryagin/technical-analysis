@@ -1,4 +1,4 @@
-import { SMA } from './sma';
+import { SMA } from "./sma";
 export function VWMA({ candles, period }) {
     let result = [];
     const sma1 = SMA({ candles: [], period });

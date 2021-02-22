@@ -1,5 +1,5 @@
-import { RMA } from './rma';
-import { trueRange } from './trueRange';
+import { RMA } from "./rma";
+import { trueRange } from "./trueRange";
 export function ATR({ candles, period }) {
     let result = [];
     const tr = trueRange({ candles: [] });

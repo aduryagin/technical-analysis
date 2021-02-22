@@ -1,4 +1,4 @@
-import { SMA } from './sma';
+import { SMA } from "./sma";
 export function stochastic({ candles, signalPeriod, period }) {
     let result = [];
     const sma = SMA({ candles: [], period: signalPeriod });

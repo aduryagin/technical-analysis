@@ -1,5 +1,5 @@
-import { SMA } from './sma';
-import { STDEV } from './stdev';
+import { SMA } from "./sma";
+import { STDEV } from "./stdev";
 export function bollingerBands({ candles, period, stdDev }) {
     let result = [];
     const sma = SMA({ candles: [], period });
