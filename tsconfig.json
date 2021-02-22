@@ -17,6 +17,7 @@
     // next to the .js files
     "outDir": "dist",
     "target": "ES6",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "module": "UMD"
   },
 }
