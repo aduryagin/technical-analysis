@@ -1,4 +1,4 @@
-import { stochastic } from './stochastic';
+import { stochastic } from "./stochastic";
 
 const high = [
   127.009,
@@ -194,13 +194,13 @@ const expected = [
   },
 ];
 
-it('stochastic', () => {
+it("stochastic", () => {
   expect(stochastic({ candles, signalPeriod, period }).result()).toEqual(
-    expected,
+    expected
   );
 });
 
-it('stochastic add', () => {
+it("stochastic add", () => {
   const stoch = stochastic({ candles: [], signalPeriod, period });
   const result = [];
 
@@ -212,7 +212,7 @@ it('stochastic add', () => {
   expect(result).toEqual(expected);
 });
 
-it('stochastic update', () => {
+it("stochastic update", () => {
   const stoch = stochastic({
     candles,
     signalPeriod,
@@ -226,7 +226,7 @@ it('stochastic update', () => {
       high: candles[candles.length - 1].high + 10,
       low: candles[candles.length - 1].low + 10,
       close: candles[candles.length - 1].close + 10,
-    }),
+    })
   ).toEqual({
     d: 68.10251827318741,
     k: 97.10600817867258,
@@ -234,6 +234,6 @@ it('stochastic update', () => {
   });
 
   expect(stoch.update(candles[candles.length - 1])).toEqual(
-    expected[expected.length - 1],
+    expected[expected.length - 1]
   );
 });

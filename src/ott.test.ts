@@ -6,14 +6,14 @@ const candles = [
     open: 22,
     high: 22.75,
     low: 18.51,
-    close: 18.60,
+    close: 18.6,
   },
   {
     time: 1,
-    open: 18.90,
+    open: 18.9,
     high: 19.44,
     low: 18,
-    close: 18.80,
+    close: 18.8,
   },
   {
     time: 2,
@@ -47,12 +47,12 @@ const candles = [
     time: 6,
     open: 18.33,
     high: 18.47,
-    low: 16.90,
+    low: 16.9,
     close: 17,
   },
   {
     time: 7,
-    open: 17.10,
+    open: 17.1,
     high: 17.25,
     low: 16.25,
     close: 17,
@@ -69,9 +69,9 @@ const candles = [
     open: 16,
     high: 16.14,
     low: 14.75,
-    close: 15.50,
+    close: 15.5,
   },
-]
+];
 
 const expected = [
   {
@@ -136,26 +136,26 @@ const expected = [
   },
 ];
 
-it('OTT', () => {
+it("OTT", () => {
   const ott = OTT({ candles });
   expect(ott.result()).toEqual(expected);
 });
 
-it('OTT update', () => {
+it("OTT update", () => {
   const ott = OTT({ candles });
-  const firstResult = ott.update({ ...candles[9], close: 12.50 });
+  const firstResult = ott.update({ ...candles[9], close: 12.5 });
   expect(firstResult).toEqual({
     ott: 17.45570619334046,
     time: 9,
     var: 14.610227615544966,
-    candle: { ...candles[9], close: 12.50 },
+    candle: { ...candles[9], close: 12.5 },
   });
 
   const secondResult = ott.update(candles[9]);
   expect(secondResult).toEqual(expected[9]);
 });
 
-it('OTT add', () => {
+it("OTT add", () => {
   const ott = OTT({ candles: [] });
 
   const result = [];

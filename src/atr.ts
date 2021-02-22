@@ -1,14 +1,20 @@
-import { RMA } from './rma';
-import { trueRange } from './trueRange';
-import { Candle } from './types';
+import { RMA } from "./rma";
+import { trueRange } from "./trueRange";
+import { Candle } from "./types";
 
-interface ATRInput { candles: Candle[], period: number }
-interface ATRResultItem { time: Candle['time'], value: number }
-type ATRResult = ATRResultItem[]
+interface ATRInput {
+  candles: Candle[];
+  period: number;
+}
+interface ATRResultItem {
+  time: Candle["time"];
+  value: number;
+}
+type ATRResult = ATRResultItem[];
 
 export function ATR({ candles, period }: ATRInput) {
   let result: ATRResult = [];
-  const tr = trueRange({candles:[]});
+  const tr = trueRange({ candles: [] });
   const rma = RMA({ candles: [], period });
 
   function calculate(candle): ATRResultItem | undefined {

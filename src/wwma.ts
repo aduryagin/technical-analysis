@@ -1,15 +1,26 @@
 import { Candle } from "./types";
 
-interface WWMAInput { source: { time: number; value: number }[]; period: number }
-interface WWMAResultItem { time: Candle['time']; value: number; }
-type WWMAResult = WWMAResultItem[]
+interface WWMAInput {
+  source: { time: number; value: number }[];
+  period: number;
+}
+interface WWMAResultItem {
+  time: Candle["time"];
+  value: number;
+}
+type WWMAResult = WWMAResultItem[];
 
 export function WWMA({ source, period }: WWMAInput) {
   let result: WWMAResult = [];
   const wwalpha = 1 / period;
 
   function calculate(src): WWMAResultItem {
-    return { value: wwalpha * src.value + (1 - wwalpha) * (result[result.length - 1]?.value || 0), time: src.time };
+    return {
+      value:
+        wwalpha * src.value +
+        (1 - wwalpha) * (result[result.length - 1]?.value || 0),
+      time: src.time,
+    };
   }
 
   source.forEach((item) => {
@@ -29,5 +40,5 @@ export function WWMA({ source, period }: WWMAInput) {
       return item;
     },
     result: () => result,
-  }
+  };
 }

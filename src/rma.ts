@@ -1,9 +1,15 @@
-import { SMA } from './sma';
-import { Candle } from './types';
+import { SMA } from "./sma";
+import { Candle } from "./types";
 
-interface RMAInput { candles: Candle[]; period: number }
-interface RMAResultItem { time: Candle['time']; value: number }
-type RMAResult = RMAResultItem[]
+interface RMAInput {
+  candles: Candle[];
+  period: number;
+}
+interface RMAResultItem {
+  time: Candle["time"];
+  value: number;
+}
+type RMAResult = RMAResultItem[];
 
 export function RMA({ candles, period }: RMAInput) {
   let result: RMAResult = [];
@@ -23,8 +29,9 @@ export function RMA({ candles, period }: RMAInput) {
     prevPrevSum = prevSum;
     prevSum = sum;
 
-    // @ts-ignore
-    return sum ? { time: candle.time, value: sum } : sum;
+    if (sum) {
+      return { time: candle.time, value: sum };
+    }
   }
 
   candles.forEach((item) => {

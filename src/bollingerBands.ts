@@ -1,10 +1,18 @@
-import { SMA } from './sma';
-import { STDEV } from './stdev';
-import { Candle } from './types'
+import { SMA } from "./sma";
+import { STDEV } from "./stdev";
+import { Candle } from "./types";
 
-interface BBInput { candles: Candle[], period: number; stdDev: number }
-interface BBResultItem { time: Candle['time'], value: number; candle: Candle }
-type BBResult = BBResultItem[]
+interface BBInput {
+  candles: Candle[];
+  period: number;
+  stdDev: number;
+}
+interface BBResultItem {
+  time: Candle["time"];
+  value: number;
+  candle: Candle;
+}
+type BBResult = BBResultItem[];
 
 export function bollingerBands({ candles, period, stdDev }: BBInput) {
   let result: BBResult = [];

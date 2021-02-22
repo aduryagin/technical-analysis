@@ -1,4 +1,4 @@
-import { trueRange } from './trueRange';
+import { trueRange } from "./trueRange";
 
 const candles = [
   {
@@ -26,13 +26,13 @@ const expectedResult = [
   { time: 2, value: 6 },
 ];
 
-it('trueRange', () => {
-  const range = trueRange({candles});
+it("trueRange", () => {
+  const range = trueRange({ candles });
   expect(range.result()).toEqual(expectedResult);
 });
 
-it('trueRange add', () => {
-  const range = trueRange({candles:[]});
+it("trueRange add", () => {
+  const range = trueRange({ candles: [] });
   const result = [];
   candles.forEach((item) => {
     const res = range.update(item);
@@ -42,8 +42,8 @@ it('trueRange add', () => {
   expect(result).toEqual(expectedResult);
 });
 
-it('trueRange update', () => {
-  const range = trueRange({candles:[]});
+it("trueRange update", () => {
+  const range = trueRange({ candles: [] });
   const result = [];
   candles.forEach((item) => {
     const res = range.update(item);

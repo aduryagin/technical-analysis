@@ -1,10 +1,17 @@
-import { averageGain } from './averageGain';
-import { averageLoss } from './averageLoss';
-import { Candle } from './types';
+import { averageGain } from "./averageGain";
+import { averageLoss } from "./averageLoss";
+import { Candle } from "./types";
 
-interface RSIInput { candles: Candle[]; period: number }
-interface RSIResultItem { time: Candle['time']; value: number; candle: Candle }
-type RSIResult = RSIResultItem[]
+interface RSIInput {
+  candles: Candle[];
+  period: number;
+}
+interface RSIResultItem {
+  time: Candle["time"];
+  value: number;
+  candle: Candle;
+}
+type RSIResult = RSIResultItem[];
 
 export function RSI({ candles, period }: RSIInput) {
   let result: RSIResult = [];

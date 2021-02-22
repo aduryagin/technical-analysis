@@ -1,8 +1,15 @@
 import { Candle } from "./types";
 
-interface SMAInput { candles: Candle[]; period: number }
-interface SMAResultItem { time: Candle['time']; value: number; candle: Candle }
-type SMAResult = SMAResultItem[]
+interface SMAInput {
+  candles: Candle[];
+  period: number;
+}
+interface SMAResultItem {
+  time: Candle["time"];
+  value: number;
+  candle: Candle;
+}
+type SMAResult = SMAResultItem[];
 
 export function SMA({ candles, period }: SMAInput) {
   let result: SMAResult = [];

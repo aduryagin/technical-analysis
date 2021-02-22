@@ -1,9 +1,16 @@
-import { SMA } from './sma';
-import { Candle } from './types';
+import { SMA } from "./sma";
+import { Candle } from "./types";
 
-interface STDEVInput { candles: Candle[]; period: number }
-interface STDEVResultItem { time: Candle['time']; value: number; candle: Candle }
-type STDEVResult = STDEVResultItem[]
+interface STDEVInput {
+  candles: Candle[];
+  period: number;
+}
+interface STDEVResultItem {
+  time: Candle["time"];
+  value: number;
+  candle: Candle;
+}
+type STDEVResult = STDEVResultItem[];
 
 export function STDEV({ candles, period }: STDEVInput) {
   let result: STDEVResult = [];

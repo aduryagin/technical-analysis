@@ -1,8 +1,13 @@
 import { Candle } from "./types";
 
-interface VWAPInput { candles: Candle[]; }
-interface VWAPResultItem { time: Candle['time']; value: number; }
-type VWAPResult = VWAPResultItem[]
+interface VWAPInput {
+  candles: Candle[];
+}
+interface VWAPResultItem {
+  time: Candle["time"];
+  value: number;
+}
+type VWAPResult = VWAPResultItem[];
 
 export function VWAP({ candles }: VWAPInput) {
   let result: VWAPResult = [];

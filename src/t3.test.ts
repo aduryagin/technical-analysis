@@ -23,11 +23,11 @@ const candles = [
   },
   {
     time: 5,
-    close: 24.30,
+    close: 24.3,
   },
   {
     time: 6,
-    close: 24.30,
+    close: 24.3,
   },
   {
     time: 7,
@@ -35,7 +35,7 @@ const candles = [
   },
   {
     time: 8,
-    close: 15.30,
+    close: 15.3,
   },
   {
     time: 9,
@@ -44,17 +44,21 @@ const candles = [
 ];
 const expectedResult = [
   { time: 6, value: 26.09 },
-  { time: 7, value: 20.40 },
+  { time: 7, value: 20.4 },
   { time: 8, value: 16.42 },
   { time: 9, value: 13.08 },
 ];
 
-it('t3', () => {
+it("t3", () => {
   const t3 = T3({ candles, period: 2, volumeFactor: 0.7 });
-  expect(t3.result().map((item) => ({ ...item, value: parseFloat(item.value.toFixed(2)) }))).toEqual(expectedResult);
+  expect(
+    t3
+      .result()
+      .map((item) => ({ ...item, value: parseFloat(item.value.toFixed(2)) }))
+  ).toEqual(expectedResult);
 });
 
-it('t3 add', () => {
+it("t3 add", () => {
   const t3 = T3({ candles: [], period: 2, volumeFactor: 0.7 });
   const result = [];
 
@@ -70,7 +74,7 @@ it('t3 add', () => {
   expect(result).toEqual(expectedResult);
 });
 
-it('t3 update', () => {
+it("t3 update", () => {
   const t3 = T3({ candles, period: 2, volumeFactor: 0.7 });
 
   expect(t3.update({ time: 9, close: 10 })).toEqual({
@@ -78,9 +82,7 @@ it('t3 update', () => {
     value: 12.013676791929882,
   });
 
-  expect(
-    t3.update({ time: 9, close: 11.91 }),
-  ).toEqual({
+  expect(t3.update({ time: 9, close: 11.91 })).toEqual({
     time: 9,
     value: 13.075374789186384,
   });

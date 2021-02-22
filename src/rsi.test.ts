@@ -1,4 +1,4 @@
-import { RSI } from './rsi';
+import { RSI } from "./rsi";
 
 const inputRSI = [
   44.34,
@@ -62,11 +62,13 @@ const expectedResult = [
   candle: inputRSI[index + 14],
 }));
 
-it('rsi', () => {
-  expect(RSI({ candles: inputRSI, period: 14 }).result()).toEqual(expectedResult);
+it("rsi", () => {
+  expect(RSI({ candles: inputRSI, period: 14 }).result()).toEqual(
+    expectedResult
+  );
 });
 
-it('rsi update', () => {
+it("rsi update", () => {
   const rsi = RSI({ candles: inputRSI, period: 14 });
   const firstResult = rsi.update({ time: 32, close: 45 });
   expect(firstResult).toEqual({
@@ -83,7 +85,7 @@ it('rsi update', () => {
   });
 });
 
-it('rsi add when update', () => {
+it("rsi add when update", () => {
   const rsi = RSI({ candles: [], period: 14 });
   const result = [];
 

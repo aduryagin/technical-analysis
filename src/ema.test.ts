@@ -1,4 +1,4 @@
-import { EMA } from './ema';
+import { EMA } from "./ema";
 
 const close = [
   127.75,
@@ -34,21 +34,21 @@ const expectedOutput = [
   229.04013365873777,
 ];
 
-it('ema', () => {
+it("ema", () => {
   expect(
     EMA({
       candles: close.map((item, index) => ({ close: item, time: index })),
       period,
-    }).result(),
+    }).result()
   ).toEqual(
     expectedOutput.map((item, index) => ({
       time: index + period - 1,
       value: item,
-    })),
+    }))
   );
 });
 
-it('ema add', () => {
+it("ema add", () => {
   const result = [];
   const ema = EMA({ candles: [], period });
   close.forEach((item, index) => {
@@ -60,11 +60,11 @@ it('ema add', () => {
     expectedOutput.map((item, index) => ({
       time: index + period - 1,
       value: item,
-    })),
+    }))
   );
 });
 
-it('ema update', () => {
+it("ema update", () => {
   const result = [];
   const ema = EMA({ candles: [], period });
   close.forEach((item, index) => {
@@ -76,7 +76,7 @@ it('ema update', () => {
     expectedOutput.map((item, index) => ({
       time: index + period - 1,
       value: item,
-    })),
+    }))
   );
 
   expect(ema.update({ close: 200, time: 17 })).toEqual({

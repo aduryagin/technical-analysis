@@ -1,8 +1,8 @@
-import { averageGain } from './averageGain';
+import { averageGain } from "./averageGain";
 
-it('averageGain', () => {
-  const result = averageGain({ candles:
-    [
+it("averageGain", () => {
+  const result = averageGain({
+    candles: [
       { time: 0, close: 44.3389 },
       { time: 1, close: 44.0902 },
       { time: 2, close: 44.1497 },
@@ -64,7 +64,7 @@ it('averageGain', () => {
     result.result().map((a) => ({
       time: a.time,
       value: parseFloat(a.value.toFixed(2)),
-    })),
+    }))
   ).toEqual(expected);
 
   expect(result.update({ time: 31, close: 43.6628 })).toEqual({

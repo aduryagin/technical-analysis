@@ -1,8 +1,8 @@
-import { averageLoss } from './averageLoss';
+import { averageLoss } from "./averageLoss";
 
-it('averageLoss', () => {
-  const result = averageLoss({ candles: 
-    [
+it("averageLoss", () => {
+  const result = averageLoss({
+    candles: [
       { time: 1, close: 1 },
       { time: 2, close: 2 },
       { time: 3, close: 3 },
@@ -28,7 +28,7 @@ it('averageLoss', () => {
     result.result().map((a) => ({
       time: a.time,
       value: parseFloat(a.value.toFixed(2)),
-    })),
+    }))
   ).toEqual(expected);
 
   expect(result.update({ time: 10, close: 7 })).toEqual({
@@ -42,7 +42,7 @@ it('averageLoss', () => {
   });
 });
 
-it('averageLoss empty input', () => {
+it("averageLoss empty input", () => {
   const loss = averageLoss({ candles: [], period: 2 });
 
   expect(loss.update({ time: 0, close: 10 })).toEqual(undefined);

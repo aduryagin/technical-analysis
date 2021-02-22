@@ -1,4 +1,4 @@
-import { VWAP } from './vwap';
+import { VWAP } from "./vwap";
 
 const inputVWAP = {
   high: [
@@ -98,17 +98,19 @@ const candles = inputVWAP.high.map((item, index) => ({
   volume: inputVWAP.volume[index],
 }));
 
-it('vwap', () => {
+it("vwap", () => {
   expect(
-    VWAP({candles}).result().map((item) => ({
-      ...item,
-      value: parseFloat(item.value.toFixed(2)),
-    })),
+    VWAP({ candles })
+      .result()
+      .map((item) => ({
+        ...item,
+        value: parseFloat(item.value.toFixed(2)),
+      }))
   ).toEqual(expectedResult);
 });
 
-it('vwap add', () => {
-  const vwap = VWAP({candles: []});
+it("vwap add", () => {
+  const vwap = VWAP({ candles: [] });
   const result = [];
   candles.forEach((candle) => {
     result.push(vwap.update(candle));
@@ -118,12 +120,12 @@ it('vwap add', () => {
     result.map((item) => ({
       ...item,
       value: parseFloat(item.value.toFixed(2)),
-    })),
+    }))
   ).toEqual(expectedResult);
 });
 
-it('vwap update', () => {
-  const vwap = VWAP({candles:[]});
+it("vwap update", () => {
+  const vwap = VWAP({ candles: [] });
   const result = [];
   candles.forEach((candle) => {
     result.push(vwap.update(candle));
@@ -133,15 +135,15 @@ it('vwap update', () => {
     result.map((item) => ({
       ...item,
       value: parseFloat(item.value.toFixed(2)),
-    })),
+    }))
   ).toEqual(expectedResult);
 
   expect(
     vwap.update({ time: 14, close: 200, high: 200, low: 200, volume: 20000 })
-      .value,
+      .value
   ).toEqual(131.77924515540604);
 
   expect(vwap.update(candles[candles.length - 1]).value).toEqual(
-    127.14668471941644,
+    127.14668471941644
   );
 });

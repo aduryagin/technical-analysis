@@ -1,9 +1,17 @@
-import { SMA } from './sma';
-import { Candle } from './types';
+import { SMA } from "./sma";
+import { Candle } from "./types";
 
-interface StochasticInput { candles: Candle[]; signalPeriod: number; period: number }
-interface StochasticResultItem { time: Candle['time']; k: number; d: number }
-type StochasticResult = StochasticResultItem[]
+interface StochasticInput {
+  candles: Candle[];
+  signalPeriod: number;
+  period: number;
+}
+interface StochasticResultItem {
+  time: Candle["time"];
+  k: number;
+  d: number;
+}
+type StochasticResult = StochasticResultItem[];
 
 export function stochastic({ candles, signalPeriod, period }: StochasticInput) {
   let result: StochasticResult = [];

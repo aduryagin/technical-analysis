@@ -1,4 +1,4 @@
-import { STDEV } from './stdev';
+import { STDEV } from "./stdev";
 
 const candles = [
   { time: 1, close: 15.27, high: 22.75, low: 13.03 },
@@ -23,19 +23,21 @@ const expectedResult = [
   { candle: candles[9], time: 10, value: 1.29 },
 ];
 
-it('stdev', () => {
+it("stdev", () => {
   expect(
     STDEV({
       candles,
       period: 3,
-    }).result().map((item) => ({
-      ...item,
-      value: parseFloat(item.value.toFixed(2)),
-    })),
+    })
+      .result()
+      .map((item) => ({
+        ...item,
+        value: parseFloat(item.value.toFixed(2)),
+      }))
   ).toEqual(expectedResult);
 });
 
-it('stdev add', () => {
+it("stdev add", () => {
   const stdev = STDEV({ candles: [], period: 3 });
   const result = [];
 
@@ -51,7 +53,7 @@ it('stdev add', () => {
   expect(result).toEqual(expectedResult);
 });
 
-it('stdev update', () => {
+it("stdev update", () => {
   const sd = STDEV({ candles, period: 3 });
 
   expect(sd.update({ time: 10, close: 10, high: 10, low: 10 })).toEqual({
@@ -60,7 +62,7 @@ it('stdev update', () => {
     value: 2.3418843315207147,
   });
   expect(
-    sd.update({ time: 10, close: 15.92, high: 18.48, low: 14.35 }),
+    sd.update({ time: 10, close: 15.92, high: 18.48, low: 14.35 })
   ).toEqual({
     candle: { time: 10, close: 15.92, high: 18.48, low: 14.35 },
     time: 10,

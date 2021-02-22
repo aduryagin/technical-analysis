@@ -1,4 +1,4 @@
-import { RMA } from './rma';
+import { RMA } from "./rma";
 
 const candles = [
   { time: 1, close: 15.27 },
@@ -23,16 +23,18 @@ const expectedResult = [
   { time: 10, value: 16.36 },
 ];
 
-it('rma', () => {
+it("rma", () => {
   expect(
-    RMA({ candles, period: 3 }).result().map((item) => ({
-      time: item.time,
-      value: parseFloat(item.value.toFixed(2)),
-    })),
+    RMA({ candles, period: 3 })
+      .result()
+      .map((item) => ({
+        time: item.time,
+        value: parseFloat(item.value.toFixed(2)),
+      }))
   ).toEqual(expectedResult);
 });
 
-it('rma add', () => {
+it("rma add", () => {
   const rma = RMA({ candles: [], period: 3 });
   const result = [];
 
@@ -44,7 +46,7 @@ it('rma add', () => {
   expect(result).toEqual(expectedResult);
 });
 
-it('rma update', () => {
+it("rma update", () => {
   const rma = RMA({ candles, period: 3 });
   expect(rma.update({ time: 10, close: 18 })).toEqual({
     time: 10,

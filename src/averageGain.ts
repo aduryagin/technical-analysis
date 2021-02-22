@@ -1,8 +1,14 @@
 import { Candle } from "./types";
 
-interface AverageGainInput { candles: Candle[], period: number }
-interface AverageGainResultItem { time: Candle['time'], value: number }
-type AverageGainResult = AverageGainResultItem[]
+interface AverageGainInput {
+  candles: Candle[];
+  period: number;
+}
+interface AverageGainResultItem {
+  time: Candle["time"];
+  value: number;
+}
+type AverageGainResult = AverageGainResultItem[];
 
 export function averageGain({ candles, period }: AverageGainInput) {
   let counter = 1;

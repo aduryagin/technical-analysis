@@ -1,4 +1,4 @@
-import { ATR } from './atr';
+import { ATR } from "./atr";
 
 const candles = [
   { time: 1, close: 15.27, high: 22.75, low: 13.03 },
@@ -23,16 +23,18 @@ const expectedResult = [
   { time: 10, value: 4.98 },
 ];
 
-it('ATR', () => {
+it("ATR", () => {
   expect(
-    ATR({ candles, period: 3 }).result().map((item) => ({
-      time: item.time,
-      value: parseFloat(item.value.toFixed(2)),
-    })),
+    ATR({ candles, period: 3 })
+      .result()
+      .map((item) => ({
+        time: item.time,
+        value: parseFloat(item.value.toFixed(2)),
+      }))
   ).toEqual(expectedResult);
 });
 
-it('ATR add', () => {
+it("ATR add", () => {
   const atr = ATR({ candles: [], period: 3 });
   const result = [];
 
@@ -44,7 +46,7 @@ it('ATR add', () => {
   expect(result).toEqual(expectedResult);
 });
 
-it('ATR update', () => {
+it("ATR update", () => {
   const atr = ATR({ candles, period: 3 });
 
   expect(atr.update({ time: 10, close: 10, high: 10, low: 10 })).toEqual({
@@ -52,6 +54,6 @@ it('ATR update', () => {
     value: 5.5119234872732825,
   });
   expect(
-    atr.update({ time: 10, close: 15.92, high: 18.48, low: 14.35 }),
+    atr.update({ time: 10, close: 15.92, high: 18.48, low: 14.35 })
   ).toEqual({ time: 10, value: 4.978590153939949 });
 });

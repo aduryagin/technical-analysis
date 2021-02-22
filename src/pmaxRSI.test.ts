@@ -6,14 +6,14 @@ const candles = [
     open: 22,
     high: 22.75,
     low: 18.51,
-    close: 18.60,
+    close: 18.6,
   },
   {
     time: 1,
-    open: 18.90,
+    open: 18.9,
     high: 19.44,
     low: 18,
-    close: 18.80,
+    close: 18.8,
   },
   {
     time: 2,
@@ -47,12 +47,12 @@ const candles = [
     time: 6,
     open: 18.33,
     high: 18.47,
-    low: 16.90,
+    low: 16.9,
     close: 17,
   },
   {
     time: 7,
-    open: 17.10,
+    open: 17.1,
     high: 17.25,
     low: 16.25,
     close: 17,
@@ -69,9 +69,9 @@ const candles = [
     open: 16,
     high: 16.14,
     low: 14.75,
-    close: 15.50,
+    close: 15.5,
   },
-]
+];
 
 const expected = [
   {
@@ -92,11 +92,11 @@ const expected = [
   },
 ];
 
-it('pmaxRSI', () => {
+it("pmaxRSI", () => {
   const pmax = PMaxRSI({
     candles,
     rsi: {
-      period: 2
+      period: 2,
     },
     t3: {
       period: 2,
@@ -105,16 +105,16 @@ it('pmaxRSI', () => {
     atr: {
       multiplier: 1,
       period: 2,
-    }
+    },
   });
   expect(pmax.result()).toEqual(expected);
 });
 
-it('pmaxRSI update', () => {
+it("pmaxRSI update", () => {
   const pmax = PMaxRSI({
     candles,
     rsi: {
-      period: 2
+      period: 2,
     },
     t3: {
       period: 2,
@@ -123,28 +123,28 @@ it('pmaxRSI update', () => {
     atr: {
       multiplier: 1,
       period: 2,
-    }
+    },
   });
 
-  const firstResult = pmax.update({ ...candles[9], close: 12.50 });
+  const firstResult = pmax.update({ ...candles[9], close: 12.5 });
   expect(firstResult).toEqual({
     time: 9,
     pmax: -26.57528701050358,
     rsi: 0.319587441666215,
     pmaxReverse: 23.069723014825293,
     t3: -1.7527819978391435,
-    candle: { ...candles[9], close: 12.50 },
+    candle: { ...candles[9], close: 12.5 },
   });
 
   const secondResult = pmax.update(candles[9]);
   expect(secondResult).toEqual(expected[1]);
 });
 
-it('pmaxRSI add', () => {
+it("pmaxRSI add", () => {
   const pmax = PMaxRSI({
     candles: [],
     rsi: {
-      period: 2
+      period: 2,
     },
     t3: {
       period: 2,
@@ -153,7 +153,7 @@ it('pmaxRSI add', () => {
     atr: {
       multiplier: 1,
       period: 2,
-    }
+    },
   });
 
   const result = [];

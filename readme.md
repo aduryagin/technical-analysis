@@ -23,6 +23,9 @@ Technical indicators with possibility of update/add last item (candle) of result
 * WWMA
 * VAR
 * OTT - https://www.tradingview.com/script/zVhoDQME/
+* Highest
+* Lowest
+* Williams VIX - https://www.tradingview.com/script/og7JPrRA-CM-Williams-Vix-Fix-Finds-Market-Bottoms/
 
 ## Example
 ```js script

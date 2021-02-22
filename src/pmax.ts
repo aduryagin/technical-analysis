@@ -1,10 +1,23 @@
-import { EMA } from './ema';
-import { ATR } from './atr';
-import { Candle } from './types';
+import { EMA } from "./ema";
+import { ATR } from "./atr";
+import { Candle } from "./types";
 
-interface PMaxInput { candles: Candle[]; emaPeriod?: number; atrPeriod?: number; multiplier?: number; }
-interface PMaxResultItem { time: Candle['time']; ema: number; pmax: number; pmaxReverse: number; pmaxLong: number; pmaxShort: number; candle: Candle }
-type PMaxResult = PMaxResultItem[]
+interface PMaxInput {
+  candles: Candle[];
+  emaPeriod?: number;
+  atrPeriod?: number;
+  multiplier?: number;
+}
+interface PMaxResultItem {
+  time: Candle["time"];
+  ema: number;
+  pmax: number;
+  pmaxReverse: number;
+  pmaxLong: number;
+  pmaxShort: number;
+  candle: Candle;
+}
+type PMaxResult = PMaxResultItem[];
 
 export function PMax({
   candles,
@@ -66,7 +79,7 @@ export function PMax({
       time: candle.time,
       ema: emaResult.value,
       pmax: dir === 1 ? longStop : shortStop,
-      pmaxReverse: dir === 1 ? shortStop : longStop, 
+      pmaxReverse: dir === 1 ? shortStop : longStop,
       pmaxLong: longStop,
       pmaxShort: shortStop,
     };

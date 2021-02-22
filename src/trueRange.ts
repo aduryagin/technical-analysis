@@ -1,8 +1,13 @@
 import { Candle } from "./types";
 
-interface trueRangeInput { candles: Candle[] }
-interface trueRangeResultItem { time: Candle['time']; value: number; }
-type trueRangeResult = trueRangeResultItem[]
+interface trueRangeInput {
+  candles: Candle[];
+}
+interface trueRangeResultItem {
+  time: Candle["time"];
+  value: number;
+}
+type trueRangeResult = trueRangeResultItem[];
 
 export function trueRange({ candles }: trueRangeInput) {
   let result: trueRangeResult = [];
@@ -23,7 +28,7 @@ export function trueRange({ candles }: trueRangeInput) {
         : Math.abs(candle.high - previousClose),
       isNaN(Math.abs(candle.low - previousClose))
         ? 0
-        : Math.abs(candle.low - previousClose),
+        : Math.abs(candle.low - previousClose)
     );
     prevPrevClose = previousClose;
     previousClose = candle.close;

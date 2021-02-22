@@ -1,9 +1,15 @@
-import { SMA } from './sma';
-import { Candle } from './types';
+import { SMA } from "./sma";
+import { Candle } from "./types";
 
-interface EMAInput { candles: Candle[], period: number; }
-interface EMAResultItem { time: Candle['time'], value: number; }
-type EMAResult = EMAResultItem[]
+interface EMAInput {
+  candles: Candle[];
+  period: number;
+}
+interface EMAResultItem {
+  time: Candle["time"];
+  value: number;
+}
+type EMAResult = EMAResultItem[];
 
 export function EMA({ candles, period }: EMAInput) {
   let result: EMAResult = [];

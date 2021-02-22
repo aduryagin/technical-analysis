@@ -1,4 +1,4 @@
-import { bollingerBands } from './bollingerBands';
+import { bollingerBands } from "./bollingerBands";
 
 const candles = [
   { time: 1, close: 15.27, high: 22.75, low: 13.03 },
@@ -23,20 +23,22 @@ const expectedResult = [
   { candle: candles[9], time: 10, value: 0.69 },
 ];
 
-it('bb', () => {
+it("bb", () => {
   expect(
     bollingerBands({
       candles,
       period: 3,
       stdDev: 2,
-    }).result().map((item) => ({
-      ...item,
-      value: parseFloat(item.value.toFixed(2)),
-    })),
+    })
+      .result()
+      .map((item) => ({
+        ...item,
+        value: parseFloat(item.value.toFixed(2)),
+      }))
   ).toEqual(expectedResult);
 });
 
-it('bb add', () => {
+it("bb add", () => {
   const bb = bollingerBands({ candles: [], period: 3, stdDev: 2 });
   const result = [];
 
@@ -52,7 +54,7 @@ it('bb add', () => {
   expect(result).toEqual(expectedResult);
 });
 
-it('bb update', () => {
+it("bb update", () => {
   const bb = bollingerBands({ candles, period: 3, stdDev: 2 });
 
   expect(bb.update({ time: 10, close: 10, high: 10, low: 10 })).toEqual({
@@ -61,7 +63,7 @@ it('bb update', () => {
     value: 0.18579433090296296,
   });
   expect(
-    bb.update({ time: 10, close: 15.92, high: 18.48, low: 14.35 }),
+    bb.update({ time: 10, close: 15.92, high: 18.48, low: 14.35 })
   ).toEqual({
     candle: { time: 10, close: 15.92, high: 18.48, low: 14.35 },
     time: 10,
