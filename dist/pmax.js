@@ -13,6 +13,7 @@
     const ema_1 = require("./ema");
     const atr_1 = require("./atr");
     function PMax({ candles, emaPeriod = 10, atrPeriod = 10, multiplier = 3, }) {
+        let crossResult = [];
         let result = [];
         const ema = ema_1.EMA({ candles: [], period: emaPeriod });
         const atr = atr_1.ATR({ candles: [], period: atrPeriod });
@@ -53,14 +54,30 @@
                         ? -1
                         : dir;
             dirStack.push(dir);
+            const pmax = dir === 1 ? longStop : shortStop;
+            // check cross
+            let cross = null;
+            if (result.length >= 1) {
+                const prevResult = result[result.length - 1];
+                const short = prevResult.pmax < prevResult.ema && pmax >= emaResult.value;
+                const long = prevResult.pmax >= prevResult.ema && pmax < emaResult.value;
+                if (short || long) {
+                    cross = {
+                        long,
+                        time: candle.time,
+                    };
+                    crossResult.push(cross);
+                }
+            }
             return {
                 candle,
                 time: candle.time,
                 ema: emaResult.value,
-                pmax: dir === 1 ? longStop : shortStop,
+                pmax,
                 pmaxReverse: dir === 1 ? shortStop : longStop,
                 pmaxLong: longStop,
                 pmaxShort: shortStop,
+                cross,
             };
         }
         candles.forEach((item) => {
@@ -69,9 +86,14 @@
                 result.push(res);
         });
         return {
+            cross: () => crossResult,
             result: () => result,
             update: (candle) => {
                 if (result.length && result[result.length - 1].time === candle.time) {
+                    if (crossResult.length &&
+                        crossResult[crossResult.length - 1].time === candle.time) {
+                        crossResult = crossResult.slice(0, -1);
+                    }
                     result = result.slice(0, -1);
                     longStopStack = [longStopPrev];
                     dirStack = [dirStackPrev];

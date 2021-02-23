@@ -21,6 +21,7 @@ const expectedResult = [
     pmaxLong: 10.816666666666666,
     pmaxShort: 25.323333333333334,
     pmaxReverse: 25.323333333333334,
+    cross: null,
   },
   {
     candle: candles[3],
@@ -30,6 +31,7 @@ const expectedResult = [
     pmaxLong: 12.872777777777781,
     pmaxShort: 25.323333333333334,
     pmaxReverse: 25.323333333333334,
+    cross: null,
   },
   {
     candle: candles[4],
@@ -39,6 +41,7 @@ const expectedResult = [
     pmaxLong: 14.25851851851852,
     pmaxShort: 25.323333333333334,
     pmaxReverse: 25.323333333333334,
+    cross: null,
   },
   {
     candle: candles[5],
@@ -48,6 +51,7 @@ const expectedResult = [
     pmaxLong: 15.51651234567901,
     pmaxShort: 25.323333333333334,
     pmaxReverse: 25.323333333333334,
+    cross: null,
   },
   {
     candle: candles[6],
@@ -57,6 +61,7 @@ const expectedResult = [
     pmaxLong: 15.51651234567901,
     pmaxShort: 25.323333333333334,
     pmaxReverse: 25.323333333333334,
+    cross: null,
   },
   {
     candle: candles[7],
@@ -66,6 +71,7 @@ const expectedResult = [
     pmaxLong: 15.51651234567901,
     pmaxShort: 23.29995284636488,
     pmaxReverse: 23.29995284636488,
+    cross: null,
   },
   {
     candle: candles[8],
@@ -75,6 +81,10 @@ const expectedResult = [
     pmaxLong: 10.069927269090075,
     pmaxShort: 20.87569773090992,
     pmaxReverse: 10.069927269090075,
+    cross: {
+      long: false,
+      time: 9,
+    },
   },
   {
     candle: candles[9],
@@ -84,6 +94,7 @@ const expectedResult = [
     pmaxLong: 10.965316096060048,
     pmaxShort: 20.87569773090992,
     pmaxReverse: 10.965316096060048,
+    cross: null,
   },
 ];
 
@@ -128,6 +139,7 @@ it("PMax update", () => {
     pmaxLong: 10.069927269090075,
     pmaxReverse: 10.069927269090075,
     pmaxShort: 18.24832973727328,
+    cross: null,
   });
   expect(
     pmax.update({ time: 10, close: 15.92, high: 18.48, low: 14.35 })
@@ -139,5 +151,6 @@ it("PMax update", () => {
     pmaxLong: 10.965316096060048,
     pmaxReverse: 10.965316096060048,
     pmaxShort: 20.87569773090992,
+    cross: null,
   });
 });

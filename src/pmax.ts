@@ -1,6 +1,6 @@
 import { EMA } from "./ema";
 import { ATR } from "./atr";
-import { Candle } from "./types";
+import { Candle, Cross } from "./types";
 
 interface PMaxInput {
   candles: Candle[];
@@ -16,6 +16,7 @@ interface PMaxResultItem {
   pmaxLong: number;
   pmaxShort: number;
   candle: Candle;
+  cross: Cross | null;
 }
 type PMaxResult = PMaxResultItem[];
 
@@ -25,6 +26,7 @@ export function PMax({
   atrPeriod = 10,
   multiplier = 3,
 }: PMaxInput) {
+  let crossResult: Cross[] = [];
   let result: PMaxResult = [];
   const ema = EMA({ candles: [], period: emaPeriod });
   const atr = ATR({ candles: [], period: atrPeriod });
@@ -74,14 +76,33 @@ export function PMax({
         : dir;
     dirStack.push(dir);
 
+    const pmax = dir === 1 ? longStop : shortStop;
+
+    // check cross
+    let cross: Cross = null;
+    if (result.length >= 1) {
+      const prevResult = result[result.length - 1];
+
+      const short = prevResult.pmax < prevResult.ema && pmax >= emaResult.value;
+      const long = prevResult.pmax >= prevResult.ema && pmax < emaResult.value;
+      if (short || long) {
+        cross = {
+          long,
+          time: candle.time,
+        };
+        crossResult.push(cross);
+      }
+    }
+
     return {
       candle,
       time: candle.time,
       ema: emaResult.value,
-      pmax: dir === 1 ? longStop : shortStop,
+      pmax,
       pmaxReverse: dir === 1 ? shortStop : longStop,
       pmaxLong: longStop,
       pmaxShort: shortStop,
+      cross,
     };
   }
 
@@ -91,9 +112,17 @@ export function PMax({
   });
 
   return {
+    cross: () => crossResult,
     result: () => result,
     update: (candle: Candle) => {
       if (result.length && result[result.length - 1].time === candle.time) {
+        if (
+          crossResult.length &&
+          crossResult[crossResult.length - 1].time === candle.time
+        ) {
+          crossResult = crossResult.slice(0, -1);
+        }
+
         result = result.slice(0, -1);
         longStopStack = [longStopPrev];
         dirStack = [dirStackPrev];
