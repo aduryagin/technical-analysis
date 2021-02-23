@@ -121,17 +121,17 @@ const expected = [
     var: 17.68979250164199,
     ott: 18.420911891490867,
     time: candles[6].time,
-    cross: null,
+    cross: {
+      long: false,
+      time: 6,
+    },
   },
   {
     candle: candles[7],
     var: 17.336052757210197,
     ott: 18.420911891490867,
     time: candles[7].time,
-    cross: {
-      long: false,
-      time: 6,
-    },
+    cross: null,
   },
   {
     candle: candles[8],

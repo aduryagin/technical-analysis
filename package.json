@@ -1,6 +1,6 @@
 {
   "name": "@aduryagin/technical-indicators",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Technical indicators with possibility of update/add last item (candle) of result. This may be useful when use realtime (for example WebSockets) data.",
   "main": "dist/index.js",
   "scripts": {

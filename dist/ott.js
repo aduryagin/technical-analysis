@@ -15,7 +15,7 @@
         period = period || 2;
         percent = percent || 1.4;
         let result = [];
-        const crossResult = [];
+        let crossResult = [];
         const varInstance = var_1.VAR({ candles: [], period });
         // stacks
         let longStopPrev;
@@ -26,27 +26,6 @@
         const shortStopStack = [];
         let ottStack = [];
         function calculate(candle) {
-            // check cross
-            let cross = null;
-            if (result.length >= 2 &&
-                candle.time !== result[result.length - 1].time &&
-                (!crossResult.length ||
-                    crossResult[crossResult.length - 1].time !==
-                        result[result.length - 1].time)) {
-                const prevResult = result[result.length - 2];
-                const currentResult = result[result.length - 1];
-                const short = prevResult.var >= prevResult.ott &&
-                    currentResult.var < currentResult.ott;
-                const long = prevResult.var < prevResult.ott &&
-                    currentResult.var >= currentResult.ott;
-                if (short || long) {
-                    cross = {
-                        long,
-                        time: currentResult.time,
-                    };
-                    crossResult.push(cross);
-                }
-            }
             // calculate
             const varResult = varInstance.update(candle);
             if (!varResult)
@@ -82,6 +61,20 @@
                 ? (MT * (200 + percent)) / 200
                 : (MT * (200 - percent)) / 200);
             const OTT = ottStack[ottStack.length - 3] || 0;
+            // check cross
+            let cross = null;
+            if (result.length >= 1) {
+                const prevResult = result[result.length - 1];
+                const short = prevResult.var >= prevResult.ott && varResult.value < OTT;
+                const long = prevResult.var < prevResult.ott && varResult.value >= OTT;
+                if (short || long) {
+                    cross = {
+                        long,
+                        time: candle.time,
+                    };
+                    crossResult.push(cross);
+                }
+            }
             return {
                 candle,
                 var: varResult.value,
@@ -100,6 +93,10 @@
             result: () => result,
             update: (candle) => {
                 if (result.length && result[result.length - 1].time === candle.time) {
+                    if (crossResult.length &&
+                        crossResult[crossResult.length - 1].time === candle.time) {
+                        crossResult = crossResult.slice(0, -1);
+                    }
                     result = result.slice(0, -1);
                     ottStack = ottStack.slice(0, -1);
                 }
