@@ -40,6 +40,7 @@ const expected = [
     isBuyZone: true,
     wvf: 4.255319148936174,
     upperBand: 0,
+    cross: null,
   },
   {
     time: 2,
@@ -49,6 +50,7 @@ const expected = [
     rangeLow: 4.351595744680862,
     wvf: 4.308510638297884,
     upperBand: 4.335106382978739,
+    cross: null,
   },
   {
     time: 3,
@@ -58,6 +60,10 @@ const expected = [
     rangeLow: 4.351595744680862,
     wvf: 3.533190578158459,
     upperBand: 4.696170668367596,
+    cross: {
+      long: true,
+      time: 3,
+    },
   },
 ];
 
@@ -93,6 +99,10 @@ it("williamsVix update", () => {
     time: 3,
     upperBand: 6.49052831169446,
     wvf: -0.055524708495269345,
+    cross: {
+      time: 3,
+      long: true,
+    },
   });
 
   const secondResult = instance.update(candles[3]);

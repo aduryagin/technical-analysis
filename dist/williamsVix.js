@@ -16,6 +16,7 @@
     const stdev_1 = require("./stdev");
     function WilliamsVix({ candles, lookBackPeriodStDevHigh = 22, bbLength = 20, bbStandardDeviationUp = 2, lookBackPeriodPercentileHigh = 50, highestPercentile = 0.85, lowestPercentile = 1.01, }) {
         let result = [];
+        let crossResult = [];
         const highestInstance = highest_1.highest({
             candles: [],
             period: lookBackPeriodStDevHigh,
@@ -50,7 +51,21 @@
             const rangeLowResult = rangeLowInstance.update(Object.assign(Object.assign({}, candle), { close: wvf }));
             const rangeLow = ((rangeLowResult === null || rangeLowResult === void 0 ? void 0 : rangeLowResult.value) || 0) * lowestPercentile;
             const isBuyZone = wvf >= upperBand || wvf >= rangeHigh;
+            // check cross
+            let cross = null;
+            if (result.length >= 1) {
+                const prevResult = result[result.length - 1];
+                const long = prevResult.isBuyZone && !isBuyZone;
+                if (long) {
+                    cross = {
+                        long,
+                        time: candle.time,
+                    };
+                    crossResult.push(cross);
+                }
+            }
             return {
+                cross,
                 time: candle.time,
                 candle,
                 rangeHigh,
@@ -66,9 +81,14 @@
                 result.push(item);
         });
         return {
+            cross: () => crossResult,
             result: () => result,
             update: (candle) => {
                 if (result.length && result[result.length - 1].time === candle.time) {
+                    if (crossResult.length &&
+                        crossResult[crossResult.length - 1].time === candle.time) {
+                        crossResult = crossResult.slice(0, -1);
+                    }
                     result = result.slice(0, -1);
                 }
                 const item = calculate(candle);

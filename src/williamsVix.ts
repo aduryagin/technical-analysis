@@ -2,7 +2,7 @@ import { highest } from "./highest";
 import { lowest } from "./lowest";
 import { SMA } from "./sma";
 import { STDEV } from "./stdev";
-import { Candle } from "./types";
+import { Candle, Cross } from "./types";
 
 interface WilliamsVixInput {
   candles: Candle[];
@@ -21,6 +21,7 @@ interface WilliamsVixResultItem {
   wvf: number;
   upperBand: number;
   isBuyZone: boolean;
+  cross: Cross | null;
 }
 type WilliamsVixResult = WilliamsVixResultItem[];
 
@@ -34,6 +35,7 @@ export function WilliamsVix({
   lowestPercentile = 1.01,
 }: WilliamsVixInput) {
   let result: WilliamsVixResult = [];
+  let crossResult: Cross[] = [];
 
   const highestInstance = highest({
     candles: [],
@@ -73,7 +75,23 @@ export function WilliamsVix({
     const rangeLow = (rangeLowResult?.value || 0) * lowestPercentile;
     const isBuyZone = wvf >= upperBand || wvf >= rangeHigh;
 
+    // check cross
+    let cross: Cross = null;
+    if (result.length >= 1) {
+      const prevResult = result[result.length - 1];
+      const long = prevResult.isBuyZone && !isBuyZone;
+
+      if (long) {
+        cross = {
+          long,
+          time: candle.time,
+        };
+        crossResult.push(cross);
+      }
+    }
+
     return {
+      cross,
       time: candle.time,
       candle,
       rangeHigh,
@@ -90,9 +108,17 @@ export function WilliamsVix({
   });
 
   return {
+    cross: () => crossResult,
     result: () => result,
     update: (candle: Candle) => {
       if (result.length && result[result.length - 1].time === candle.time) {
+        if (
+          crossResult.length &&
+          crossResult[crossResult.length - 1].time === candle.time
+        ) {
+          crossResult = crossResult.slice(0, -1);
+        }
+
         result = result.slice(0, -1);
       }
 
