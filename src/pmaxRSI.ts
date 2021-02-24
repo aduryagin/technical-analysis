@@ -18,7 +18,6 @@ interface PMaxRRSIResultItem {
   candle: Candle;
   cross: Cross | null;
 }
-type PMaxRRSIResult = PMaxRRSIResultItem[];
 
 export function PMaxRSI({ candles, rsi, t3, atr }: PMaxRRSIInput) {
   candles = candles || [];
@@ -35,7 +34,7 @@ export function PMaxRSI({ candles, rsi, t3, atr }: PMaxRRSIInput) {
   };
 
   let crossResult: Cross[] = [];
-  let result: PMaxRRSIResult = [];
+  const result = new Map<Candle["time"], PMaxRRSIResultItem>();
   let candleStack = [...candles];
   const t3Instance = T3({
     candles: [],
@@ -103,10 +102,11 @@ export function PMaxRSI({ candles, rsi, t3, atr }: PMaxRRSIInput) {
     const rsih = rsh === -1 ? 0 : 100 - 100 / (1 + rsh);
     const rsl = AvgUpL / AvgDownL;
     const rsil = rsl === -1 ? 0 : 100 - 100 / (1 + rsl);
+    const prevResult = Array.from(result.values()).pop();
     const TR = Math.max(
       rsih - rsil,
-      Math.abs(rsih - (result[result.length - 1]?.rsi || 0)),
-      Math.abs(rsil - (result[result.length - 1]?.rsi || 0))
+      Math.abs(rsih - (prevResult?.rsi || 0)),
+      Math.abs(rsil - (prevResult?.rsi || 0))
     );
 
     const ATRResult = ATR.update({ time: candle.time, close: TR });
@@ -146,9 +146,7 @@ export function PMaxRSI({ candles, rsi, t3, atr }: PMaxRRSIInput) {
 
     // check cross
     let cross: Cross = null;
-    if (result.length >= 1) {
-      const prevResult = result[result.length - 1];
-
+    if (result.size >= 1) {
       const short = prevResult.pmax < prevResult.t3 && pmax >= t3Result.value;
       const long = prevResult.pmax >= prevResult.t3 && pmax < t3Result.value;
       if (short || long) {
@@ -173,14 +171,19 @@ export function PMaxRSI({ candles, rsi, t3, atr }: PMaxRRSIInput) {
 
   candleStack.forEach((item, index) => {
     const res = calculate(item, index);
-    if (res) result.push(res);
+    if (res) result.set(item.time, res);
   });
 
   return {
     cross: () => crossResult,
-    result: () => result,
+    result: (time?: Candle["time"]) => {
+      if (time) return result.get(time);
+      return result;
+    },
     update: (candle: Candle) => {
-      if (result.length && result[result.length - 1].time === candle.time) {
+      const prevResult = Array.from(result.values()).pop();
+
+      if (result.size && prevResult.time === candle.time) {
         if (
           crossResult.length &&
           crossResult[crossResult.length - 1].time === candle.time
@@ -188,7 +191,7 @@ export function PMaxRSI({ candles, rsi, t3, atr }: PMaxRRSIInput) {
           crossResult = crossResult.slice(0, -1);
         }
 
-        result = result.slice(0, -1);
+        result.delete(candle.time);
         candleStack = candleStack.slice(0, -1);
         longStopStack = [longStopPrev];
         dirStack = [dirStackPrev];
@@ -197,7 +200,7 @@ export function PMaxRSI({ candles, rsi, t3, atr }: PMaxRRSIInput) {
 
       candleStack.push(candle);
       const item = calculate(candle, candleStack.length - 1);
-      if (item) result.push(item);
+      if (item) result.set(candle.time, item);
 
       return item;
     },

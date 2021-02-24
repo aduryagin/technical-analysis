@@ -73,26 +73,32 @@ const candles = [
   },
 ];
 
-const expected = [
-  {
-    time: 8,
-    rsi: 2.209112589431399,
-    t3: -0.25963042368900346,
-    pmax: -37.71384287790147,
-    pmaxReverse: 37.19458203052346,
-    candle: candles[8],
-    cross: null,
-  },
-  {
-    time: 9,
-    rsi: 1.0557255113670294,
-    t3: -1.235768703344199,
-    pmax: -26.058273716008635,
-    pmaxReverse: 23.586736309320237,
-    candle: candles[9],
-    cross: null,
-  },
-];
+const expected = new Map([
+  [
+    8,
+    {
+      time: 8,
+      rsi: 2.209112589431399,
+      t3: -0.25963042368900346,
+      pmax: -37.71384287790147,
+      pmaxReverse: 37.19458203052346,
+      candle: candles[8],
+      cross: null,
+    },
+  ],
+  [
+    9,
+    {
+      time: 9,
+      rsi: 1.0557255113670294,
+      t3: -1.235768703344199,
+      pmax: -26.058273716008635,
+      pmaxReverse: 23.586736309320237,
+      candle: candles[9],
+      cross: null,
+    },
+  ],
+]);
 
 it("pmaxRSI", () => {
   const pmax = PMaxRSI({
@@ -140,7 +146,7 @@ it("pmaxRSI update", () => {
   });
 
   const secondResult = pmax.update(candles[9]);
-  expect(secondResult).toEqual(expected[1]);
+  expect(secondResult).toEqual(expected.get(9));
 });
 
 it("pmaxRSI add", () => {
@@ -165,5 +171,23 @@ it("pmaxRSI add", () => {
     if (res) result.push(res);
   });
 
-  expect(result).toEqual(expected);
+  expect(result).toEqual([...expected.values()]);
+});
+
+it("get result PMaxRSI by time", () => {
+  const pmax = PMaxRSI({
+    candles: [],
+    rsi: {
+      period: 2,
+    },
+    t3: {
+      period: 2,
+      volumeFactor: 1,
+    },
+    atr: {
+      multiplier: 1,
+      period: 2,
+    },
+  });
+  expect(pmax.result(candles[9].time)).toEqual([...expected.values()][2]);
 });
