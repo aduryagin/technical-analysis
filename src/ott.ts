@@ -13,13 +13,12 @@ interface OTTResultItem {
   cross: Cross | null;
   candle: Candle;
 }
-type OTTResult = OTTResultItem[];
 
 export function OTT({ candles, period, percent }: OTTInput) {
   period = period || 2;
   percent = percent || 1.4;
 
-  let result: OTTResult = [];
+  const result = new Map<Candle["time"], OTTResultItem>();
   let crossResult: Cross[] = [];
   const varInstance = VAR({ candles: [], period });
 
@@ -77,8 +76,8 @@ export function OTT({ candles, period, percent }: OTTInput) {
 
     // check cross
     let cross: Cross = null;
-    if (result.length >= 1) {
-      const prevResult = result[result.length - 1];
+    if (result.size >= 1) {
+      const prevResult = Array.from(result.values()).pop();
 
       const short = prevResult.var >= prevResult.ott && varResult.value < OTT;
       const long = prevResult.var < prevResult.ott && varResult.value >= OTT;
@@ -102,14 +101,18 @@ export function OTT({ candles, period, percent }: OTTInput) {
 
   candles.forEach((item) => {
     const res = calculate(item);
-    if (res) result.push(res);
+    if (res) result.set(item.time, res);
   });
 
   return {
     cross: () => crossResult,
-    result: () => result,
+    result: (time?: Candle["time"]) => {
+      if (time) return result.get(time);
+      return result;
+    },
     update: (candle: Candle) => {
-      if (result.length && result[result.length - 1].time === candle.time) {
+      const prevResult = Array.from(result.values()).pop();
+      if (result.size && prevResult.time === candle.time) {
         if (
           crossResult.length &&
           crossResult[crossResult.length - 1].time === candle.time
@@ -117,12 +120,12 @@ export function OTT({ candles, period, percent }: OTTInput) {
           crossResult = crossResult.slice(0, -1);
         }
 
-        result = result.slice(0, -1);
+        result.delete(candle.time);
         ottStack = ottStack.slice(0, -1);
       }
 
       const item = calculate(candle);
-      if (item) result.push(item);
+      if (item) result.set(candle.time, item);
 
       return item;
     },
