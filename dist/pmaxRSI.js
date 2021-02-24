@@ -27,7 +27,7 @@
             period: 10,
         };
         let crossResult = [];
-        let result = [];
+        const result = new Map();
         let candleStack = [...candles];
         const t3Instance = t3_1.T3({
             candles: [],
@@ -47,7 +47,6 @@
         let shortStopPrev;
         let shortStopStack = [];
         function calculate(candle, index) {
-            var _a, _b;
             if (!candleStack[index - 1])
                 return undefined;
             const i = candle.close >= candleStack[index - 1].close
@@ -84,7 +83,8 @@
             const rsih = rsh === -1 ? 0 : 100 - 100 / (1 + rsh);
             const rsl = AvgUpL / AvgDownL;
             const rsil = rsl === -1 ? 0 : 100 - 100 / (1 + rsl);
-            const TR = Math.max(rsih - rsil, Math.abs(rsih - (((_a = result[result.length - 1]) === null || _a === void 0 ? void 0 : _a.rsi) || 0)), Math.abs(rsil - (((_b = result[result.length - 1]) === null || _b === void 0 ? void 0 : _b.rsi) || 0)));
+            const prevResult = Array.from(result.values()).pop();
+            const TR = Math.max(rsih - rsil, Math.abs(rsih - ((prevResult === null || prevResult === void 0 ? void 0 : prevResult.rsi) || 0)), Math.abs(rsil - ((prevResult === null || prevResult === void 0 ? void 0 : prevResult.rsi) || 0)));
             const ATRResult = ATR.update({ time: candle.time, close: TR });
             const t3Result = t3Instance.update({ close: rsi1, time: candle.time });
             if (!ATRResult || !t3Result)
@@ -117,8 +117,7 @@
             const pmax = dir === 1 ? longStop : shortStop;
             // check cross
             let cross = null;
-            if (result.length >= 1) {
-                const prevResult = result[result.length - 1];
+            if (result.size >= 1) {
                 const short = prevResult.pmax < prevResult.t3 && pmax >= t3Result.value;
                 const long = prevResult.pmax >= prevResult.t3 && pmax < t3Result.value;
                 if (short || long) {
@@ -142,18 +141,23 @@
         candleStack.forEach((item, index) => {
             const res = calculate(item, index);
             if (res)
-                result.push(res);
+                result.set(item.time, res);
         });
         return {
             cross: () => crossResult,
-            result: () => result,
+            result: (time) => {
+                if (time)
+                    return result.get(time);
+                return result;
+            },
             update: (candle) => {
-                if (result.length && result[result.length - 1].time === candle.time) {
+                const prevResult = Array.from(result.values()).pop();
+                if (result.size && prevResult.time === candle.time) {
                     if (crossResult.length &&
                         crossResult[crossResult.length - 1].time === candle.time) {
                         crossResult = crossResult.slice(0, -1);
                     }
-                    result = result.slice(0, -1);
+                    result.delete(candle.time);
                     candleStack = candleStack.slice(0, -1);
                     longStopStack = [longStopPrev];
                     dirStack = [dirStackPrev];
@@ -162,7 +166,7 @@
                 candleStack.push(candle);
                 const item = calculate(candle, candleStack.length - 1);
                 if (item)
-                    result.push(item);
+                    result.set(candle.time, item);
                 return item;
             },
         };

@@ -14,7 +14,7 @@
     function OTT({ candles, period, percent }) {
         period = period || 2;
         percent = percent || 1.4;
-        let result = [];
+        const result = new Map();
         let crossResult = [];
         const varInstance = var_1.VAR({ candles: [], period });
         // stacks
@@ -63,8 +63,8 @@
             const OTT = ottStack[ottStack.length - 3] || 0;
             // check cross
             let cross = null;
-            if (result.length >= 1) {
-                const prevResult = result[result.length - 1];
+            if (result.size >= 1) {
+                const prevResult = Array.from(result.values()).pop();
                 const short = prevResult.var >= prevResult.ott && varResult.value < OTT;
                 const long = prevResult.var < prevResult.ott && varResult.value >= OTT;
                 if (short || long) {
@@ -86,23 +86,28 @@
         candles.forEach((item) => {
             const res = calculate(item);
             if (res)
-                result.push(res);
+                result.set(item.time, res);
         });
         return {
             cross: () => crossResult,
-            result: () => result,
+            result: (time) => {
+                if (time)
+                    return result.get(time);
+                return result;
+            },
             update: (candle) => {
-                if (result.length && result[result.length - 1].time === candle.time) {
+                const prevResult = Array.from(result.values()).pop();
+                if (result.size && prevResult.time === candle.time) {
                     if (crossResult.length &&
                         crossResult[crossResult.length - 1].time === candle.time) {
                         crossResult = crossResult.slice(0, -1);
                     }
-                    result = result.slice(0, -1);
+                    result.delete(candle.time);
                     ottStack = ottStack.slice(0, -1);
                 }
                 const item = calculate(candle);
                 if (item)
-                    result.push(item);
+                    result.set(candle.time, item);
                 return item;
             },
         };

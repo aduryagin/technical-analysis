@@ -14,7 +14,7 @@
     const atr_1 = require("./atr");
     function PMax({ candles, emaPeriod = 10, atrPeriod = 10, multiplier = 3, }) {
         let crossResult = [];
-        let result = [];
+        const result = new Map();
         const ema = ema_1.EMA({ candles: [], period: emaPeriod });
         const atr = atr_1.ATR({ candles: [], period: atrPeriod });
         // stacks
@@ -57,8 +57,8 @@
             const pmax = dir === 1 ? longStop : shortStop;
             // check cross
             let cross = null;
-            if (result.length >= 1) {
-                const prevResult = result[result.length - 1];
+            if (result.size >= 1) {
+                const prevResult = Array.from(result.values()).pop();
                 const short = prevResult.pmax < prevResult.ema && pmax >= emaResult.value;
                 const long = prevResult.pmax >= prevResult.ema && pmax < emaResult.value;
                 if (short || long) {
@@ -83,25 +83,30 @@
         candles.forEach((item) => {
             const res = calculate(item);
             if (res)
-                result.push(res);
+                result.set(item.time, res);
         });
         return {
             cross: () => crossResult,
-            result: () => result,
+            result: (time) => {
+                if (time)
+                    return result.get(time);
+                return result;
+            },
             update: (candle) => {
-                if (result.length && result[result.length - 1].time === candle.time) {
+                const prevResult = Array.from(result.values()).pop();
+                if (result.size && prevResult.time === candle.time) {
                     if (crossResult.length &&
                         crossResult[crossResult.length - 1].time === candle.time) {
                         crossResult = crossResult.slice(0, -1);
                     }
-                    result = result.slice(0, -1);
+                    result.delete(candle.time);
                     longStopStack = [longStopPrev];
                     dirStack = [dirStackPrev];
                     shortStopStack = [shortStopPrev];
                 }
                 const item = calculate(candle);
                 if (item)
-                    result.push(item);
+                    result.set(candle.time, item);
                 return item;
             },
         };

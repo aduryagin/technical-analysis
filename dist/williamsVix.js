@@ -15,7 +15,7 @@
     const sma_1 = require("./sma");
     const stdev_1 = require("./stdev");
     function WilliamsVix({ candles, lookBackPeriodStDevHigh = 22, bbLength = 20, bbStandardDeviationUp = 2, lookBackPeriodPercentileHigh = 50, highestPercentile = 0.85, lowestPercentile = 1.01, }) {
-        let result = [];
+        const result = new Map();
         let crossResult = [];
         const highestInstance = highest_1.highest({
             candles: [],
@@ -53,8 +53,8 @@
             const isBuyZone = wvf >= upperBand || wvf >= rangeHigh;
             // check cross
             let cross = null;
-            if (result.length >= 1) {
-                const prevResult = result[result.length - 1];
+            if (result.size >= 1) {
+                const prevResult = Array.from(result.values()).pop();
                 const long = prevResult.isBuyZone && !isBuyZone;
                 if (long) {
                     cross = {
@@ -78,22 +78,27 @@
         candles.forEach((candle) => {
             const item = calculate(candle);
             if (item)
-                result.push(item);
+                result.set(candle.time, item);
         });
         return {
             cross: () => crossResult,
-            result: () => result,
+            result: (time) => {
+                if (time)
+                    return result.get(time);
+                return result;
+            },
             update: (candle) => {
-                if (result.length && result[result.length - 1].time === candle.time) {
+                const prevResult = Array.from(result.values()).pop();
+                if (result.size && prevResult.time === candle.time) {
                     if (crossResult.length &&
                         crossResult[crossResult.length - 1].time === candle.time) {
                         crossResult = crossResult.slice(0, -1);
                     }
-                    result = result.slice(0, -1);
+                    result.delete(candle.time);
                 }
                 const item = calculate(candle);
                 if (item)
-                    result.push(item);
+                    result.set(candle.time, item);
                 return item;
             },
         };
