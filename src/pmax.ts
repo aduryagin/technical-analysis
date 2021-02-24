@@ -2,13 +2,13 @@ import { EMA } from "./ema";
 import { ATR } from "./atr";
 import { Candle, Cross } from "./types";
 
-interface PMaxInput {
+export interface PMaxInput {
   candles: Candle[];
   emaPeriod?: number;
   atrPeriod?: number;
   multiplier?: number;
 }
-interface PMaxResultItem {
+export interface PMaxResultItem {
   time: Candle["time"];
   ema: number;
   pmax: number;

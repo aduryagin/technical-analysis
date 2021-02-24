@@ -3,13 +3,13 @@ import { T3 } from "./t3";
 import { Candle, Cross } from "./types";
 import { WWMA } from "./wwma";
 
-interface PMaxRRSIInput {
+export interface PMaxRRSIInput {
   candles: Candle[];
   rsi?: { period: number };
   t3?: { period: number; volumeFactor: number };
   atr?: { period: number; multiplier: number };
 }
-interface PMaxRRSIResultItem {
+export interface PMaxRRSIResultItem {
   time: Candle["time"];
   rsi: number;
   t3: number;

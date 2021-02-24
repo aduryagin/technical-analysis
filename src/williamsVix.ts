@@ -4,7 +4,7 @@ import { SMA } from "./sma";
 import { STDEV } from "./stdev";
 import { Candle, Cross } from "./types";
 
-interface WilliamsVixInput {
+export interface WilliamsVixInput {
   candles: Candle[];
   lookBackPeriodStDevHigh?: number;
   bbLength?: number;
@@ -13,7 +13,7 @@ interface WilliamsVixInput {
   highestPercentile?: number;
   lowestPercentile?: number;
 }
-interface WilliamsVixResultItem {
+export interface WilliamsVixResultItem {
   time: Candle["time"];
   candle: Candle;
   rangeHigh: number;

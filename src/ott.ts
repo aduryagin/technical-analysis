@@ -1,12 +1,12 @@
 import { Candle, Cross } from "./types";
 import { VAR } from "./var";
 
-interface OTTInput {
+export interface OTTInput {
   candles: Candle[];
   period?: number;
   percent?: number;
 }
-interface OTTResultItem {
+export interface OTTResultItem {
   time: Candle["time"];
   var: number;
   ott: number;
