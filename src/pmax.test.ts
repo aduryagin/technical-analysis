@@ -12,103 +12,119 @@ const candles = [
   { time: 9, close: 15.73, high: 15.75, low: 11.54 },
   { time: 10, close: 15.92, high: 18.48, low: 14.35 },
 ];
-const expectedResult = [
-  {
-    candle: candles[2],
-    time: 3,
-    ema: 18.07,
-    pmax: 10.82,
-    pmaxLong: 10.816666666666666,
-    pmaxShort: 25.323333333333334,
-    pmaxReverse: 25.323333333333334,
-    cross: null,
-  },
-  {
-    candle: candles[3],
-    time: 4,
-    ema: 19.44,
-    pmax: 12.87,
-    pmaxLong: 12.872777777777781,
-    pmaxShort: 25.323333333333334,
-    pmaxReverse: 25.323333333333334,
-    cross: null,
-  },
-  {
-    candle: candles[4],
-    time: 5,
-    ema: 22.05,
-    pmax: 14.26,
-    pmaxLong: 14.25851851851852,
-    pmaxShort: 25.323333333333334,
-    pmaxReverse: 25.323333333333334,
-    cross: null,
-  },
-  {
-    candle: candles[5],
-    time: 6,
-    ema: 23.45,
-    pmax: 15.52,
-    pmaxLong: 15.51651234567901,
-    pmaxShort: 25.323333333333334,
-    pmaxReverse: 25.323333333333334,
-    cross: null,
-  },
-  {
-    candle: candles[6],
-    time: 7,
-    ema: 20.35,
-    pmax: 15.52,
-    pmaxLong: 15.51651234567901,
-    pmaxShort: 25.323333333333334,
-    pmaxReverse: 25.323333333333334,
-    cross: null,
-  },
-  {
-    candle: candles[7],
-    time: 8,
-    ema: 17.3,
-    pmax: 15.52,
-    pmaxLong: 15.51651234567901,
-    pmaxShort: 23.29995284636488,
-    pmaxReverse: 23.29995284636488,
-    cross: null,
-  },
-  {
-    candle: candles[8],
-    time: 9,
-    ema: 15.47,
-    pmax: 20.88,
-    pmaxLong: 10.069927269090075,
-    pmaxShort: 20.87569773090992,
-    pmaxReverse: 10.069927269090075,
-    cross: {
-      long: false,
-      time: 9,
+const expectedResult = new Map([
+  [
+    candles[2].time,
+    {
+      candle: candles[2],
+      time: 3,
+      ema: 18.07,
+      pmax: 10.816666666666666,
+      pmaxLong: 10.816666666666666,
+      pmaxShort: 25.323333333333334,
+      pmaxReverse: 25.323333333333334,
+      cross: null,
     },
-  },
-  {
-    candle: candles[9],
-    time: 10,
-    ema: 15.94,
-    pmax: 20.88,
-    pmaxLong: 10.965316096060048,
-    pmaxShort: 20.87569773090992,
-    pmaxReverse: 10.965316096060048,
-    cross: null,
-  },
-];
+  ],
+  [
+    candles[3].time,
+    {
+      candle: candles[3],
+      time: 4,
+      ema: 19.435000000000002,
+      pmax: 12.872777777777781,
+      pmaxLong: 12.872777777777781,
+      pmaxShort: 25.323333333333334,
+      pmaxReverse: 25.323333333333334,
+      cross: null,
+    },
+  ],
+  [
+    candles[4].time,
+    {
+      candle: candles[4],
+      time: 5,
+      ema: 22.05,
+      pmax: 14.25851851851852,
+      pmaxLong: 14.25851851851852,
+      pmaxShort: 25.323333333333334,
+      pmaxReverse: 25.323333333333334,
+      cross: null,
+    },
+  ],
+  [
+    candles[5].time,
+    {
+      candle: candles[5],
+      time: 6,
+      ema: 23.447499999999998,
+      pmax: 15.51651234567901,
+      pmaxLong: 15.51651234567901,
+      pmaxShort: 25.323333333333334,
+      pmaxReverse: 25.323333333333334,
+      cross: null,
+    },
+  ],
+  [
+    candles[6].time,
+    {
+      candle: candles[6],
+      time: 7,
+      ema: 20.346249999999998,
+      pmax: 15.51651234567901,
+      pmaxLong: 15.51651234567901,
+      pmaxShort: 25.323333333333334,
+      pmaxReverse: 25.323333333333334,
+      cross: null,
+    },
+  ],
+  [
+    candles[7].time,
+    {
+      candle: candles[7],
+      time: 8,
+      ema: 17.300624999999997,
+      pmax: 15.51651234567901,
+      pmaxLong: 15.51651234567901,
+      pmaxShort: 23.29995284636488,
+      pmaxReverse: 23.29995284636488,
+      cross: null,
+    },
+  ],
+  [
+    candles[8].time,
+    {
+      candle: candles[8],
+      time: 9,
+      ema: 15.472812499999998,
+      pmax: 20.87569773090992,
+      pmaxLong: 10.069927269090075,
+      pmaxShort: 20.87569773090992,
+      pmaxReverse: 10.069927269090075,
+      cross: {
+        long: false,
+        time: 9,
+      },
+    },
+  ],
+  [
+    candles[9].time,
+    {
+      candle: candles[9],
+      time: 10,
+      ema: 15.943906249999998,
+      pmax: 20.87569773090992,
+      pmaxLong: 10.965316096060048,
+      pmaxShort: 20.87569773090992,
+      pmaxReverse: 10.965316096060048,
+      cross: null,
+    },
+  ],
+]);
 
 it("PMax", () => {
-  expect(
-    PMax({ candles, emaPeriod: 3, atrPeriod: 3, multiplier: 1 })
-      .result()
-      .map((item) => ({
-        ...item,
-        time: item.time,
-        pmax: parseFloat(item.pmax.toFixed(2)),
-        ema: parseFloat(item.ema.toFixed(2)),
-      }))
-  ).toEqual(expectedResult);
+  const pmax = PMax({ candles, emaPeriod: 3, atrPeriod: 3, multiplier: 1 });
+  expect(pmax.result()).toEqual(expectedResult);
 });
 
 it("PMax add", () => {
@@ -120,12 +136,10 @@ it("PMax add", () => {
     if (res)
       result.push({
         ...res,
-        ema: parseFloat(res.ema.toFixed(2)),
-        pmax: parseFloat(res.pmax.toFixed(2)),
       });
   });
 
-  expect(result).toEqual(expectedResult);
+  expect(result).toEqual(Array.from(expectedResult.values()));
 });
 
 it("PMax update", () => {
@@ -153,4 +167,9 @@ it("PMax update", () => {
     pmaxShort: 20.87569773090992,
     cross: null,
   });
+});
+
+it("get result PMax by time", () => {
+  const pmax = PMax({ candles, emaPeriod: 3, atrPeriod: 3, multiplier: 1 });
+  expect(pmax.result(candles[9].time)).toEqual([...expectedResult.values()][7]);
 });

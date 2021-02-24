@@ -18,7 +18,6 @@ interface PMaxResultItem {
   candle: Candle;
   cross: Cross | null;
 }
-type PMaxResult = PMaxResultItem[];
 
 export function PMax({
   candles,
@@ -27,7 +26,7 @@ export function PMax({
   multiplier = 3,
 }: PMaxInput) {
   let crossResult: Cross[] = [];
-  let result: PMaxResult = [];
+  const result = new Map<Candle["time"], PMaxResultItem>();
   const ema = EMA({ candles: [], period: emaPeriod });
   const atr = ATR({ candles: [], period: atrPeriod });
 
@@ -80,8 +79,8 @@ export function PMax({
 
     // check cross
     let cross: Cross = null;
-    if (result.length >= 1) {
-      const prevResult = result[result.length - 1];
+    if (result.size >= 1) {
+      const prevResult = Array.from(result.values()).pop();
 
       const short = prevResult.pmax < prevResult.ema && pmax >= emaResult.value;
       const long = prevResult.pmax >= prevResult.ema && pmax < emaResult.value;
@@ -108,14 +107,19 @@ export function PMax({
 
   candles.forEach((item) => {
     const res = calculate(item);
-    if (res) result.push(res);
+    if (res) result.set(item.time, res);
   });
 
   return {
     cross: () => crossResult,
-    result: () => result,
+    result: (time?: Candle["time"]) => {
+      if (time) return result.get(time);
+      return result;
+    },
     update: (candle: Candle) => {
-      if (result.length && result[result.length - 1].time === candle.time) {
+      const prevResult = Array.from(result.values()).pop();
+
+      if (result.size && prevResult.time === candle.time) {
         if (
           crossResult.length &&
           crossResult[crossResult.length - 1].time === candle.time
@@ -123,14 +127,14 @@ export function PMax({
           crossResult = crossResult.slice(0, -1);
         }
 
-        result = result.slice(0, -1);
+        result.delete(candle.time);
         longStopStack = [longStopPrev];
         dirStack = [dirStackPrev];
         shortStopStack = [shortStopPrev];
       }
 
       const item = calculate(candle);
-      if (item) result.push(item);
+      if (item) result.set(candle.time, item);
 
       return item;
     },
