@@ -149,8 +149,8 @@ export function PMaxRSI({ candles, rsi, t3, atr }: PMaxRRSIInput) {
     if (result.length >= 1) {
       const prevResult = result[result.length - 1];
 
-      const short = prevResult.pmax < prevResult.rsi && pmax >= rsi1;
-      const long = prevResult.pmax >= prevResult.rsi && pmax < rsi1;
+      const short = prevResult.pmax < prevResult.t3 && pmax >= t3Result.value;
+      const long = prevResult.pmax >= prevResult.t3 && pmax < t3Result.value;
       if (short || long) {
         cross = {
           long,
