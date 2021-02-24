@@ -31,41 +31,50 @@ const candles = [
   },
 ];
 
-const expected = [
-  {
-    time: 1,
-    candle: candles[1],
-    rangeHigh: 0,
-    rangeLow: 0,
-    isBuyZone: true,
-    wvf: 4.255319148936174,
-    upperBand: 0,
-    cross: null,
-  },
-  {
-    time: 2,
-    candle: candles[2],
-    isBuyZone: true,
-    rangeHigh: 3.662234042553201,
-    rangeLow: 4.351595744680862,
-    wvf: 4.308510638297884,
-    upperBand: 4.335106382978739,
-    cross: null,
-  },
-  {
-    time: 3,
-    candle: candles[3],
-    isBuyZone: false,
-    rangeHigh: 3.662234042553201,
-    rangeLow: 4.351595744680862,
-    wvf: 3.533190578158459,
-    upperBand: 4.696170668367596,
-    cross: {
-      long: true,
-      time: 3,
+const expected = new Map([
+  [
+    1,
+    {
+      time: 1,
+      candle: candles[1],
+      rangeHigh: 0,
+      rangeLow: 0,
+      isBuyZone: true,
+      wvf: 4.255319148936174,
+      upperBand: 0,
+      cross: null,
     },
-  },
-];
+  ],
+  [
+    2,
+    {
+      time: 2,
+      candle: candles[2],
+      isBuyZone: true,
+      rangeHigh: 3.662234042553201,
+      rangeLow: 4.351595744680862,
+      wvf: 4.308510638297884,
+      upperBand: 4.335106382978739,
+      cross: null,
+    },
+  ],
+  [
+    3,
+    {
+      time: 3,
+      candle: candles[3],
+      isBuyZone: false,
+      rangeHigh: 3.662234042553201,
+      rangeLow: 4.351595744680862,
+      wvf: 3.533190578158459,
+      upperBand: 4.696170668367596,
+      cross: {
+        long: true,
+        time: 3,
+      },
+    },
+  ],
+]);
 
 it("williamsVix", () => {
   const instance = WilliamsVix({
@@ -106,7 +115,7 @@ it("williamsVix update", () => {
   });
 
   const secondResult = instance.update(candles[3]);
-  expect(secondResult).toEqual(expected[2]);
+  expect(secondResult).toEqual(expected.get(3));
 });
 
 it("williamsVix add", () => {
@@ -124,5 +133,18 @@ it("williamsVix add", () => {
     if (res) result.push(res);
   });
 
-  expect(result).toEqual(expected);
+  expect(result).toEqual([...expected.values()]);
+});
+
+it("get result WilliamsVix by time", () => {
+  const williamsVix = WilliamsVix({
+    candles,
+    lookBackPeriodStDevHigh: 2,
+    bbLength: 2,
+    bbStandardDeviationUp: 2,
+    lookBackPeriodPercentileHigh: 2,
+  });
+  expect(williamsVix.result(candles[3].time)).toEqual(
+    [...expected.values()][2]
+  );
 });
