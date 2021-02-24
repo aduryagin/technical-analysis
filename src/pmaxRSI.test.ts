@@ -81,6 +81,7 @@ const expected = [
     pmax: -37.71384287790147,
     pmaxReverse: 37.19458203052346,
     candle: candles[8],
+    cross: null,
   },
   {
     time: 9,
@@ -89,6 +90,7 @@ const expected = [
     pmax: -26.058273716008635,
     pmaxReverse: 23.586736309320237,
     candle: candles[9],
+    cross: null,
   },
 ];
 
@@ -134,6 +136,7 @@ it("pmaxRSI update", () => {
     pmaxReverse: 23.069723014825293,
     t3: -1.7527819978391435,
     candle: { ...candles[9], close: 12.5 },
+    cross: null,
   });
 
   const secondResult = pmax.update(candles[9]);

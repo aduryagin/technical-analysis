@@ -26,6 +26,7 @@
             multiplier: 3,
             period: 10,
         };
+        let crossResult = [];
         let result = [];
         let candleStack = [...candles];
         const t3Instance = t3_1.T3({
@@ -113,13 +114,29 @@
                         ? -1
                         : dir;
             dirStack.push(dir);
+            const pmax = dir === 1 ? longStop : shortStop;
+            // check cross
+            let cross = null;
+            if (result.length >= 1) {
+                const prevResult = result[result.length - 1];
+                const short = prevResult.pmax < prevResult.rsi && pmax >= rsi1;
+                const long = prevResult.pmax >= prevResult.rsi && pmax < rsi1;
+                if (short || long) {
+                    cross = {
+                        long,
+                        time: candle.time,
+                    };
+                    crossResult.push(cross);
+                }
+            }
             return {
                 candle,
                 time: candle.time,
                 rsi: rsi1,
                 t3: t3Result.value,
-                pmax: dir === 1 ? longStop : shortStop,
+                pmax,
                 pmaxReverse: dir === 1 ? shortStop : longStop,
+                cross,
             };
         }
         candleStack.forEach((item, index) => {
@@ -128,9 +145,14 @@
                 result.push(res);
         });
         return {
+            cross: () => crossResult,
             result: () => result,
             update: (candle) => {
                 if (result.length && result[result.length - 1].time === candle.time) {
+                    if (crossResult.length &&
+                        crossResult[crossResult.length - 1].time === candle.time) {
+                        crossResult = crossResult.slice(0, -1);
+                    }
                     result = result.slice(0, -1);
                     candleStack = candleStack.slice(0, -1);
                     longStopStack = [longStopPrev];

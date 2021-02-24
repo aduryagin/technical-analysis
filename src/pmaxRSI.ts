@@ -1,6 +1,6 @@
 import { SMA } from "./sma";
 import { T3 } from "./t3";
-import { Candle } from "./types";
+import { Candle, Cross } from "./types";
 import { WWMA } from "./wwma";
 
 interface PMaxRRSIInput {
@@ -16,6 +16,7 @@ interface PMaxRRSIResultItem {
   pmax: number;
   pmaxReverse: number;
   candle: Candle;
+  cross: Cross | null;
 }
 type PMaxRRSIResult = PMaxRRSIResultItem[];
 
@@ -33,6 +34,7 @@ export function PMaxRSI({ candles, rsi, t3, atr }: PMaxRRSIInput) {
     period: 10,
   };
 
+  let crossResult: Cross[] = [];
   let result: PMaxRRSIResult = [];
   let candleStack = [...candles];
   const t3Instance = T3({
@@ -140,13 +142,32 @@ export function PMaxRSI({ candles, rsi, t3, atr }: PMaxRRSIInput) {
         : dir;
     dirStack.push(dir);
 
+    const pmax = dir === 1 ? longStop : shortStop;
+
+    // check cross
+    let cross: Cross = null;
+    if (result.length >= 1) {
+      const prevResult = result[result.length - 1];
+
+      const short = prevResult.pmax < prevResult.rsi && pmax >= rsi1;
+      const long = prevResult.pmax >= prevResult.rsi && pmax < rsi1;
+      if (short || long) {
+        cross = {
+          long,
+          time: candle.time,
+        };
+        crossResult.push(cross);
+      }
+    }
+
     return {
       candle,
       time: candle.time,
       rsi: rsi1,
       t3: t3Result.value,
-      pmax: dir === 1 ? longStop : shortStop,
+      pmax,
       pmaxReverse: dir === 1 ? shortStop : longStop,
+      cross,
     };
   }
 
@@ -156,9 +177,17 @@ export function PMaxRSI({ candles, rsi, t3, atr }: PMaxRRSIInput) {
   });
 
   return {
+    cross: () => crossResult,
     result: () => result,
     update: (candle: Candle) => {
       if (result.length && result[result.length - 1].time === candle.time) {
+        if (
+          crossResult.length &&
+          crossResult[crossResult.length - 1].time === candle.time
+        ) {
+          crossResult = crossResult.slice(0, -1);
+        }
+
         result = result.slice(0, -1);
         candleStack = candleStack.slice(0, -1);
         longStopStack = [longStopPrev];
