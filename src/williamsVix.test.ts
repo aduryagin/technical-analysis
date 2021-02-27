@@ -55,7 +55,11 @@ const expected = new Map([
       rangeLow: 4.351595744680862,
       wvf: 4.308510638297884,
       upperBand: 4.335106382978739,
-      cross: null,
+      cross: {
+        long: true,
+        name: "In",
+        time: 2,
+      },
     },
   ],
   [
@@ -71,6 +75,7 @@ const expected = new Map([
       cross: {
         long: true,
         time: 3,
+        name: "Out",
       },
     },
   ],
@@ -110,6 +115,7 @@ it("williamsVix update", () => {
     wvf: -0.055524708495269345,
     cross: {
       time: 3,
+      name: "Out",
       long: true,
     },
   });

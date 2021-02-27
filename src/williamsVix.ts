@@ -80,9 +80,10 @@ export function WilliamsVix({
       const prevResult = Array.from(result.values()).pop();
       const long = prevResult.isBuyZone && !isBuyZone;
 
-      if (long) {
+      if (long || isBuyZone) {
         cross = {
-          long,
+          name: isBuyZone ? "In" : "Out",
+          long: long || isBuyZone,
           time: candle.time,
         };
         crossResult.push(cross);
