@@ -8,6 +8,7 @@ export interface Candle {
 }
 
 export interface Cross {
+  name?: string;
   long: boolean;
   time: Candle["time"];
 }

@@ -118,11 +118,14 @@
             // check cross
             let cross = null;
             if (result.size >= 1) {
-                const short = prevResult.pmax < prevResult.t3 && pmax >= t3Result.value;
-                const long = prevResult.pmax >= prevResult.t3 && pmax < t3Result.value;
-                if (short || long) {
+                const shortRSI = prevResult.rsi >= 70 && rsi1 < 70;
+                const longRSI = prevResult.rsi <= 30 && rsi1 > 30;
+                const shortPMax = prevResult.pmax < prevResult.t3 && pmax >= t3Result.value;
+                const longPMax = prevResult.pmax >= prevResult.t3 && pmax < t3Result.value;
+                if (shortPMax || longPMax || shortRSI || longRSI) {
                     cross = {
-                        long,
+                        name: shortPMax || longPMax ? "PMax" : "RSI",
+                        long: longPMax || longRSI,
                         time: candle.time,
                     };
                     crossResult.push(cross);
