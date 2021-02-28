@@ -11,10 +11,13 @@ interface StochasticResultItem {
   k: number;
   d: number;
 }
-type StochasticResult = StochasticResultItem[];
 
-export function stochastic({ candles, signalPeriod, period }: StochasticInput) {
-  let result: StochasticResult = [];
+export function Stochastic({
+  candles,
+  signalPeriod = 3,
+  period = 14,
+}: StochasticInput) {
+  const result = new Map<Candle["time"], StochasticResultItem>();
   const sma = SMA({ candles: [], period: signalPeriod });
   const pastHighPeriods = [];
   const pastLowPeriods = [];
@@ -45,14 +48,19 @@ export function stochastic({ candles, signalPeriod, period }: StochasticInput) {
 
   candles.forEach((candle) => {
     const item = calculate(candle);
-    if (item) result.push(item);
+    if (item) result.set(candle.time, item);
   });
 
   return {
-    result: () => result,
+    result: (time?: Candle["time"]) => {
+      if (time) return result.get(time);
+      return result;
+    },
     update: (candle: Candle) => {
-      if (result.length && result[result.length - 1].time === candle.time) {
-        result = result.slice(0, -1);
+      const prevResult = Array.from(result.values()).pop();
+
+      if (result.size && prevResult.time === candle.time) {
+        result.delete(candle.time);
       }
 
       if (lastCandle && lastCandle.time === candle.time) {
@@ -65,7 +73,7 @@ export function stochastic({ candles, signalPeriod, period }: StochasticInput) {
       }
 
       const item = calculate(candle);
-      if (item) result.push(item);
+      if (item) result.set(candle.time, item);
 
       return item;
     },

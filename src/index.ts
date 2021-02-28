@@ -8,7 +8,7 @@ export { RMA } from "./rma";
 export { RSI } from "./rsi";
 export { SMA } from "./sma";
 export { STDEV } from "./stdev";
-export { stochastic } from "./stochastic";
+export { Stochastic } from "./stochastic";
 export { trueRange } from "./trueRange";
 export { VWAP } from "./vwap";
 export { T3 } from "./t3";

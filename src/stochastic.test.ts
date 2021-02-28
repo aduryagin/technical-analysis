@@ -1,4 +1,4 @@
-import { stochastic } from "./stochastic";
+import { Stochastic } from "./stochastic";
 
 const high = [
   127.009,
@@ -106,102 +106,153 @@ const candles = high.map((item, index) => ({
   close: close[index],
 }));
 
-const expected = [
-  {
-    d: undefined,
-    k: 70.43927648578827,
-    time: 13,
-  },
-  {
-    d: undefined,
-    k: 67.59689922480636,
-    time: 14,
-  },
-  {
-    d: 75.74504737295463,
-    k: 89.19896640826927,
-    time: 15,
-  },
-  {
-    d: 74.2032730404826,
-    k: 65.81395348837218,
-    time: 16,
-  },
-  {
-    d: 78.91472868217079,
-    k: 81.73126614987092,
-    time: 17,
-  },
-  {
-    d: 70.68906115417757,
-    k: 64.52196382428956,
-    time: 18,
-  },
-  {
-    d: 73.58714959436897,
-    k: 74.50821880894642,
-    time: 19,
-  },
-  {
-    d: 79.20144237330932,
-    k: 98.57414448669196,
-    time: 20,
-  },
-  {
-    d: 81.06625513734681,
-    k: 70.11640211640204,
-    time: 21,
-  },
-  {
-    d: 80.58333011353209,
-    k: 73.05944373750224,
-    time: 22,
-  },
-  {
-    d: 72.19961995045314,
-    k: 73.42301399745516,
-    time: 23,
-  },
-  {
-    d: 69.23664028547631,
-    k: 61.22746312147157,
-    time: 24,
-  },
-  {
-    d: 65.20120696381794,
-    k: 60.95314377252715,
-    time: 25,
-  },
-  {
-    d: 54.187477954516474,
-    k: 40.38182696955075,
-    time: 26,
-  },
-  {
-    d: 47.238932570542865,
-    k: 40.38182696955075,
-    time: 27,
-  },
-  {
-    d: 49.19445787014681,
-    k: 66.81971967133897,
-    time: 28,
-  },
-  {
-    d: 54.647978089254224,
-    k: 56.74238762687298,
-    time: 29,
-  },
-];
+const expected = new Map([
+  [
+    13,
+    {
+      d: undefined,
+      k: 70.43927648578827,
+      time: 13,
+    },
+  ],
+  [
+    14,
+    {
+      d: undefined,
+      k: 67.59689922480636,
+      time: 14,
+    },
+  ],
+  [
+    15,
+    {
+      d: 75.74504737295463,
+      k: 89.19896640826927,
+      time: 15,
+    },
+  ],
+  [
+    16,
+    {
+      d: 74.2032730404826,
+      k: 65.81395348837218,
+      time: 16,
+    },
+  ],
+  [
+    17,
+    {
+      d: 78.91472868217079,
+      k: 81.73126614987092,
+      time: 17,
+    },
+  ],
+  [
+    18,
+    {
+      d: 70.68906115417757,
+      k: 64.52196382428956,
+      time: 18,
+    },
+  ],
+  [
+    19,
+    {
+      d: 73.58714959436897,
+      k: 74.50821880894642,
+      time: 19,
+    },
+  ],
+  [
+    20,
+    {
+      d: 79.20144237330932,
+      k: 98.57414448669196,
+      time: 20,
+    },
+  ],
+  [
+    21,
+    {
+      d: 81.06625513734681,
+      k: 70.11640211640204,
+      time: 21,
+    },
+  ],
+  [
+    22,
+    {
+      d: 80.58333011353209,
+      k: 73.05944373750224,
+      time: 22,
+    },
+  ],
+  [
+    23,
+    {
+      d: 72.19961995045314,
+      k: 73.42301399745516,
+      time: 23,
+    },
+  ],
+  [
+    24,
+    {
+      d: 69.23664028547631,
+      k: 61.22746312147157,
+      time: 24,
+    },
+  ],
+  [
+    25,
+    {
+      d: 65.20120696381794,
+      k: 60.95314377252715,
+      time: 25,
+    },
+  ],
+  [
+    26,
+    {
+      d: 54.187477954516474,
+      k: 40.38182696955075,
+      time: 26,
+    },
+  ],
+  [
+    27,
+    {
+      d: 47.238932570542865,
+      k: 40.38182696955075,
+      time: 27,
+    },
+  ],
+  [
+    28,
+    {
+      d: 49.19445787014681,
+      k: 66.81971967133897,
+      time: 28,
+    },
+  ],
+  [
+    29,
+    {
+      d: 54.647978089254224,
+      k: 56.74238762687298,
+      time: 29,
+    },
+  ],
+]);
 
-it("stochastic", () => {
-  expect(stochastic({ candles, signalPeriod, period }).result()).toEqual(
+it("Stochastic", () => {
+  expect(Stochastic({ candles, signalPeriod, period }).result()).toEqual(
     expected
   );
 });
 
-it("stochastic add", () => {
-  const stoch = stochastic({ candles: [], signalPeriod, period });
+it("Stochastic add", () => {
+  const stoch = Stochastic({ candles: [], signalPeriod, period });
   const result = [];
 
   candles.forEach((item) => {
@@ -209,11 +260,11 @@ it("stochastic add", () => {
     if (res) result.push(res);
   });
 
-  expect(result).toEqual(expected);
+  expect(result).toEqual([...expected.values()]);
 });
 
-it("stochastic update", () => {
-  const stoch = stochastic({
+it("Stochastic update", () => {
+  const stoch = Stochastic({
     candles,
     signalPeriod,
     period,
@@ -234,6 +285,13 @@ it("stochastic update", () => {
   });
 
   expect(stoch.update(candles[candles.length - 1])).toEqual(
-    expected[expected.length - 1]
+    Array.from(expected.values()).pop()
+  );
+});
+
+it("get result Stochastic by time", () => {
+  const stochastic = Stochastic({ candles, signalPeriod, period });
+  expect(stochastic.result(candles[candles.length - 1].time)).toEqual(
+    [...expected.values()].pop()
   );
 });

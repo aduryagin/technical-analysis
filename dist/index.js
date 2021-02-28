@@ -9,7 +9,7 @@
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.WilliamsVix = exports.lowest = exports.highest = exports.OTT = exports.VAR = exports.WWMA = exports.FBB = exports.VWMA = exports.PMaxRSI = exports.T3 = exports.VWAP = exports.trueRange = exports.stochastic = exports.STDEV = exports.SMA = exports.RSI = exports.RMA = exports.PMax = exports.EMA = exports.bollingerBands = exports.averageLoss = exports.averageGain = exports.ATR = void 0;
+    exports.WilliamsVix = exports.lowest = exports.highest = exports.OTT = exports.VAR = exports.WWMA = exports.FBB = exports.VWMA = exports.PMaxRSI = exports.T3 = exports.VWAP = exports.trueRange = exports.Stochastic = exports.STDEV = exports.SMA = exports.RSI = exports.RMA = exports.PMax = exports.EMA = exports.bollingerBands = exports.averageLoss = exports.averageGain = exports.ATR = void 0;
     var atr_1 = require("./atr");
     Object.defineProperty(exports, "ATR", { enumerable: true, get: function () { return atr_1.ATR; } });
     var averageGain_1 = require("./averageGain");
@@ -31,7 +31,7 @@
     var stdev_1 = require("./stdev");
     Object.defineProperty(exports, "STDEV", { enumerable: true, get: function () { return stdev_1.STDEV; } });
     var stochastic_1 = require("./stochastic");
-    Object.defineProperty(exports, "stochastic", { enumerable: true, get: function () { return stochastic_1.stochastic; } });
+    Object.defineProperty(exports, "Stochastic", { enumerable: true, get: function () { return stochastic_1.Stochastic; } });
     var trueRange_1 = require("./trueRange");
     Object.defineProperty(exports, "trueRange", { enumerable: true, get: function () { return trueRange_1.trueRange; } });
     var vwap_1 = require("./vwap");

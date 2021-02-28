@@ -9,10 +9,10 @@
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.stochastic = void 0;
+    exports.Stochastic = void 0;
     const sma_1 = require("./sma");
-    function stochastic({ candles, signalPeriod, period }) {
-        let result = [];
+    function Stochastic({ candles, signalPeriod = 3, period = 14, }) {
+        const result = new Map();
         const sma = sma_1.SMA({ candles: [], period: signalPeriod });
         const pastHighPeriods = [];
         const pastLowPeriods = [];
@@ -40,13 +40,18 @@
         candles.forEach((candle) => {
             const item = calculate(candle);
             if (item)
-                result.push(item);
+                result.set(candle.time, item);
         });
         return {
-            result: () => result,
+            result: (time) => {
+                if (time)
+                    return result.get(time);
+                return result;
+            },
             update: (candle) => {
-                if (result.length && result[result.length - 1].time === candle.time) {
-                    result = result.slice(0, -1);
+                const prevResult = Array.from(result.values()).pop();
+                if (result.size && prevResult.time === candle.time) {
+                    result.delete(candle.time);
                 }
                 if (lastCandle && lastCandle.time === candle.time) {
                     pastLowPeriods.pop();
@@ -57,10 +62,10 @@
                 }
                 const item = calculate(candle);
                 if (item)
-                    result.push(item);
+                    result.set(candle.time, item);
                 return item;
             },
         };
     }
-    exports.stochastic = stochastic;
+    exports.Stochastic = Stochastic;
 });
