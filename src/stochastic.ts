@@ -3,8 +3,8 @@ import { Candle } from "./types";
 
 interface StochasticInput {
   candles: Candle[];
-  signalPeriod: number;
-  period: number;
+  signalPeriod?: number;
+  period?: number;
 }
 interface StochasticResultItem {
   time: Candle["time"];
