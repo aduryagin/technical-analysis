@@ -49,11 +49,24 @@ export function Stochastic({
         const longStoch = prevResult.d <= 20 && d > 20;
         const shortKD = prevResult.k > prevResult.d && d >= k;
         const longKD = prevResult.k < prevResult.d && d <= k;
+        const shortStochKD = k >= 80 && shortKD;
+        const longStochKD = k <= 20 && longKD;
 
-        if (shortStoch || longStoch || shortKD || longKD) {
+        if (
+          shortStoch ||
+          longStoch ||
+          shortKD ||
+          longKD ||
+          shortStochKD ||
+          longStochKD
+        ) {
+          let name = "Stochastic";
+          if (shortKD || longKD) name = "KD";
+          else if (shortStochKD || longStochKD) name = "Stochastic KD";
+
           cross = {
-            name: shortStoch || longStoch ? "Stochastic" : "KD",
-            long: longStoch || longKD,
+            name,
+            long: longStoch || longKD || longStochKD,
             time: candle.time,
           };
           crossResult.push(cross);
@@ -73,6 +86,7 @@ export function Stochastic({
   });
 
   return {
+    cross: () => crossResult,
     result: (time?: Candle["time"]) => {
       if (time) return result.get(time);
       return result;

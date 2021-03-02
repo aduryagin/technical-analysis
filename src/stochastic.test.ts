@@ -225,7 +225,7 @@ const expected = new Map([
       time: 23,
       cross: {
         long: true,
-        name: "Stochastic",
+        name: "KD",
         time: 23,
       },
     },
