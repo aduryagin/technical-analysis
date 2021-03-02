@@ -62,7 +62,7 @@ export function Stochastic({
         ) {
           let name = "Stochastic";
           if (shortKD || longKD) name = "KD";
-          else if (shortStochKD || longStochKD) name = "Stochastic KD";
+          if (shortStochKD || longStochKD) name = "Stochastic KD";
 
           cross = {
             name,

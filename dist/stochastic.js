@@ -52,7 +52,7 @@
                         let name = "Stochastic";
                         if (shortKD || longKD)
                             name = "KD";
-                        else if (shortStochKD || longStochKD)
+                        if (shortStochKD || longStochKD)
                             name = "Stochastic KD";
                         cross = {
                             name,
