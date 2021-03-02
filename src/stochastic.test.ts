@@ -113,6 +113,7 @@ const expected = new Map([
       d: undefined,
       k: 70.43927648578827,
       time: 13,
+      cross: null,
     },
   ],
   [
@@ -120,6 +121,7 @@ const expected = new Map([
     {
       d: undefined,
       k: 67.59689922480636,
+      cross: null,
       time: 14,
     },
   ],
@@ -129,6 +131,7 @@ const expected = new Map([
       d: 75.74504737295463,
       k: 89.19896640826927,
       time: 15,
+      cross: null,
     },
   ],
   [
@@ -137,6 +140,11 @@ const expected = new Map([
       d: 74.2032730404826,
       k: 65.81395348837218,
       time: 16,
+      cross: {
+        long: false,
+        name: "KD",
+        time: 16,
+      },
     },
   ],
   [
@@ -145,6 +153,11 @@ const expected = new Map([
       d: 78.91472868217079,
       k: 81.73126614987092,
       time: 17,
+      cross: {
+        long: true,
+        name: "KD",
+        time: 17,
+      },
     },
   ],
   [
@@ -153,6 +166,11 @@ const expected = new Map([
       d: 70.68906115417757,
       k: 64.52196382428956,
       time: 18,
+      cross: {
+        long: false,
+        name: "KD",
+        time: 18,
+      },
     },
   ],
   [
@@ -161,6 +179,11 @@ const expected = new Map([
       d: 73.58714959436897,
       k: 74.50821880894642,
       time: 19,
+      cross: {
+        long: true,
+        name: "KD",
+        time: 19,
+      },
     },
   ],
   [
@@ -169,6 +192,7 @@ const expected = new Map([
       d: 79.20144237330932,
       k: 98.57414448669196,
       time: 20,
+      cross: null,
     },
   ],
   [
@@ -177,6 +201,11 @@ const expected = new Map([
       d: 81.06625513734681,
       k: 70.11640211640204,
       time: 21,
+      cross: {
+        long: false,
+        name: "KD",
+        time: 21,
+      },
     },
   ],
   [
@@ -185,6 +214,7 @@ const expected = new Map([
       d: 80.58333011353209,
       k: 73.05944373750224,
       time: 22,
+      cross: null,
     },
   ],
   [
@@ -193,6 +223,11 @@ const expected = new Map([
       d: 72.19961995045314,
       k: 73.42301399745516,
       time: 23,
+      cross: {
+        long: true,
+        name: "Stochastic",
+        time: 23,
+      },
     },
   ],
   [
@@ -201,6 +236,11 @@ const expected = new Map([
       d: 69.23664028547631,
       k: 61.22746312147157,
       time: 24,
+      cross: {
+        long: false,
+        name: "KD",
+        time: 24,
+      },
     },
   ],
   [
@@ -209,6 +249,7 @@ const expected = new Map([
       d: 65.20120696381794,
       k: 60.95314377252715,
       time: 25,
+      cross: null,
     },
   ],
   [
@@ -217,6 +258,7 @@ const expected = new Map([
       d: 54.187477954516474,
       k: 40.38182696955075,
       time: 26,
+      cross: null,
     },
   ],
   [
@@ -225,6 +267,7 @@ const expected = new Map([
       d: 47.238932570542865,
       k: 40.38182696955075,
       time: 27,
+      cross: null,
     },
   ],
   [
@@ -233,6 +276,11 @@ const expected = new Map([
       d: 49.19445787014681,
       k: 66.81971967133897,
       time: 28,
+      cross: {
+        long: true,
+        name: "KD",
+        time: 28,
+      },
     },
   ],
   [
@@ -241,6 +289,7 @@ const expected = new Map([
       d: 54.647978089254224,
       k: 56.74238762687298,
       time: 29,
+      cross: null,
     },
   ],
 ]);
@@ -282,11 +331,12 @@ it("Stochastic update", () => {
     d: 68.10251827318741,
     k: 97.10600817867258,
     time: 29,
+    cross: null,
   });
 
-  expect(stoch.update(candles[candles.length - 1])).toEqual(
-    Array.from(expected.values()).pop()
-  );
+  expect(stoch.update(candles[candles.length - 1])).toEqual({
+    ...Array.from(expected.values()).pop(),
+  });
 });
 
 it("get result Stochastic by time", () => {

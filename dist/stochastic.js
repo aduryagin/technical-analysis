@@ -12,6 +12,7 @@
     exports.Stochastic = void 0;
     const sma_1 = require("./sma");
     function Stochastic({ candles, signalPeriod = 3, period = 14, }) {
+        const crossResult = [];
         const result = new Map();
         const sma = sma_1.SMA({ candles: [], period: signalPeriod });
         const pastHighPeriods = [];
@@ -32,7 +33,24 @@
                 // eslint-disable-next-line no-restricted-globals
                 k = isNaN(k) ? 0 : k;
                 d = (_a = sma.update({ time: candle.time, close: k })) === null || _a === void 0 ? void 0 : _a.value;
-                return { k, d, time: candle.time };
+                // check cross
+                let cross = null;
+                if (result.size >= 1) {
+                    const prevResult = Array.from(result.values()).pop();
+                    const shortStoch = prevResult.d >= 80 && d < 80;
+                    const longStoch = prevResult.d <= 20 && d > 20;
+                    const shortKD = prevResult.k > prevResult.d && d >= k;
+                    const longKD = prevResult.k < prevResult.d && d <= k;
+                    if (shortStoch || longStoch || shortKD || longKD) {
+                        cross = {
+                            name: shortStoch || longStoch ? "Stochastic" : "KD",
+                            long: longStoch || longKD,
+                            time: candle.time,
+                        };
+                        crossResult.push(cross);
+                    }
+                }
+                return { k, d, time: candle.time, cross };
             }
             index += 1;
             return undefined;

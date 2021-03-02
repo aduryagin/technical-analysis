@@ -1,15 +1,16 @@
 import { SMA } from "./sma";
-import { Candle } from "./types";
+import { Candle, Cross } from "./types";
 
-interface StochasticInput {
+export interface StochasticInput {
   candles: Candle[];
   signalPeriod?: number;
   period?: number;
 }
-interface StochasticResultItem {
+export interface StochasticResultItem {
   time: Candle["time"];
   k: number;
   d: number;
+  cross: Cross | null;
 }
 
 export function Stochastic({
@@ -17,6 +18,7 @@ export function Stochastic({
   signalPeriod = 3,
   period = 14,
 }: StochasticInput) {
+  const crossResult: Cross[] = [];
   const result = new Map<Candle["time"], StochasticResultItem>();
   const sma = SMA({ candles: [], period: signalPeriod });
   const pastHighPeriods = [];
@@ -39,7 +41,26 @@ export function Stochastic({
       k = isNaN(k) ? 0 : k;
       d = sma.update({ time: candle.time, close: k })?.value;
 
-      return { k, d, time: candle.time };
+      // check cross
+      let cross: Cross = null;
+      if (result.size >= 1) {
+        const prevResult = Array.from(result.values()).pop();
+        const shortStoch = prevResult.d >= 80 && d < 80;
+        const longStoch = prevResult.d <= 20 && d > 20;
+        const shortKD = prevResult.k > prevResult.d && d >= k;
+        const longKD = prevResult.k < prevResult.d && d <= k;
+
+        if (shortStoch || longStoch || shortKD || longKD) {
+          cross = {
+            name: shortStoch || longStoch ? "Stochastic" : "KD",
+            long: longStoch || longKD,
+            time: candle.time,
+          };
+          crossResult.push(cross);
+        }
+      }
+
+      return { k, d, time: candle.time, cross };
     }
     index += 1;
 
