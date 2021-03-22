@@ -94,6 +94,10 @@
             },
             update: (candle) => {
                 const prevResult = Array.from(result.values()).pop();
+                // handle bad stream values
+                if (result.size && prevResult.time > candle.time) {
+                    return prevResult;
+                }
                 if (result.size && prevResult.time === candle.time) {
                     if (crossResult.length &&
                         crossResult[crossResult.length - 1].time === candle.time) {

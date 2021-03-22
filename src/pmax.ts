@@ -119,6 +119,11 @@ export function PMax({
     update: (candle: Candle) => {
       const prevResult = Array.from(result.values()).pop();
 
+      // handle bad stream values
+      if (result.size && prevResult.time > candle.time) {
+        return prevResult;
+      }
+
       if (result.size && prevResult.time === candle.time) {
         if (
           crossResult.length &&
