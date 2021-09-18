@@ -13,6 +13,9 @@ export interface WilliamsVixInput {
   highestPercentile?: number;
   lowestPercentile?: number;
 }
+
+export type WilliamsVixCross = Cross & { name: "In" | "Out" }
+
 export interface WilliamsVixResultItem {
   time: Candle["time"];
   candle: Candle;
@@ -21,7 +24,7 @@ export interface WilliamsVixResultItem {
   wvf: number;
   upperBand: number;
   isBuyZone: boolean;
-  cross: Cross | null;
+  cross: WilliamsVixCross | null;
 }
 
 export function WilliamsVix({
@@ -75,7 +78,7 @@ export function WilliamsVix({
     const isBuyZone = wvf >= upperBand || wvf >= rangeHigh;
 
     // check cross
-    let cross: Cross = null;
+    let cross: WilliamsVixCross = null;
     if (result.size >= 1) {
       const prevResult = Array.from(result.values()).pop();
       const long = prevResult.isBuyZone && !isBuyZone;
