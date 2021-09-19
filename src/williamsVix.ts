@@ -14,7 +14,7 @@ export interface WilliamsVixInput {
   lowestPercentile?: number;
 }
 
-export type WilliamsVixCross = Cross & { name: "In" | "Out" }
+export type WilliamsVixCross = Cross & { name: "In" | "Out" };
 
 export interface WilliamsVixResultItem {
   time: Candle["time"];
