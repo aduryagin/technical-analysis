@@ -21,3 +21,5 @@ export { OTT } from "./ott";
 export { highest } from "./highest";
 export { lowest } from "./lowest";
 export { WilliamsVix } from "./williamsVix";
+export { MACD } from "./macd";
+export { RSIStochasticTakeProfit } from "./rsiStochasticTakeProfit";
