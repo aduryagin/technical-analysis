@@ -27,6 +27,7 @@ Technical indicators with possibility of update/add last item (candle) of result
 * Lowest
 * Williams VIX - https://www.tradingview.com/script/og7JPrRA-CM-Williams-Vix-Fix-Finds-Market-Bottoms/
 * MACD
+* RSI + Stochastic take profits - https://www.tradingview.com/script/w8zVRvn6-RSI-Stochastics/
 
 ## Example
 ```js script
