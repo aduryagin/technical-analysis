@@ -4,12 +4,12 @@
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./atr", "./averageGain", "./averageLoss", "./bollingerBands", "./ema", "./pmax", "./rma", "./rsi", "./sma", "./stdev", "./stochastic", "./trueRange", "./vwap", "./t3", "./pmaxRSI", "./vwma", "./fbb", "./wwma", "./var", "./ott", "./highest", "./lowest", "./williamsVix"], factory);
+        define(["require", "exports", "./atr", "./averageGain", "./averageLoss", "./bollingerBands", "./ema", "./pmax", "./rma", "./rsi", "./sma", "./stdev", "./stochastic", "./trueRange", "./vwap", "./t3", "./pmaxRSI", "./vwma", "./fbb", "./wwma", "./var", "./ott", "./highest", "./lowest", "./williamsVix", "./macd", "./rsiStochasticTakeProfit"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.WilliamsVix = exports.lowest = exports.highest = exports.OTT = exports.VAR = exports.WWMA = exports.FBB = exports.VWMA = exports.PMaxRSI = exports.T3 = exports.VWAP = exports.trueRange = exports.Stochastic = exports.STDEV = exports.SMA = exports.RSI = exports.RMA = exports.PMax = exports.EMA = exports.bollingerBands = exports.averageLoss = exports.averageGain = exports.ATR = void 0;
+    exports.RSIStochasticTakeProfit = exports.MACD = exports.WilliamsVix = exports.lowest = exports.highest = exports.OTT = exports.VAR = exports.WWMA = exports.FBB = exports.VWMA = exports.PMaxRSI = exports.T3 = exports.VWAP = exports.trueRange = exports.Stochastic = exports.STDEV = exports.SMA = exports.RSI = exports.RMA = exports.PMax = exports.EMA = exports.bollingerBands = exports.averageLoss = exports.averageGain = exports.ATR = void 0;
     var atr_1 = require("./atr");
     Object.defineProperty(exports, "ATR", { enumerable: true, get: function () { return atr_1.ATR; } });
     var averageGain_1 = require("./averageGain");
@@ -56,4 +56,8 @@
     Object.defineProperty(exports, "lowest", { enumerable: true, get: function () { return lowest_1.lowest; } });
     var williamsVix_1 = require("./williamsVix");
     Object.defineProperty(exports, "WilliamsVix", { enumerable: true, get: function () { return williamsVix_1.WilliamsVix; } });
+    var macd_1 = require("./macd");
+    Object.defineProperty(exports, "MACD", { enumerable: true, get: function () { return macd_1.MACD; } });
+    var rsiStochasticTakeProfit_1 = require("./rsiStochasticTakeProfit");
+    Object.defineProperty(exports, "RSIStochasticTakeProfit", { enumerable: true, get: function () { return rsiStochasticTakeProfit_1.RSIStochasticTakeProfit; } });
 });
