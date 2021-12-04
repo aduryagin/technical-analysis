@@ -6,13 +6,18 @@ export interface RSIStochasticTakeProfitResultItem {
   time: Candle["time"];
   candle: Candle;
   cross: Cross | null;
+  rsi: number;
+  stochasticD: number;
+  stochasticK: number;
 }
 interface RSIStochasticTakeProfitInput {
   candles: Candle[];
+  period: number,
+  kSmoothing: number
 }
 
 export function RSIStochasticTakeProfit({
-  candles,
+  candles, period = 14, kSmoothing = 3
 }: RSIStochasticTakeProfitInput) {
   let crossResult: Cross[] = [];
   const result = new Map<Candle["time"], RSIStochasticTakeProfitResultItem>();
@@ -20,8 +25,8 @@ export function RSIStochasticTakeProfit({
   const overboughtRsi = 70;
   const oversoldRsi = 30;
 
-  const rsi = RSI({ candles: [], period: 14 });
-  const stochastic = Stochastic({ candles: [], kSmoothing: 3 });
+  const rsi = RSI({ candles: [], period });
+  const stochastic = Stochastic({ candles: [], kSmoothing });
 
   function calculate(
     candle: Candle
@@ -57,6 +62,9 @@ export function RSIStochasticTakeProfit({
       candle,
       time: candle.time,
       cross,
+      rsi: rsiResult.value,
+      stochasticD: stochasticResult.d,
+      stochasticK: stochasticResult.k
     };
   }
 
