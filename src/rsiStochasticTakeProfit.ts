@@ -12,12 +12,14 @@ export interface RSIStochasticTakeProfitResultItem {
 }
 interface RSIStochasticTakeProfitInput {
   candles: Candle[];
-  period: number,
-  kSmoothing: number
+  period: number;
+  kSmoothing: number;
 }
 
 export function RSIStochasticTakeProfit({
-  candles, period = 14, kSmoothing = 3
+  candles,
+  period = 14,
+  kSmoothing = 3,
 }: RSIStochasticTakeProfitInput) {
   let crossResult: Cross[] = [];
   const result = new Map<Candle["time"], RSIStochasticTakeProfitResultItem>();
@@ -64,7 +66,7 @@ export function RSIStochasticTakeProfit({
       cross,
       rsi: rsiResult.value,
       stochasticD: stochasticResult.d,
-      stochasticK: stochasticResult.k
+      stochasticK: stochasticResult.k,
     };
   }
 
