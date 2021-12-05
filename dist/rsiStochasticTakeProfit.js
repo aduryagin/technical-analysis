@@ -12,13 +12,13 @@
     exports.RSIStochasticTakeProfit = void 0;
     const rsi_1 = require("./rsi");
     const _1 = require(".");
-    function RSIStochasticTakeProfit({ candles, }) {
+    function RSIStochasticTakeProfit({ candles, period = 14, kSmoothing = 3, }) {
         let crossResult = [];
         const result = new Map();
         const overboughtRsi = 70;
         const oversoldRsi = 30;
-        const rsi = rsi_1.RSI({ candles: [], period: 14 });
-        const stochastic = _1.Stochastic({ candles: [], kSmoothing: 3 });
+        const rsi = rsi_1.RSI({ candles: [], period });
+        const stochastic = _1.Stochastic({ candles: [], kSmoothing });
         function calculate(candle) {
             var _a, _b, _c, _d;
             const rsiResult = rsi.update(candle);
@@ -45,6 +45,9 @@
                 candle,
                 time: candle.time,
                 cross,
+                rsi: rsiResult.value,
+                stochasticD: stochasticResult.d,
+                stochasticK: stochasticResult.k,
             };
         }
         candles.forEach((item) => {
