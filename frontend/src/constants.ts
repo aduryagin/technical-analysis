@@ -1,0 +1,180 @@
+export const CHART_ID = 'chart'
+export const CHART_OPTIONS = {
+  grid: {
+    show: true,
+    horizontal: {
+      show: true,
+      size: 1,
+      color: '#ebebed',
+      style: 'solid',
+    },
+    vertical: {
+      show: true,
+      size: 1,
+      color: '#ebebed',
+      style: 'solid',
+    },
+  },
+  candle: {
+    tooltip: {
+      labels: [''],
+      values: [{ label: '', value: '' }],
+      text: {
+        size: 24,
+        family: 'Helvetica Neue',
+        weight: 'normal',
+        color: 'rgba(0,0,0,0.7)',
+        marginLeft: 10,
+        marginTop: 6,
+        marginRight: 8,
+        marginBottom: 0,
+      },
+    },
+    priceMark: {
+      show: true,
+      high: {
+        show: true,
+        color: 'rgba(0,0,0,0.7)',
+        textMargin: 5,
+        textSize: 10,
+        textFamily: 'Helvetica Neue',
+        textWeight: 'normal',
+      },
+      low: {
+        show: true,
+        color: 'rgba(0,0,0,0.7)',
+        textMargin: 5,
+        textSize: 10,
+        textFamily: 'Helvetica Neue',
+        textWeight: 'normal',
+      },
+      last: {
+        show: true,
+        upColor: '#26A69A',
+        downColor: '#EF5350',
+        noChangeColor: '#888888',
+        line: {
+          show: true,
+          // 'solid'|'dash'
+          style: 'dash',
+          dashValue: [4, 4],
+          size: 1,
+        },
+        text: {
+          show: true,
+          size: 12,
+          paddingLeft: 2,
+          paddingTop: 2,
+          paddingRight: 2,
+          paddingBottom: 2,
+          color: '#FFFFFF',
+          family: 'Helvetica Neue',
+          weight: 'normal',
+        },
+      },
+    },
+  },
+  yAxis: {
+    show: true,
+    width: null,
+    // 'left' | 'right'
+    position: 'right',
+    // 'normal' | 'percentage'
+    type: 'normal',
+    inside: false,
+    axisLine: {
+      show: true,
+      color: '#888888',
+      size: 1,
+    },
+    tickText: {
+      show: true,
+      color: 'rgba(0,0,0,0.7)',
+      family: 'Helvetica Neue',
+      weight: 'normal',
+      size: 12,
+      paddingLeft: 3,
+      paddingRight: 6,
+    },
+    tickLine: {
+      show: true,
+      size: 1,
+      length: 3,
+      color: '#888888',
+    },
+  },
+  xAxis: {
+    show: true,
+    height: null,
+    axisLine: {
+      show: true,
+      color: '#888888',
+      size: 1,
+    },
+    tickText: {
+      show: true,
+      color: 'rgba(0,0,0,0.7)',
+      family: 'Helvetica Neue',
+      weight: 'normal',
+      size: 12,
+      paddingTop: 3,
+      paddingBottom: 6,
+    },
+    tickLine: {
+      show: true,
+      size: 1,
+      length: 3,
+      color: '#888888',
+    },
+  },
+  technicalIndicator: {
+    margin: {
+      top: 0.2,
+      bottom: 0.1,
+    },
+    bar: {
+      upColor: '#26A69A',
+      downColor: '#EF5350',
+      noChangeColor: '#888888',
+    },
+    line: {
+      size: 1,
+      colors: ['#FF9600', '#9D65C9', '#2196F3', '#E11D74', '#01C5C4'],
+    },
+    circle: {
+      upColor: '#26A69A',
+      downColor: '#EF5350',
+      noChangeColor: '#888888',
+    },
+    lastValueMark: {
+      show: false,
+      text: {
+        show: false,
+        color: '#ffffff',
+        size: 12,
+        family: 'Helvetica Neue',
+        weight: 'normal',
+        paddingLeft: 3,
+        paddingTop: 2,
+        paddingRight: 3,
+        paddingBottom: 2,
+      },
+    },
+    tooltip: {
+      showRule: 'always',
+      showName: true,
+      showParams: true,
+      defaultValue: 'n/a',
+      text: {
+        size: 12,
+        family: 'Helvetica Neue',
+        weight: 'normal',
+        color: 'rgba(0,0,0,0.7)',
+        marginTop: 6,
+        marginRight: 8,
+        marginBottom: 0,
+        marginLeft: 10,
+      },
+    },
+  },
+};
