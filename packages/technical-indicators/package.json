@@ -1,6 +1,6 @@
 {
   "name": "@aduryagin/technical-indicators",
-  "version": "0.0.27",
+  "version": "0.0.28",
   "description": "Technical indicators with possibility of update/add last item (candle) of result. This may be useful when use realtime (for example WebSockets) data.",
   "main": "dist/index.js",
   "scripts": {
@@ -13,8 +13,13 @@
     "technical-indicators"
   ],
   "types": "./src",
-  "author": "Alexey Duryagin <aiduryagih@gmail.com> (https://github.com/aduryagin/technical-indicators/packages/technical-indicators)",
+  "author": "Alexey Duryagin <aiduryagih@gmail.com> (https://github.com/aduryagin/technical-analysis/packages/technical-indicators)",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aduryagin/technical-analysis.git",
+    "directory": "packages/technical-indicators"
+  },
   "devDependencies": {
     "@babel/cli": "^7.12.10",
     "@babel/core": "^7.12.10",
