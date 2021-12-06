@@ -1,0 +1,35 @@
+{
+  "name": "@aduryagin/technical-indicators",
+  "version": "0.0.27",
+  "description": "Technical indicators with possibility of update/add last item (candle) of result. This may be useful when use realtime (for example WebSockets) data.",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc --project tsconfig.json",
+    "lint": "eslint src"
+  },
+  "keywords": [
+    "trading",
+    "technical-analysis",
+    "technical-indicators"
+  ],
+  "types": "./src",
+  "author": "Alexey Duryagin <aiduryagih@gmail.com> (https://github.com/aduryagin/technical-indicators/packages/technical-indicators)",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.10",
+    "@babel/preset-typescript": "^7.12.17",
+    "@types/jest": "^26.0.20",
+    "@typescript-eslint/eslint-plugin": "^4.15.1",
+    "@typescript-eslint/parser": "^4.15.1",
+    "babel-jest": "^26.6.3",
+    "eslint": "^7.20.0",
+    "eslint-config-prettier": "^8.0.0",
+    "eslint-plugin-prettier": "^3.3.1",
+    "jest": "^26.6.3",
+    "prettier": "^2.2.1",
+    "typescript": "^4.1.2"
+  }
+}
