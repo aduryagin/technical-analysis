@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "start:backend:dev": "cd backend && npm run start:dev",
-    "start:frontend:dev": "cd frontend && PORT=3001 npm run start",
+    "start:frontend:dev": "cd frontend && npm run start",
     "lint": "eslint .",
     "lint:backend": "eslint backend",
     "lint:frontend": "eslint frontend",

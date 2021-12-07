@@ -1,9 +1,7 @@
 import Chart from "./Chart";
 
 function App() {
-  return (
-    <Chart />
-  );
+  return <Chart />;
 }
 
 export default App;
