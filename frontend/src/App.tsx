@@ -1,3 +1,4 @@
+import "antd/dist/antd.css";
 import Chart from "./Chart";
 
 function App() {
