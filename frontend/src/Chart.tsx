@@ -5,6 +5,7 @@ import { FunctionOutlined, SettingOutlined } from "@ant-design/icons";
 import { CHART_ID, CHART_OPTIONS } from "./constants";
 import styled from "styled-components";
 import SettingsModal from "./SettingsModal";
+import SymbolSearchModal from "./SymbolSearchModal";
 
 const { Option, OptGroup } = Select;
 
@@ -24,18 +25,28 @@ function useChart() {
 
 function useSettings() {
   const [isVisibleSettings, showSettings] = useState(false);
-
   return { showSettings, isVisibleSettings };
+}
+
+function useSymbolSearch() {
+  const [isVisibleSymbolSearch, showSymbolSearch] = useState(false);
+  return { showSymbolSearch, isVisibleSymbolSearch };
 }
 
 export default function Chart() {
   useChart();
   const { showSettings, isVisibleSettings } = useSettings();
+  const { showSymbolSearch, isVisibleSymbolSearch } = useSymbolSearch();
 
   return (
     <>
       <Header>
-        <Button style={{ fontWeight: 600 }}>AAPL</Button>
+        <Button
+          style={{ fontWeight: 600 }}
+          onClick={() => showSymbolSearch(true)}
+        >
+          AAPL
+        </Button>
         <Select style={{ width: 120 }} defaultValue="1m">
           <OptGroup label="Minutes">
             <Option value="1m">1 minute</Option>
@@ -61,6 +72,10 @@ export default function Chart() {
       <SettingsModal
         onHide={() => showSettings(false)}
         visible={isVisibleSettings}
+      />
+      <SymbolSearchModal
+        onHide={() => showSymbolSearch(false)}
+        visible={isVisibleSymbolSearch}
       />
       <div
         id={CHART_ID}

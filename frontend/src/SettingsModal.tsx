@@ -27,8 +27,8 @@ export default function SettingsModal({ visible, onHide }: Props) {
           <Form layout="vertical">
             <Form.Item label="Source" name="source" required>
               <Radio.Group>
-                <Radio.Button value="alphaVantage">Alpha Vantage</Radio.Button>
                 <Radio.Button value="binance">Binance</Radio.Button>
+                <Radio.Button value="alphaVantage">Alpha Vantage</Radio.Button>
                 <Radio.Button value="tinkoff">Tinkoff</Radio.Button>
               </Radio.Group>
             </Form.Item>
