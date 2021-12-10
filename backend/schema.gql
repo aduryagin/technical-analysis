@@ -1,0 +1,20 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Candle {
+  time: Float!
+  close: Float!
+  open: Float!
+  high: Float!
+  low: Float!
+  volume: Float!
+}
+
+type Query {
+  candles(interval: String!, ticker: String!): [Candle!]!
+}
+
+type Subscription {
+  candle(interval: String!, ticker: String!): Candle!
+}
