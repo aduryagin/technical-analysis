@@ -1,0 +1,21 @@
+query candles($ticker: String!, $interval: String!) {
+  candles(ticker: $ticker, interval: $interval) {
+    time
+    close
+    open
+    high
+    low
+    volume
+  }
+}
+
+subscription candle($ticker: String!, $interval: String!) {
+  candle(ticker: $ticker, interval: $interval) {
+    time
+    close
+    open
+    high
+    low
+    volume
+  }
+}

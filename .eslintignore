@@ -1,3 +1,6 @@
 dist
 .eslintrc.js
 babel.config.js
+
+# frontend
+frontend/src/graphql.ts

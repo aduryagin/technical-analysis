@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
-import { init, dispose } from "klinecharts";
-import { Button, Select } from "antd";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
+import { init, dispose, Chart as ChartType } from "klinecharts";
+import { Button, notification, Select } from "antd";
 import { FunctionOutlined, SettingOutlined } from "@ant-design/icons";
 import { CHART_ID, CHART_OPTIONS } from "./constants";
 import styled from "styled-components";
 import SettingsModal from "./SettingsModal";
 import SymbolSearchModal from "./SymbolSearchModal";
+import { useCandlesQuery, useCandleSubscription } from "./graphql";
 
 const { Option, OptGroup } = Select;
 
@@ -14,13 +15,17 @@ const Header = styled.div`
 `;
 
 function useChart() {
+  const chart = useRef<ChartType | null>(null);
+
   useEffect(() => {
-    const chart = init(CHART_ID, CHART_OPTIONS);
+    chart.current = init(CHART_ID, CHART_OPTIONS);
 
     return () => {
-      if (chart) dispose(chart);
+      if (chart.current) dispose(chart.current);
     };
   }, []);
+
+  return { chart };
 }
 
 function useSettings() {
@@ -33,8 +38,55 @@ function useSymbolSearch() {
   return { showSymbolSearch, isVisibleSymbolSearch };
 }
 
+function useCandles({ chart }: { chart: MutableRefObject<ChartType | null> }) {
+  const variables = {
+    ticker: "BTCUSDT",
+    interval: "1m",
+  };
+  const { data, loading } = useCandlesQuery({
+    fetchPolicy: "no-cache",
+    onError: notification.error,
+    variables,
+  });
+
+  useEffect(() => {
+    if (chart.current && data?.candles?.length) {
+      chart.current.applyNewData(
+        data.candles.map((item) => ({
+          open: item.open,
+          close: item.close,
+          high: item.high,
+          low: item.low,
+          timestamp: item.time,
+        }))
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
+  const { data: candlesSubscriptionData } = useCandleSubscription({
+    variables,
+  });
+
+  useEffect(() => {
+    const candle = candlesSubscriptionData?.candle;
+    if (candle)
+      chart.current?.updateData({
+        open: candle.open,
+        close: candle.close,
+        high: candle.high,
+        low: candle.low,
+        timestamp: candle.time,
+      });
+  }, [candlesSubscriptionData, chart]);
+
+  return { loading };
+}
+
 export default function Chart() {
-  useChart();
+  const { chart } = useChart();
+  useCandles({ chart });
+
   const { showSettings, isVisibleSettings } = useSettings();
   const { showSymbolSearch, isVisibleSymbolSearch } = useSymbolSearch();
 
@@ -81,7 +133,7 @@ export default function Chart() {
         id={CHART_ID}
         style={{
           width: "100vw",
-          height: "calc(100vh-32px)",
+          height: "calc(100vh - 32px)",
         }}
       />
     </>

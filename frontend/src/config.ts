@@ -1,7 +1,8 @@
-const HOST = "http://localhost:3001";
+const HOST = "localhost:3000";
 
 const config = {
-  graphql: `${HOST}/graphql`,
+  graphqlSubscription: `ws://${HOST}/graphql`,
+  graphql: `http://${HOST}/graphql`,
   socket: HOST,
 };
 

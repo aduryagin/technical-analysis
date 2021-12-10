@@ -1,0 +1,13 @@
+schema: ../backend/schema.gql
+documents: "src/**/*.graphql"
+generates:
+  src/graphql.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+    config:
+      federation: true
+  ./graphql.schema.json:
+    plugins:
+      - "introspection"
