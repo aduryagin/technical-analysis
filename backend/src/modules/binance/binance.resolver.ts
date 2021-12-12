@@ -1,7 +1,7 @@
-import { Args, Query, Resolver, Subscription } from '@nestjs/graphql';
-import { PubSub } from 'graphql-subscriptions';
-import { Candle } from './binance.entity';
-import { BinanceService } from './binance.service';
+import { Args, Query, Resolver, Subscription } from "@nestjs/graphql";
+import { PubSub } from "graphql-subscriptions";
+import { Candle } from "./binance.entity";
+import { BinanceService } from "./binance.service";
 
 const pubSub = new PubSub();
 
@@ -10,11 +10,11 @@ export class BinanceResolver {
   constructor(private readonly binanceService: BinanceService) {}
 
   @Subscription(() => Candle, {
-    name: 'candle',
+    name: "candle",
   })
   realtimeCandles(
-    @Args('ticker', { type: () => String }) ticker: string,
-    @Args('interval', { type: () => String }) interval: string,
+    @Args("ticker", { type: () => String }) ticker: string,
+    @Args("interval", { type: () => String }) interval: string
   ) {
     this.binanceService.binance.websockets.candlesticks(
       [ticker],
@@ -37,17 +37,17 @@ export class BinanceResolver {
         candle.close = close;
         candle.volume = volume;
 
-        pubSub.publish('candle', { candle });
-      },
+        pubSub.publish("candle", { candle });
+      }
     );
 
-    return pubSub.asyncIterator('candle');
+    return pubSub.asyncIterator("candle");
   }
 
   @Query(() => [Candle])
   async candles(
-    @Args('ticker', { type: () => String }) ticker: string,
-    @Args('interval', { type: () => String }) interval: string,
+    @Args("ticker", { type: () => String }) ticker: string,
+    @Args("interval", { type: () => String }) interval: string
   ) {
     return new Promise((resolve) =>
       this.binanceService.binance.candlesticks(
@@ -65,10 +65,10 @@ export class BinanceResolver {
               candle.volume = volume;
 
               return candle;
-            }),
+            })
           );
-        },
-      ),
+        }
+      )
     );
   }
 }
