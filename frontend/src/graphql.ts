@@ -26,9 +26,17 @@ export type Candle = {
   volume: Scalars['Float'];
 };
 
+export type Instrument = {
+  __typename?: 'Instrument';
+  description: Scalars['String'];
+  source: Source;
+  ticker: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   candles: Array<Candle>;
+  findInstrument: Array<Instrument>;
 };
 
 
@@ -36,6 +44,15 @@ export type QueryCandlesArgs = {
   interval: Scalars['String'];
   ticker: Scalars['String'];
 };
+
+
+export type QueryFindInstrumentArgs = {
+  ticker: Scalars['String'];
+};
+
+export enum Source {
+  Binance = 'BINANCE'
+}
 
 export type Subscription = {
   __typename?: 'Subscription';
@@ -55,6 +72,13 @@ export type CandlesQueryVariables = Exact<{
 
 
 export type CandlesQuery = { __typename?: 'Query', candles: Array<{ __typename?: 'Candle', time: number, close: number, open: number, high: number, low: number, volume: number }> };
+
+export type FindInstrumentQueryVariables = Exact<{
+  ticker: Scalars['String'];
+}>;
+
+
+export type FindInstrumentQuery = { __typename?: 'Query', findInstrument: Array<{ __typename?: 'Instrument', ticker: string, source: Source, description: string }> };
 
 export type CandleSubscriptionVariables = Exact<{
   ticker: Scalars['String'];
@@ -106,6 +130,43 @@ export function useCandlesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ca
 export type CandlesQueryHookResult = ReturnType<typeof useCandlesQuery>;
 export type CandlesLazyQueryHookResult = ReturnType<typeof useCandlesLazyQuery>;
 export type CandlesQueryResult = Apollo.QueryResult<CandlesQuery, CandlesQueryVariables>;
+export const FindInstrumentDocument = gql`
+    query findInstrument($ticker: String!) {
+  findInstrument(ticker: $ticker) {
+    ticker
+    source
+    description
+  }
+}
+    `;
+
+/**
+ * __useFindInstrumentQuery__
+ *
+ * To run a query within a React component, call `useFindInstrumentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindInstrumentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindInstrumentQuery({
+ *   variables: {
+ *      ticker: // value for 'ticker'
+ *   },
+ * });
+ */
+export function useFindInstrumentQuery(baseOptions: Apollo.QueryHookOptions<FindInstrumentQuery, FindInstrumentQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FindInstrumentQuery, FindInstrumentQueryVariables>(FindInstrumentDocument, options);
+      }
+export function useFindInstrumentLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FindInstrumentQuery, FindInstrumentQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FindInstrumentQuery, FindInstrumentQueryVariables>(FindInstrumentDocument, options);
+        }
+export type FindInstrumentQueryHookResult = ReturnType<typeof useFindInstrumentQuery>;
+export type FindInstrumentLazyQueryHookResult = ReturnType<typeof useFindInstrumentLazyQuery>;
+export type FindInstrumentQueryResult = Apollo.QueryResult<FindInstrumentQuery, FindInstrumentQueryVariables>;
 export const CandleDocument = gql`
     subscription candle($ticker: String!, $interval: String!) {
   candle(ticker: $ticker, interval: $interval) {

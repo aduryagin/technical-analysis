@@ -1,4 +1,4 @@
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, ObjectType, registerEnumType } from "@nestjs/graphql";
 
 @ObjectType()
 export class Candle {
@@ -19,4 +19,23 @@ export class Candle {
 
   @Field()
   volume: number;
+}
+
+export enum Source {
+  BINANCE,
+}
+registerEnumType(Source, {
+  name: "Source",
+});
+
+@ObjectType()
+export class Instrument {
+  @Field()
+  ticker: string;
+
+  @Field()
+  description: string;
+
+  @Field(() => Source)
+  source: Source;
 }

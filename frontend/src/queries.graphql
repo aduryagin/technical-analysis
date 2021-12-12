@@ -9,6 +9,14 @@ query candles($ticker: String!, $interval: String!) {
   }
 }
 
+query findInstrument($ticker:String!) {
+  findInstrument(ticker:$ticker) {
+    ticker
+    source
+    description
+  }
+}
+
 subscription candle($ticker: String!, $interval: String!) {
   candle(ticker: $ticker, interval: $interval) {
     time

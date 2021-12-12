@@ -5,7 +5,7 @@ import { FunctionOutlined, SettingOutlined } from "@ant-design/icons";
 import { CHART_ID, CHART_OPTIONS } from "./constants";
 import styled from "styled-components";
 import SettingsModal from "./SettingsModal";
-import SymbolSearchModal from "./SymbolSearchModal";
+import TickerSearchModal from "./TickerSearchModal";
 import { useCandlesQuery, useCandleSubscription } from "./graphql";
 
 const { Option, OptGroup } = Select;
@@ -33,9 +33,9 @@ function useSettings() {
   return { showSettings, isVisibleSettings };
 }
 
-function useSymbolSearch() {
-  const [isVisibleSymbolSearch, showSymbolSearch] = useState(false);
-  return { showSymbolSearch, isVisibleSymbolSearch };
+function useTickerSearch() {
+  const [isVisibleTickerSearch, showTickerSearch] = useState(false);
+  return { showTickerSearch, isVisibleTickerSearch };
 }
 
 function useCandles({ chart }: { chart: MutableRefObject<ChartType | null> }) {
@@ -88,14 +88,14 @@ export default function Chart() {
   useCandles({ chart });
 
   const { showSettings, isVisibleSettings } = useSettings();
-  const { showSymbolSearch, isVisibleSymbolSearch } = useSymbolSearch();
+  const { showTickerSearch, isVisibleTickerSearch } = useTickerSearch();
 
   return (
     <>
       <Header>
         <Button
           style={{ fontWeight: 600 }}
-          onClick={() => showSymbolSearch(true)}
+          onClick={() => showTickerSearch(true)}
         >
           AAPL
         </Button>
@@ -125,9 +125,9 @@ export default function Chart() {
         onHide={() => showSettings(false)}
         visible={isVisibleSettings}
       />
-      <SymbolSearchModal
-        onHide={() => showSymbolSearch(false)}
-        visible={isVisibleSymbolSearch}
+      <TickerSearchModal
+        onHide={() => showTickerSearch(false)}
+        visible={isVisibleTickerSearch}
       />
       <div
         id={CHART_ID}

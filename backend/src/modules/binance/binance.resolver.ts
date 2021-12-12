@@ -1,6 +1,6 @@
 import { Args, Query, Resolver, Subscription } from "@nestjs/graphql";
 import { PubSub } from "graphql-subscriptions";
-import { Candle } from "./binance.entity";
+import { Candle, Instrument, Source } from "./binance.entity";
 import { BinanceService } from "./binance.service";
 
 const pubSub = new PubSub();
@@ -49,11 +49,13 @@ export class BinanceResolver {
     @Args("ticker", { type: () => String }) ticker: string,
     @Args("interval", { type: () => String }) interval: string
   ) {
-    return new Promise((resolve) =>
+    return new Promise((resolve, reject) =>
       this.binanceService.binance.candlesticks(
         ticker,
         interval,
-        (_error, ticks) => {
+        (error, ticks) => {
+          if (error) reject(error);
+
           resolve(
             ticks.map(([time, open, high, low, close, volume]) => {
               const candle = new Candle();
@@ -69,6 +71,29 @@ export class BinanceResolver {
           );
         }
       )
+    );
+  }
+
+  @Query(() => [Instrument])
+  findInstrument(@Args("ticker", { type: () => String }) ticker: string) {
+    return new Promise((resolve, reject) =>
+      this.binanceService.binance.exchangeInfo((error, data) => {
+        if (error) reject(error);
+
+        const filtered = data?.symbols?.filter((item) =>
+          item.symbol.toLowerCase().startsWith(ticker.toLocaleLowerCase())
+        );
+
+        resolve(
+          filtered.map((item) => {
+            const instrument = new Instrument();
+            instrument.ticker = item.symbol;
+            instrument.description = "";
+            instrument.source = Source.BINANCE;
+            return instrument;
+          })
+        );
+      })
     );
   }
 }

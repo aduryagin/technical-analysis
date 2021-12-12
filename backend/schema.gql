@@ -11,8 +11,19 @@ type Candle {
   volume: Float!
 }
 
+type Instrument {
+  ticker: String!
+  description: String!
+  source: Source!
+}
+
+enum Source {
+  BINANCE
+}
+
 type Query {
   candles(interval: String!, ticker: String!): [Candle!]!
+  findInstrument(ticker: String!): [Instrument!]!
 }
 
 type Subscription {
