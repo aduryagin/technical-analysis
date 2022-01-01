@@ -1,0 +1,105 @@
+query candles($figi: String!, $interval: Interval!, $to: String) {
+  candles(figi: $figi, interval: $interval, to: $to) {
+    time
+    close
+    open
+    high
+    low
+    volume
+    timestamp
+  }
+}
+
+query searchInstrument($ticker: String!) {
+  searchInstrument(ticker:$ticker) {
+    ticker
+    id
+    figi
+  }
+}
+
+subscription watchList {
+  watchList {
+    ticker
+    id
+    figi
+    price
+    pricePercentChange
+  }
+}
+
+mutation watch ($input: WatchInput!) {
+  watch(input: $input) {
+    id
+  }
+}
+
+mutation unwatch($id: Float!) {
+  unwatch(id: $id)
+}
+
+subscription candle($figi: String!, $interval: Interval!) {
+  candle(figi: $figi, interval: $interval) {
+    candle {
+      time
+      close
+      open
+      high
+      low
+      volume
+      timestamp
+    }
+    instrument {
+      id
+      ticker
+      figi
+    }
+  }
+}
+query tradingViewIdeas($ticker: String!) {
+  tradingViewIdeas(ticker: $ticker) {
+    title
+    link
+    timeframe
+    type
+    date
+    likes
+    comments
+    pureDate
+  }
+}
+
+query tipRanksInfo($ticker:String!) {
+  tipRanksInfo(ticker:$ticker) {
+    priceTarget
+    priceTargetHigh
+    priceTargetLow
+    ratingBuy
+    ratingHold
+    ratingSell
+    stockScore
+    newsSentimentBullishPercent
+    newsSentimentBearishPercent
+    lastWeekBuyNews
+    lastWeekSellNews
+    lastWeekNeutralNews
+  }
+}
+
+
+query indicators {
+  indicators {
+    name
+    id
+  }
+}
+
+mutation addIndicator ($input: AddIndicatorInput!) {
+  addIndicator(input: $input) {
+    id
+  }
+}
+
+mutation removeIndicator($id: Float!) {
+  removeIndicator(id: $id)
+}

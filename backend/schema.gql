@@ -2,8 +2,22 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Indicator {
+  id: Float
+  name: String!
+}
+
+type Instrument {
+  id: Float
+  ticker: String!
+  figi: String!
+  price: Float
+  pricePercentChange: Float
+}
+
 type Candle {
-  time: Float!
+  time: String!
+  timestamp: Float!
   close: Float!
   open: Float!
   high: Float!
@@ -11,21 +25,76 @@ type Candle {
   volume: Float!
 }
 
-type Instrument {
-  ticker: String!
-  description: String!
-  source: Source!
+type CandleSubscriptionData {
+  candle: Candle!
+  instrument: Instrument!
 }
 
-enum Source {
-  BINANCE
+type TipRanksInfo {
+  priceTarget: Float!
+  priceTargetHigh: Float!
+  priceTargetLow: Float!
+  ratingBuy: Float!
+  ratingHold: Float!
+  ratingSell: Float!
+  stockScore: Float!
+  newsSentimentBullishPercent: Float!
+  newsSentimentBearishPercent: Float!
+  lastWeekBuyNews: Float!
+  lastWeekSellNews: Float!
+  lastWeekNeutralNews: Float!
+}
+
+type TradingViewIdea {
+  title: String!
+  link: String!
+  timeframe: String!
+  type: String!
+  date: String!
+  likes: Float!
+  comments: Float!
+  pureDate: String!
 }
 
 type Query {
-  candles(interval: String!, ticker: String!): [Candle!]!
-  findInstrument(ticker: String!): [Instrument!]!
+  candles(to: String, interval: Interval!, figi: String!): [Candle!]!
+  searchInstrument(ticker: String!): [Instrument!]!
+  tradingViewIdeas(ticker: String!): [TradingViewIdea!]!
+  tipRanksInfo(ticker: String!): TipRanksInfo!
+  indicators: [Indicator!]!
+}
+
+enum Interval {
+  MIN1
+  MIN2
+  MIN3
+  MIN5
+  MIN10
+  MIN15
+  MIN30
+  HOUR
+  DAY
+  WEEK
+  MONTH
+}
+
+type Mutation {
+  watch(input: WatchInput!): Instrument!
+  unwatch(id: Float!): Boolean!
+  addIndicator(input: AddIndicatorInput!): Indicator!
+  removeIndicator(id: Float!): Boolean!
+}
+
+input WatchInput {
+  ticker: String!
+  figi: String!
+}
+
+input AddIndicatorInput {
+  name: String!
 }
 
 type Subscription {
-  candle(interval: String!, ticker: String!): Candle!
+  candle(interval: Interval!, figi: String!): CandleSubscriptionData!
+  watchList: [Instrument!]!
 }
