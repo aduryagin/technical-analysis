@@ -1,7 +1,7 @@
 import { Args, Query, Mutation, Resolver } from "@nestjs/graphql";
 import { Indicator } from "./indicator.entity";
 import { IndicatorService } from "./indicator.service";
-import { AddIndicatorInput } from "./indicator.types";
+import { AddIndicatorInput, UpdateIndicatorInput } from "./indicator.types";
 
 @Resolver()
 export class IndicatorResolver {
@@ -14,6 +14,14 @@ export class IndicatorResolver {
     return this.indicatorService.addIndicator(input);
   }
 
+  @Mutation(() => Indicator)
+  async updateIndicator(
+    @Args("input", { type: () => UpdateIndicatorInput })
+    input: UpdateIndicatorInput
+  ) {
+    return this.indicatorService.updateIndicator(input);
+  }
+
   @Mutation(() => Boolean)
   async removeIndicator(@Args("id") id: number) {
     await this.indicatorService.removeIndicator(id);
@@ -22,6 +30,15 @@ export class IndicatorResolver {
 
   @Query(() => [Indicator])
   async indicators() {
-    return this.indicatorService.indicators();
+    const indicators = await this.indicatorService.indicators();
+
+    return indicators.map((indicator) => {
+      return {
+        ...indicator,
+        settings: indicator.settings
+          ? indicator.settings.split(",")
+          : indicator.settings,
+      };
+    });
   }
 }

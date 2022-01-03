@@ -25,6 +25,15 @@ export class IndicatorService {
     );
   }
 
+  async updateIndicator(indicator: Partial<Indicator>) {
+    const exist = await this.indicatorRepository.findOne({
+      name: indicator.name,
+    });
+    if (exist) return exist;
+
+    return this.indicatorRepository.save({ ...exist, ...indicator });
+  }
+
   async removeIndicator(id: Indicator["id"]) {
     return this.indicatorRepository.delete({
       id,

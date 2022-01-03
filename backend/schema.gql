@@ -5,6 +5,7 @@
 type Indicator {
   id: Float
   name: String!
+  settings: [Float!]
 }
 
 type Instrument {
@@ -82,6 +83,7 @@ type Mutation {
   watch(input: WatchInput!): Instrument!
   unwatch(id: Float!): Boolean!
   addIndicator(input: AddIndicatorInput!): Indicator!
+  updateIndicator(input: UpdateIndicatorInput!): Indicator!
   removeIndicator(id: Float!): Boolean!
 }
 
@@ -92,6 +94,11 @@ input WatchInput {
 
 input AddIndicatorInput {
   name: String!
+}
+
+input UpdateIndicatorInput {
+  id: Float!
+  settings: [Float!]!
 }
 
 type Subscription {

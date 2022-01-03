@@ -11,4 +11,8 @@ export class Indicator {
   @Column()
   @Field()
   name: string;
+
+  @Column({ nullable: true })
+  @Field(() => [Number], { nullable: true })
+  settings: string;
 }
