@@ -8,6 +8,19 @@ type Indicator {
   settings: [Float!]
 }
 
+type ShapePoint {
+  dataIndex: Float!
+  timestamp: Float!
+  value: Float!
+}
+
+type Shape {
+  id: Float!
+  name: String!
+  ticker: String!
+  points: [ShapePoint!]!
+}
+
 type Instrument {
   id: Float
   ticker: String!
@@ -63,6 +76,7 @@ type Query {
   tradingViewIdeas(ticker: String!): [TradingViewIdea!]!
   tipRanksInfo(ticker: String!): TipRanksInfo!
   indicators: [Indicator!]!
+  shapes(ticker: String!): [Shape!]!
 }
 
 enum Interval {
@@ -85,6 +99,9 @@ type Mutation {
   addIndicator(input: AddIndicatorInput!): Indicator!
   updateIndicator(input: UpdateIndicatorInput!): Indicator!
   removeIndicator(id: Float!): Boolean!
+  addShape(input: AddShapeInput!): Shape!
+  updateShape(input: UpdateShapeInput!): Shape!
+  removeShape(id: Float!): Boolean!
 }
 
 input WatchInput {
@@ -99,6 +116,23 @@ input AddIndicatorInput {
 input UpdateIndicatorInput {
   id: Float!
   settings: [Float!]!
+}
+
+input AddShapeInput {
+  name: String!
+  ticker: String!
+  points: [SharePointInput!]!
+}
+
+input SharePointInput {
+  dataIndex: Float
+  timestamp: Float
+  value: Float
+}
+
+input UpdateShapeInput {
+  id: Float!
+  points: [SharePointInput!]!
 }
 
 type Subscription {

@@ -3,6 +3,7 @@ import { ConfigModule } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { IndicatorModule } from "./modules/indicator/indicator.module";
+import { ShapeModule } from "./modules/shape/shape.module";
 import { TinkoffModule } from "./modules/tinkoff/tinkoff.module";
 import { TipRanksModule } from "./modules/tipranks/tipranks.module";
 import { TradingViewModule } from "./modules/tradingview/tradingview.module";
@@ -29,6 +30,7 @@ import { WatchListModule } from "./modules/watchList/watchList.module";
     TradingViewModule,
     TipRanksModule,
     IndicatorModule,
+    ShapeModule,
   ],
   controllers: [],
   providers: [],
