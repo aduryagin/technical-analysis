@@ -6,7 +6,7 @@ import styled from "styled-components";
 import {
   IndicatorsDocument,
   useAddIndicatorMutation,
-  useIndicatorsLazyQuery,
+  useIndicatorsQuery,
   useRemoveIndicatorMutation,
 } from "../../../graphql";
 import IndicatorSettingsForm from "./IndicatorSettingsForm";
@@ -244,7 +244,7 @@ const CollapseWrapper = styled.div`
 `;
 
 export default function Indicators({ chart }: Props) {
-  const [getIndicators, { data, loading }] = useIndicatorsLazyQuery({
+  const { data, loading } = useIndicatorsQuery({
     fetchPolicy: "no-cache",
     onError: notification.error,
   });
@@ -255,7 +255,12 @@ export default function Indicators({ chart }: Props) {
         // @ts-ignore
         indicators[name as keyof typeof indicators].paneId =
           chart?.createTechnicalIndicator(
-            { name: name },
+            {
+              name: name,
+              // @ts-ignore
+              calcParams: data?.indicators?.find((item) => item.name === name)
+                ?.settings,
+            },
             true,
             indicators[name as keyof typeof indicators]?.options || {
               id: "candle_pane",
@@ -263,14 +268,12 @@ export default function Indicators({ chart }: Props) {
           );
       }
     },
-    [chart]
+    [chart, data]
   );
 
   useEffect(() => {
-    getIndicators().then((data) => {
-      data.data?.indicators?.forEach((indicator) => {
-        addIndicatorToChart(indicator.name);
-      });
+    data?.indicators?.forEach((indicator) => {
+      addIndicatorToChart(indicator.name);
     });
 
     return () => {
@@ -282,7 +285,7 @@ export default function Indicators({ chart }: Props) {
         indicators[indicator as keyof typeof indicators].paneId = null;
       });
     };
-  }, [addIndicatorToChart, getIndicators, chart]);
+  }, [addIndicatorToChart, chart, data?.indicators]);
 
   const [addIndicator, { loading: addingIndicator }] = useAddIndicatorMutation({
     onError: notification.error,
@@ -365,7 +368,7 @@ export default function Indicators({ chart }: Props) {
                     />
                   }
                 >
-                  <IndicatorSettingsForm chart={chart} name={item.name} />
+                  <IndicatorSettingsForm chart={chart} indicator={item} />
                 </Collapse.Panel>
               </Collapse>
             </CollapseWrapper>

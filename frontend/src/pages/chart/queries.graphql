@@ -91,6 +91,7 @@ query indicators {
   indicators {
     name
     id
+    settings
   }
 }
 
@@ -102,4 +103,10 @@ mutation addIndicator ($input: AddIndicatorInput!) {
 
 mutation removeIndicator($id: Float!) {
   removeIndicator(id: $id)
+}
+
+mutation updateIndicator($input: UpdateIndicatorInput!) {
+  updateIndicator(input: $input) {
+    id
+  }
 }

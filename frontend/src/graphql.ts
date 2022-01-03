@@ -41,6 +41,7 @@ export type Indicator = {
   __typename?: 'Indicator';
   id?: Maybe<Scalars['Float']>;
   name: Scalars['String'];
+  settings?: Maybe<Array<Scalars['Float']>>;
 };
 
 export type Instrument = {
@@ -71,6 +72,7 @@ export type Mutation = {
   addIndicator: Indicator;
   removeIndicator: Scalars['Boolean'];
   unwatch: Scalars['Boolean'];
+  updateIndicator: Indicator;
   watch: Instrument;
 };
 
@@ -87,6 +89,11 @@ export type MutationRemoveIndicatorArgs = {
 
 export type MutationUnwatchArgs = {
   id: Scalars['Float'];
+};
+
+
+export type MutationUpdateIndicatorArgs = {
+  input: UpdateIndicatorInput;
 };
 
 
@@ -165,6 +172,11 @@ export type TradingViewIdea = {
   type: Scalars['String'];
 };
 
+export type UpdateIndicatorInput = {
+  id: Scalars['Float'];
+  settings: Array<Scalars['Float']>;
+};
+
 export type WatchInput = {
   figi: Scalars['String'];
   ticker: Scalars['String'];
@@ -230,7 +242,7 @@ export type TipRanksInfoQuery = { __typename?: 'Query', tipRanksInfo: { __typena
 export type IndicatorsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type IndicatorsQuery = { __typename?: 'Query', indicators: Array<{ __typename?: 'Indicator', name: string, id?: number | null | undefined }> };
+export type IndicatorsQuery = { __typename?: 'Query', indicators: Array<{ __typename?: 'Indicator', name: string, id?: number | null | undefined, settings?: Array<number> | null | undefined }> };
 
 export type AddIndicatorMutationVariables = Exact<{
   input: AddIndicatorInput;
@@ -245,6 +257,13 @@ export type RemoveIndicatorMutationVariables = Exact<{
 
 
 export type RemoveIndicatorMutation = { __typename?: 'Mutation', removeIndicator: boolean };
+
+export type UpdateIndicatorMutationVariables = Exact<{
+  input: UpdateIndicatorInput;
+}>;
+
+
+export type UpdateIndicatorMutation = { __typename?: 'Mutation', updateIndicator: { __typename?: 'Indicator', id?: number | null | undefined } };
 
 
 export const CandlesDocument = gql`
@@ -561,6 +580,7 @@ export const IndicatorsDocument = gql`
   indicators {
     name
     id
+    settings
   }
 }
     `;
@@ -655,3 +675,36 @@ export function useRemoveIndicatorMutation(baseOptions?: Apollo.MutationHookOpti
 export type RemoveIndicatorMutationHookResult = ReturnType<typeof useRemoveIndicatorMutation>;
 export type RemoveIndicatorMutationResult = Apollo.MutationResult<RemoveIndicatorMutation>;
 export type RemoveIndicatorMutationOptions = Apollo.BaseMutationOptions<RemoveIndicatorMutation, RemoveIndicatorMutationVariables>;
+export const UpdateIndicatorDocument = gql`
+    mutation updateIndicator($input: UpdateIndicatorInput!) {
+  updateIndicator(input: $input) {
+    id
+  }
+}
+    `;
+export type UpdateIndicatorMutationFn = Apollo.MutationFunction<UpdateIndicatorMutation, UpdateIndicatorMutationVariables>;
+
+/**
+ * __useUpdateIndicatorMutation__
+ *
+ * To run a mutation, you first call `useUpdateIndicatorMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateIndicatorMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateIndicatorMutation, { data, loading, error }] = useUpdateIndicatorMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateIndicatorMutation(baseOptions?: Apollo.MutationHookOptions<UpdateIndicatorMutation, UpdateIndicatorMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateIndicatorMutation, UpdateIndicatorMutationVariables>(UpdateIndicatorDocument, options);
+      }
+export type UpdateIndicatorMutationHookResult = ReturnType<typeof useUpdateIndicatorMutation>;
+export type UpdateIndicatorMutationResult = Apollo.MutationResult<UpdateIndicatorMutation>;
+export type UpdateIndicatorMutationOptions = Apollo.BaseMutationOptions<UpdateIndicatorMutation, UpdateIndicatorMutationVariables>;
