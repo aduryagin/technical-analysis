@@ -14,6 +14,6 @@
     "outDir": "dist",
     "target": "ES6",
     "moduleResolution": "node",
-    "module": "UMD"
+    "module": "CommonJS"
   },
 }
