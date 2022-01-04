@@ -2,10 +2,10 @@ import { InputType, Field, ObjectType, PartialType } from "@nestjs/graphql";
 
 @ObjectType()
 export class ShapePoint {
-  @Field()
+  @Field({ nullable: true })
   dataIndex: number;
 
-  @Field()
+  @Field({ nullable: true })
   timestamp: number;
 
   @Field()

@@ -11,10 +11,12 @@ export class ShapeResolver {
   async addShape(
     @Args("input", { type: () => AddShapeInput }) input: AddShapeInput
   ) {
-    return this.shapeService.addShape({
+    const shape = await this.shapeService.addShape({
       ...input,
       points: JSON.stringify(input.points),
     });
+
+    return { ...shape, points: JSON.parse(shape.points) };
   }
 
   @Mutation(() => Shape)

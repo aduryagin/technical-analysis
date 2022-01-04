@@ -110,3 +110,42 @@ mutation updateIndicator($input: UpdateIndicatorInput!) {
     id
   }
 }
+
+query shapes($ticker: String!) {
+  shapes(ticker: $ticker) {
+    id
+    name
+    ticker
+    points {
+      dataIndex
+      timestamp
+      value
+    }
+  }
+}
+
+mutation removeShape($id: Float!) {
+  removeShape(id: $id)
+}
+
+mutation updateShape($input: UpdateShapeInput!) {
+  updateShape(
+    input: $input
+  ) {
+    id
+  }
+}
+
+mutation addShape($input: AddShapeInput!) {
+  addShape(
+    input: $input
+  ) {
+    id
+    ticker
+    points {
+      dataIndex
+      timestamp
+      value
+    }
+  }
+}

@@ -20,6 +20,12 @@ export type AddIndicatorInput = {
   name: Scalars['String'];
 };
 
+export type AddShapeInput = {
+  name: Scalars['String'];
+  points: Array<SharePointInput>;
+  ticker: Scalars['String'];
+};
+
 export type Candle = {
   __typename?: 'Candle';
   close: Scalars['Float'];
@@ -70,9 +76,12 @@ export enum Interval {
 export type Mutation = {
   __typename?: 'Mutation';
   addIndicator: Indicator;
+  addShape: Shape;
   removeIndicator: Scalars['Boolean'];
+  removeShape: Scalars['Boolean'];
   unwatch: Scalars['Boolean'];
   updateIndicator: Indicator;
+  updateShape: Shape;
   watch: Instrument;
 };
 
@@ -82,7 +91,17 @@ export type MutationAddIndicatorArgs = {
 };
 
 
+export type MutationAddShapeArgs = {
+  input: AddShapeInput;
+};
+
+
 export type MutationRemoveIndicatorArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type MutationRemoveShapeArgs = {
   id: Scalars['Float'];
 };
 
@@ -97,6 +116,11 @@ export type MutationUpdateIndicatorArgs = {
 };
 
 
+export type MutationUpdateShapeArgs = {
+  input: UpdateShapeInput;
+};
+
+
 export type MutationWatchArgs = {
   input: WatchInput;
 };
@@ -106,6 +130,7 @@ export type Query = {
   candles: Array<Candle>;
   indicators: Array<Indicator>;
   searchInstrument: Array<Instrument>;
+  shapes: Array<Shape>;
   tipRanksInfo: TipRanksInfo;
   tradingViewIdeas: Array<TradingViewIdea>;
 };
@@ -123,6 +148,11 @@ export type QuerySearchInstrumentArgs = {
 };
 
 
+export type QueryShapesArgs = {
+  ticker: Scalars['String'];
+};
+
+
 export type QueryTipRanksInfoArgs = {
   ticker: Scalars['String'];
 };
@@ -130,6 +160,27 @@ export type QueryTipRanksInfoArgs = {
 
 export type QueryTradingViewIdeasArgs = {
   ticker: Scalars['String'];
+};
+
+export type Shape = {
+  __typename?: 'Shape';
+  id: Scalars['Float'];
+  name: Scalars['String'];
+  points: Array<ShapePoint>;
+  ticker: Scalars['String'];
+};
+
+export type ShapePoint = {
+  __typename?: 'ShapePoint';
+  dataIndex?: Maybe<Scalars['Float']>;
+  timestamp?: Maybe<Scalars['Float']>;
+  value: Scalars['Float'];
+};
+
+export type SharePointInput = {
+  dataIndex?: InputMaybe<Scalars['Float']>;
+  timestamp?: InputMaybe<Scalars['Float']>;
+  value?: InputMaybe<Scalars['Float']>;
 };
 
 export type Subscription = {
@@ -175,6 +226,11 @@ export type TradingViewIdea = {
 export type UpdateIndicatorInput = {
   id: Scalars['Float'];
   settings: Array<Scalars['Float']>;
+};
+
+export type UpdateShapeInput = {
+  id: Scalars['Float'];
+  points: Array<SharePointInput>;
 };
 
 export type WatchInput = {
@@ -264,6 +320,34 @@ export type UpdateIndicatorMutationVariables = Exact<{
 
 
 export type UpdateIndicatorMutation = { __typename?: 'Mutation', updateIndicator: { __typename?: 'Indicator', id?: number | null | undefined } };
+
+export type ShapesQueryVariables = Exact<{
+  ticker: Scalars['String'];
+}>;
+
+
+export type ShapesQuery = { __typename?: 'Query', shapes: Array<{ __typename?: 'Shape', id: number, name: string, ticker: string, points: Array<{ __typename?: 'ShapePoint', dataIndex?: number | null | undefined, timestamp?: number | null | undefined, value: number }> }> };
+
+export type RemoveShapeMutationVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type RemoveShapeMutation = { __typename?: 'Mutation', removeShape: boolean };
+
+export type UpdateShapeMutationVariables = Exact<{
+  input: UpdateShapeInput;
+}>;
+
+
+export type UpdateShapeMutation = { __typename?: 'Mutation', updateShape: { __typename?: 'Shape', id: number } };
+
+export type AddShapeMutationVariables = Exact<{
+  input: AddShapeInput;
+}>;
+
+
+export type AddShapeMutation = { __typename?: 'Mutation', addShape: { __typename?: 'Shape', id: number, ticker: string, points: Array<{ __typename?: 'ShapePoint', dataIndex?: number | null | undefined, timestamp?: number | null | undefined, value: number }> } };
 
 
 export const CandlesDocument = gql`
@@ -708,3 +792,148 @@ export function useUpdateIndicatorMutation(baseOptions?: Apollo.MutationHookOpti
 export type UpdateIndicatorMutationHookResult = ReturnType<typeof useUpdateIndicatorMutation>;
 export type UpdateIndicatorMutationResult = Apollo.MutationResult<UpdateIndicatorMutation>;
 export type UpdateIndicatorMutationOptions = Apollo.BaseMutationOptions<UpdateIndicatorMutation, UpdateIndicatorMutationVariables>;
+export const ShapesDocument = gql`
+    query shapes($ticker: String!) {
+  shapes(ticker: $ticker) {
+    id
+    name
+    ticker
+    points {
+      dataIndex
+      timestamp
+      value
+    }
+  }
+}
+    `;
+
+/**
+ * __useShapesQuery__
+ *
+ * To run a query within a React component, call `useShapesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useShapesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useShapesQuery({
+ *   variables: {
+ *      ticker: // value for 'ticker'
+ *   },
+ * });
+ */
+export function useShapesQuery(baseOptions: Apollo.QueryHookOptions<ShapesQuery, ShapesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ShapesQuery, ShapesQueryVariables>(ShapesDocument, options);
+      }
+export function useShapesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ShapesQuery, ShapesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ShapesQuery, ShapesQueryVariables>(ShapesDocument, options);
+        }
+export type ShapesQueryHookResult = ReturnType<typeof useShapesQuery>;
+export type ShapesLazyQueryHookResult = ReturnType<typeof useShapesLazyQuery>;
+export type ShapesQueryResult = Apollo.QueryResult<ShapesQuery, ShapesQueryVariables>;
+export const RemoveShapeDocument = gql`
+    mutation removeShape($id: Float!) {
+  removeShape(id: $id)
+}
+    `;
+export type RemoveShapeMutationFn = Apollo.MutationFunction<RemoveShapeMutation, RemoveShapeMutationVariables>;
+
+/**
+ * __useRemoveShapeMutation__
+ *
+ * To run a mutation, you first call `useRemoveShapeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveShapeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeShapeMutation, { data, loading, error }] = useRemoveShapeMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRemoveShapeMutation(baseOptions?: Apollo.MutationHookOptions<RemoveShapeMutation, RemoveShapeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveShapeMutation, RemoveShapeMutationVariables>(RemoveShapeDocument, options);
+      }
+export type RemoveShapeMutationHookResult = ReturnType<typeof useRemoveShapeMutation>;
+export type RemoveShapeMutationResult = Apollo.MutationResult<RemoveShapeMutation>;
+export type RemoveShapeMutationOptions = Apollo.BaseMutationOptions<RemoveShapeMutation, RemoveShapeMutationVariables>;
+export const UpdateShapeDocument = gql`
+    mutation updateShape($input: UpdateShapeInput!) {
+  updateShape(input: $input) {
+    id
+  }
+}
+    `;
+export type UpdateShapeMutationFn = Apollo.MutationFunction<UpdateShapeMutation, UpdateShapeMutationVariables>;
+
+/**
+ * __useUpdateShapeMutation__
+ *
+ * To run a mutation, you first call `useUpdateShapeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateShapeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateShapeMutation, { data, loading, error }] = useUpdateShapeMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateShapeMutation(baseOptions?: Apollo.MutationHookOptions<UpdateShapeMutation, UpdateShapeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateShapeMutation, UpdateShapeMutationVariables>(UpdateShapeDocument, options);
+      }
+export type UpdateShapeMutationHookResult = ReturnType<typeof useUpdateShapeMutation>;
+export type UpdateShapeMutationResult = Apollo.MutationResult<UpdateShapeMutation>;
+export type UpdateShapeMutationOptions = Apollo.BaseMutationOptions<UpdateShapeMutation, UpdateShapeMutationVariables>;
+export const AddShapeDocument = gql`
+    mutation addShape($input: AddShapeInput!) {
+  addShape(input: $input) {
+    id
+    ticker
+    points {
+      dataIndex
+      timestamp
+      value
+    }
+  }
+}
+    `;
+export type AddShapeMutationFn = Apollo.MutationFunction<AddShapeMutation, AddShapeMutationVariables>;
+
+/**
+ * __useAddShapeMutation__
+ *
+ * To run a mutation, you first call `useAddShapeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddShapeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addShapeMutation, { data, loading, error }] = useAddShapeMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddShapeMutation(baseOptions?: Apollo.MutationHookOptions<AddShapeMutation, AddShapeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddShapeMutation, AddShapeMutationVariables>(AddShapeDocument, options);
+      }
+export type AddShapeMutationHookResult = ReturnType<typeof useAddShapeMutation>;
+export type AddShapeMutationResult = Apollo.MutationResult<AddShapeMutation>;
+export type AddShapeMutationOptions = Apollo.BaseMutationOptions<AddShapeMutation, AddShapeMutationVariables>;

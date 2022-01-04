@@ -9,8 +9,8 @@ type Indicator {
 }
 
 type ShapePoint {
-  dataIndex: Float!
-  timestamp: Float!
+  dataIndex: Float
+  timestamp: Float
   value: Float!
 }
 

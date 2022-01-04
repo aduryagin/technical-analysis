@@ -276,15 +276,15 @@ export default function Indicators({ chart }: Props) {
       addIndicatorToChart(indicator.name);
     });
 
-    return () => {
-      Object.keys(indicators).forEach((indicator) => {
-        chart?.removeTechnicalIndicator(
-          indicators[indicator as keyof typeof indicators].paneId as any,
-          indicator
-        );
-        indicators[indicator as keyof typeof indicators].paneId = null;
-      });
-    };
+    // return () => {
+    //   Object.keys(indicators).forEach((indicator) => {
+    //     chart?.removeTechnicalIndicator(
+    //       indicators[indicator as keyof typeof indicators].paneId as any,
+    //       indicator
+    //     );
+    //     indicators[indicator as keyof typeof indicators].paneId = null;
+    //   });
+    // };
   }, [addIndicatorToChart, chart, data?.indicators]);
 
   const [addIndicator, { loading: addingIndicator }] = useAddIndicatorMutation({

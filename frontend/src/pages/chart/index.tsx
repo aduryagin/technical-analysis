@@ -6,20 +6,20 @@ import { init, dispose, Chart as KChart } from "klinecharts";
 import { findGetParameter, intervalLabels } from "./helpers";
 import { CHART_OPTIONS } from "./constants";
 import WatchList from "./components/WatchList";
-import {
-  HorizontalLineDrawingIcon,
-  VerticalLineDrawingIcon,
-  DiagonalLineDrawingIcon,
-  RulerDrawingIcon,
-} from "./icons";
 import { MEASURE_GRAPHIC_MARK } from "./graphicMarks";
 import {
   Candle,
   CandleDocument,
   Interval,
+  useAddShapeMutation,
   useCandlesLazyQuery,
+  useRemoveShapeMutation,
+  useShapesLazyQuery,
+  useUpdateShapeMutation,
 } from "../../graphql";
 import Indicators from "./components/Indicators";
+import { DRAWINGS } from "./drawings";
+import { useDebouncedCallback } from "use-debounce/lib";
 
 const WrapperChart = styled.div`
   display: flex;
@@ -95,6 +95,12 @@ function useChart() {
     [chart, fetchCandles, loadMoreCandles, subscribeToMore]
   );
 
+  // shapes
+  const [fetchShapes, { data: shapesData }] = useShapesLazyQuery({
+    fetchPolicy: "no-cache",
+    onError: notification.error,
+  });
+
   // init chart
   useEffect(() => {
     const instance = init("chart", CHART_OPTIONS);
@@ -124,12 +130,22 @@ function useChart() {
     window.addEventListener("resize", resizeCallback);
 
     // initial candles
-    if (figi)
+    if (figi) {
       fetchAndSubscribeOnCandles({
         figi,
         interval,
         instance,
       });
+    }
+
+    // initial shapes
+    if (ticker) {
+      fetchShapes({
+        variables: {
+          ticker,
+        },
+      });
+    }
 
     return () => {
       dispose("chart");
@@ -149,18 +165,64 @@ function useChart() {
     if (data?.candles?.length) chart?.applyNewData(data?.candles || []);
   }, [data, chart]);
 
+  const [removeShape] = useRemoveShapeMutation({
+    onError: notification.error,
+  });
+
+  // update shapes
+
+  const [updateShape] = useUpdateShapeMutation({
+    onError: notification.error,
+  });
+  const onUpdateShape = useDebouncedCallback(({ id, points }) => {
+    updateShape({
+      variables: {
+        input: {
+          id,
+          points,
+        },
+      },
+    });
+  }, 100);
+  useEffect(() => {
+    if (shapesData?.shapes.length) {
+      shapesData?.shapes.forEach((shape) => {
+        const existShape = chart?.getShape(shape.id as any);
+
+        if (!existShape)
+          chart?.createShape({
+            id: shape.id as any,
+            name: shape.name,
+            points: shape.points as any,
+            onRemove: (e) => {
+              if (shape.ticker === findGetParameter("ticker"))
+                removeShape({
+                  variables: {
+                    id: e.id as any,
+                  },
+                });
+            },
+            onPressedMove: (e) => {
+              onUpdateShape({
+                id: shape.id,
+                // @ts-ignore
+                points: e.points?.map(({ __typename, ...point }) => point),
+              });
+            },
+          });
+      });
+    }
+  }, [shapesData, chart, updateShape, removeShape, onUpdateShape]);
+
   // ticker select handler
   const onTickerSelect = useCallback(
     ({ figi: chartFigi, ticker: chartTicker, interval: chartInterval }) => {
+      if (chartFigi === findGetParameter("figi")) return;
+
       const ticker = chartTicker || findGetParameter("ticker");
       const figi = chartFigi || findGetParameter("figi");
       const interval =
         chartInterval || findGetParameter("interval") || Interval.Day;
-
-      fetchAndSubscribeOnCandles({
-        figi,
-        interval,
-      });
 
       window.document.title = ticker;
       window.history.replaceState(
@@ -168,6 +230,22 @@ function useChart() {
         ticker,
         `/?ticker=${ticker}&figi=${figi}&interval=${interval}`
       );
+
+      fetchAndSubscribeOnCandles({
+        figi,
+        interval,
+      });
+
+      if (!chartInterval) {
+        console.log("remove");
+
+        chart?.removeShape();
+      }
+      fetchShapes({
+        variables: {
+          ticker,
+        },
+      });
 
       chart?.setStyleOptions({
         candle: {
@@ -182,12 +260,19 @@ function useChart() {
           },
         },
       });
-      chart?.removeShape();
     },
-    [chart, fetchAndSubscribeOnCandles]
+    [chart, fetchShapes, fetchAndSubscribeOnCandles]
   );
 
+  const [addShape] = useAddShapeMutation({
+    onError: notification.error,
+  });
+
   return {
+    addShape,
+    removeShape,
+    updateShape,
+    onUpdateShape,
     onTickerSelect,
     loading,
     chart,
@@ -197,7 +282,16 @@ function useChart() {
 }
 
 export default function Chart() {
-  const { loading, onTickerSelect, interval, ticker, chart } = useChart();
+  const {
+    loading,
+    onTickerSelect,
+    removeShape,
+    onUpdateShape,
+    addShape,
+    interval,
+    ticker,
+    chart,
+  } = useChart();
 
   return (
     <div>
@@ -235,35 +329,76 @@ export default function Chart() {
           >
             1m
           </Select>
+
+          <WatchList onTickerSelect={onTickerSelect} />
           <Typography.Title style={{ fontSize: 16, marginBottom: 3 }} level={4}>
             Drawing
           </Typography.Title>
-          <div style={{ marginBottom: 10 }}>
-            <Button
-              style={{ marginRight: 10 }}
-              icon={<HorizontalLineDrawingIcon />}
-              size="large"
-              onClick={() => chart?.createShape("horizontalStraightLine")}
-            />
-            <Button
-              style={{ marginRight: 10 }}
-              icon={<VerticalLineDrawingIcon />}
-              size="large"
-              onClick={() => chart?.createShape("verticalStraightLine")}
-            />
-            <Button
-              style={{ marginRight: 10 }}
-              icon={<DiagonalLineDrawingIcon />}
-              onClick={() => chart?.createShape("straightLine")}
-              size="large"
-            />
-            <Button
-              icon={<RulerDrawingIcon />}
-              onClick={() => chart?.createShape("measure")}
-              size="large"
-            />
+          <div
+            style={{
+              marginBottom: 10,
+              display: "grid",
+              gridGap: "10px",
+              gridTemplateColumns: "repeat(6, 40px)",
+            }}
+          >
+            {DRAWINGS.map((drawing) => (
+              <Button
+                key={drawing.name}
+                icon={drawing.icon}
+                size="large"
+                onClick={() => {
+                  chart?.createShape({
+                    name: drawing.name,
+                    onDrawEnd: (e) => {
+                      addShape({
+                        variables: {
+                          input: {
+                            name: drawing.name,
+                            ticker: ticker as any,
+                            points: e.points as any,
+                          },
+                        },
+                      }).then((data) => {
+                        chart.removeShape(e.id as any);
+
+                        chart?.createShape({
+                          id: data.data?.addShape.id as any,
+                          points: data.data?.addShape?.points as any,
+                          name: drawing.name,
+                          onRemove: (e) => {
+                            if (
+                              data.data?.addShape.ticker ===
+                              findGetParameter("ticker")
+                            )
+                              removeShape({
+                                variables: {
+                                  id: e.id as any,
+                                },
+                              });
+                          },
+                          onPressedMove: (e) => {
+                            onUpdateShape({
+                              id: e.id,
+                              // @ts-ignore
+                              points: e.points?.map(
+                                ({ __typename, ...point }: any) => point
+                              ),
+                            });
+                          },
+                        });
+
+                        // todo: klinecharts contribute. update id
+                        // shape.setShapeOptions({
+                        //   id: data.data?.addShape.id,
+                        // });
+                      });
+                    },
+                  });
+                }}
+              />
+            ))}
           </div>
-          <WatchList onTickerSelect={onTickerSelect} />
           <Indicators chart={chart} />
         </SideBarWrapper>
       </WrapperChart>
