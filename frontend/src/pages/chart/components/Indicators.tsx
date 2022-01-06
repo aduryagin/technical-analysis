@@ -9,6 +9,11 @@ import {
   useIndicatorsQuery,
   useRemoveIndicatorMutation,
 } from "../../../graphql";
+import ottIndicatorTemplate from "../indicatorsTemplates/ott";
+import pmaxIndicatorTemplate from "../indicatorsTemplates/pmax";
+import pmaxRsiIndicatorTemplate from "../indicatorsTemplates/pmaxRsi";
+import rsiStochTPIndicatorTemplate from "../indicatorsTemplates/rsiStochTP";
+import williamsVixIndicatorTemplate from "../indicatorsTemplates/williamsVix";
 import IndicatorSettingsForm from "./IndicatorSettingsForm";
 
 interface Props {
@@ -18,53 +23,105 @@ interface Props {
 // @ts-ignore
 const standardIndicators = extension.technicalIndicatorExtensions;
 
-const indicators = {
+export const INDICATORS: { [key: string]: any } = {
+  PMAXRSI: {
+    ...pmaxRsiIndicatorTemplate,
+    paneId: null,
+    label: "RSI & PMax (PMAXRSI)",
+    options: {},
+    calcParamsLabels: [
+      "RSI Period",
+      "T3 Period",
+      "T3 Volume Factor",
+      "ATR Multiplier",
+      "ATR Period",
+    ],
+  },
+  RSTP: {
+    ...rsiStochTPIndicatorTemplate,
+    paneId: null,
+    label: "RSI & Stoch Take Profit (RSTP)",
+    options: {},
+    calcParamsLabels: ["Period", "K Smoothing"],
+  },
+  OTT: {
+    ...ottIndicatorTemplate,
+    paneId: null,
+    label: "Optimized Trend Tracker (OTT)",
+    options: {
+      id: "candle_pane",
+    },
+    calcParamsLabels: ["Period", "Percent"],
+  },
+  PMAX: {
+    ...pmaxIndicatorTemplate,
+    paneId: null,
+    label: "PMax",
+    options: {
+      id: "candle_pane",
+    },
+    calcParamsLabels: ["EMA Period", "ATR Period", "Multiplier"],
+  },
+  WVX: {
+    ...williamsVixIndicatorTemplate,
+    paneId: null,
+    label: "Williams VIX (WVX)",
+    options: {},
+    calcParamsLabels: [
+      "Look Back Period StDev High",
+      "BB Length",
+      "BB Standard Deviation Up",
+      "Lookback Period Percentile High",
+      "Highest Percentile",
+      "Lowest Percentile",
+    ],
+  },
   BBI: {
+    ...standardIndicators.BBI,
     paneId: null,
     label: "Bull and Bead Index (BBI)",
-    name: standardIndicators.BBI.name,
     options: {
       id: "candle_pane",
     },
   },
   DMA: {
+    ...standardIndicators.DMA,
     paneId: null,
     label: "DMA",
-    name: standardIndicators.DMA.name,
     options: {},
   },
   DMI: {
+    ...standardIndicators.DMI,
     paneId: null,
     label: "Directional Movement Index (DMI)",
-    name: standardIndicators.DMI.name,
     options: {},
   },
   EMA: {
+    ...standardIndicators.EMA,
     paneId: null,
     label: "EMA",
-    name: standardIndicators.EMA.name,
     options: {
       id: "candle_pane",
     },
   },
   MA: {
+    ...standardIndicators.MA,
     paneId: null,
     label: "Moving Average (MA)",
-    name: standardIndicators.MA.name,
     options: {
       id: "candle_pane",
     },
   },
   MACD: {
+    ...standardIndicators.MACD,
     paneId: null,
     label: "MACD",
-    name: standardIndicators.MACD.name,
     options: {},
   },
   SMA: {
     paneId: null,
     label: "SMA",
-    name: standardIndicators.SMA.name,
+    ...standardIndicators.SMA,
     options: {
       id: "candle_pane",
     },
@@ -72,79 +129,79 @@ const indicators = {
   TRIX: {
     paneId: null,
     label: "Tripple EMA (TRIX)",
-    name: standardIndicators.TRIX.name,
+    ...standardIndicators.TRIX,
     options: {},
   },
   BRAR: {
     paneId: null,
     label: "Emotional index (BRAR)",
-    name: standardIndicators.BRAR.name,
+    ...standardIndicators.BRAR,
     options: {},
   },
   MTM: {
     paneId: null,
     label: "Momentum (MTM)",
-    name: standardIndicators.MTM.name,
+    ...standardIndicators.MTM,
     options: {},
   },
   PSY: {
     paneId: null,
     label: "Psycological Line (PSY)",
-    name: standardIndicators.PSY.name,
+    ...standardIndicators.PSY,
     options: {},
   },
   ROC: {
     paneId: null,
     label: "Rate of Change (ROC)",
-    name: standardIndicators.ROC.name,
+    ...standardIndicators.ROC,
     options: {},
   },
   VR: {
     paneId: null,
     label: "Volume Ratio (VR)",
-    name: standardIndicators.VR.name,
+    ...standardIndicators.VR,
     options: {},
   },
   AO: {
     paneId: null,
     label: "Awesome Oscillator (AO)",
-    name: standardIndicators.AO.name,
+    ...standardIndicators.AO,
     options: {},
   },
   BIAS: {
     paneId: null,
     label: "BIAS",
-    name: standardIndicators.BIAS.name,
+    ...standardIndicators.BIAS,
     options: {},
   },
   CCI: {
     paneId: null,
     label: "Commodity Channel Index (CCI)",
-    name: standardIndicators.CCI.name,
+    ...standardIndicators.CCI,
     options: {},
   },
   RSI: {
     paneId: null,
     label: "Relative Strength Index (RSI)",
-    name: standardIndicators.RSI.name,
+    ...standardIndicators.RSI,
     options: {},
   },
   KDJ: {
     paneId: null,
     label: "KDJ",
-    name: standardIndicators.KDJ.name,
+    ...standardIndicators.KDJ,
     options: {},
   },
   WR: {
     paneId: null,
     label: "Williams %R (WR)",
-    name: standardIndicators.WR.name,
+    ...standardIndicators.WR,
     options: {},
   },
   BOLL: {
     paneId: null,
     label: "Bollinger Bands (BOLL)",
-    name: standardIndicators.BOLL.name,
+    ...standardIndicators.BOLL,
     options: {
       id: "candle_pane",
     },
@@ -152,7 +209,7 @@ const indicators = {
   SAR: {
     paneId: null,
     label: "Stop and Reverse (SAR)",
-    name: standardIndicators.SAR.name,
+    ...standardIndicators.SAR,
     options: {
       id: "candle_pane",
     },
@@ -160,19 +217,19 @@ const indicators = {
   VOL: {
     paneId: null,
     label: "Volume (VOL)",
-    name: standardIndicators.VOL.name,
+    ...standardIndicators.VOL,
     options: {},
   },
   PVT: {
     paneId: null,
     label: "Price and Volume Trend (PVT)",
-    name: standardIndicators.PVT.name,
+    ...standardIndicators.PVT,
     options: {},
   },
   OBV: {
     paneId: null,
     label: "On Balance Volume (OBV)",
-    name: standardIndicators.OBV.name,
+    ...standardIndicators.OBV,
     options: {},
   },
 };
@@ -181,43 +238,53 @@ const indicatorGroups = [
   {
     label: "Directional Movement",
     group: [
-      indicators.BBI,
-      indicators.DMA,
-      indicators.DMI,
-      indicators.EMA,
-      indicators.MA,
-      indicators.MACD,
-      indicators.SMA,
-      indicators.TRIX,
+      INDICATORS.BBI,
+      INDICATORS.DMA,
+      INDICATORS.DMI,
+      INDICATORS.EMA,
+      INDICATORS.MA,
+      INDICATORS.MACD,
+      INDICATORS.SMA,
+      INDICATORS.TRIX,
     ],
   },
   {
     label: "Momentum",
     group: [
-      indicators.BRAR,
-      indicators.MTM,
-      indicators.PSY,
-      indicators.ROC,
-      indicators.VR,
+      INDICATORS.BRAR,
+      INDICATORS.MTM,
+      INDICATORS.PSY,
+      INDICATORS.ROC,
+      INDICATORS.VR,
     ],
   },
   {
     label: "Oscillators",
     group: [
-      indicators.AO,
-      indicators.BIAS,
-      indicators.RSI,
-      indicators.KDJ,
-      indicators.WR,
+      INDICATORS.AO,
+      INDICATORS.BIAS,
+      INDICATORS.RSI,
+      INDICATORS.KDJ,
+      INDICATORS.WR,
     ],
   },
   {
     label: "Volatility",
-    group: [indicators.BOLL, indicators.SAR],
+    group: [INDICATORS.BOLL, INDICATORS.SAR],
   },
   {
     label: "Volume",
-    group: [indicators.VOL, indicators.PVT, indicators.OBV],
+    group: [INDICATORS.VOL, INDICATORS.PVT, INDICATORS.OBV],
+  },
+  {
+    label: "Custom",
+    group: [
+      INDICATORS.WVX,
+      INDICATORS.PMAX,
+      INDICATORS.OTT,
+      INDICATORS.RSTP,
+      INDICATORS.PMAXRSI,
+    ],
   },
 ];
 
@@ -251,9 +318,9 @@ export default function Indicators({ chart }: Props) {
 
   const addIndicatorToChart = useCallback(
     (name: string) => {
-      if (!indicators[name as keyof typeof indicators].paneId) {
+      if (!INDICATORS[name as keyof typeof INDICATORS].paneId) {
         // @ts-ignore
-        indicators[name as keyof typeof indicators].paneId =
+        INDICATORS[name as keyof typeof INDICATORS].paneId =
           chart?.createTechnicalIndicator(
             {
               name: name,
@@ -262,7 +329,7 @@ export default function Indicators({ chart }: Props) {
                 ?.settings,
             },
             true,
-            indicators[name as keyof typeof indicators]?.options || {
+            INDICATORS[name as keyof typeof INDICATORS]?.options || {
               id: "candle_pane",
             }
           );
@@ -346,7 +413,7 @@ export default function Indicators({ chart }: Props) {
               <Collapse ghost expandIconPosition="left">
                 <Collapse.Panel
                   header={
-                    indicators[item.name as keyof typeof indicators].label
+                    INDICATORS[item.name as keyof typeof INDICATORS].label
                   }
                   key={item.name}
                   extra={
@@ -359,7 +426,7 @@ export default function Indicators({ chart }: Props) {
                         });
 
                         const paneId =
-                          indicators[item.name as keyof typeof indicators]
+                          INDICATORS[item.name as keyof typeof INDICATORS]
                             .paneId;
 
                         if (paneId)

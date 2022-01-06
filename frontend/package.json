@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@aduryagin/technical-indicators": "^0.0.29",
     "@ant-design/icons": "^4.7.0",
     "@antv/g2plot": "^2.4.4",
     "@apollo/client": "^3.5.5",

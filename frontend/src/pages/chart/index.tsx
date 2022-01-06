@@ -20,6 +20,11 @@ import {
 import Indicators from "./components/Indicators";
 import { DRAWINGS } from "./drawings";
 import { useDebouncedCallback } from "use-debounce/lib";
+import williamsVixIndicatorTemplate from "./indicatorsTemplates/williamsVix";
+import pmaxIndicatorTemplate from "./indicatorsTemplates/pmax";
+import ottIndicatorTemplate from "./indicatorsTemplates/ott";
+import rsiStochTPIndicatorTemplate from "./indicatorsTemplates/rsiStochTP";
+import pmaxRsiIndicatorTemplate from "./indicatorsTemplates/pmaxRsi";
 
 const WrapperChart = styled.div`
   display: flex;
@@ -107,6 +112,13 @@ function useChart() {
     setChart(instance);
 
     instance?.addShapeTemplate(MEASURE_GRAPHIC_MARK as any);
+    instance?.addTechnicalIndicatorTemplate([
+      williamsVixIndicatorTemplate,
+      pmaxIndicatorTemplate,
+      ottIndicatorTemplate,
+      rsiStochTPIndicatorTemplate,
+      pmaxRsiIndicatorTemplate,
+    ]);
 
     instance?.setStyleOptions({
       candle: {
@@ -237,8 +249,6 @@ function useChart() {
       });
 
       if (!chartInterval) {
-        console.log("remove");
-
         chart?.removeShape();
       }
       fetchShapes({
