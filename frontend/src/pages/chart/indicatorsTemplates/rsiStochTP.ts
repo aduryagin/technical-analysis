@@ -1,6 +1,5 @@
 import { TechnicalIndicatorTemplate } from "klinecharts";
 import { RSIStochasticTakeProfit } from "@aduryagin/technical-indicators";
-import { RSIStochasticTakeProfitResultItem } from "@aduryagin/technical-indicators/src/rsiStochasticTakeProfit";
 import THEME from "../../../theme";
 
 const rsiStochTPIndicatorTemplate: TechnicalIndicatorTemplate = {
@@ -10,7 +9,6 @@ const rsiStochTPIndicatorTemplate: TechnicalIndicatorTemplate = {
   ],
 
   name: "RSTP",
-  precision: 0,
   series: "normal",
   plots: [
     {
@@ -39,17 +37,10 @@ const rsiStochTPIndicatorTemplate: TechnicalIndicatorTemplate = {
       kSmoothing: params[1],
     });
 
-    const indicatorResult = Array.from<
-      [number, RSIStochasticTakeProfitResultItem]
-    >(data?.result() as any)?.map((item) => ({
-      ...item[1],
+    return kLineDataList.map((candle: any) => ({
+      ...data?.result(candle.time),
       tp: 10,
     }));
-
-    return [
-      ...Array(kLineDataList.length - indicatorResult.length).fill({}),
-      ...indicatorResult,
-    ];
   },
 };
 

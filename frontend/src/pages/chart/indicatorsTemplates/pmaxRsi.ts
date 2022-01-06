@@ -1,12 +1,10 @@
 import { TechnicalIndicatorTemplate } from "klinecharts";
 import { PMaxRSI } from "@aduryagin/technical-indicators";
-import { PMaxRRSIResultItem } from "@aduryagin/technical-indicators/src/pmaxRSI";
 
 const pmaxRsiIndicatorTemplate: TechnicalIndicatorTemplate = {
   calcParams: [14, 8, { value: 0.7, allowDecimal: true }, 3, 10],
 
   name: "PMAXRSI",
-  precision: 0,
   series: "normal",
   plots: [
     {
@@ -43,16 +41,7 @@ const pmaxRsiIndicatorTemplate: TechnicalIndicatorTemplate = {
       },
     });
 
-    const indicatorResult = Array.from<[number, PMaxRRSIResultItem]>(
-      data?.result() as any
-    )?.map((item) => ({
-      ...item[1],
-    }));
-
-    return [
-      ...Array(kLineDataList.length - indicatorResult.length).fill({}),
-      ...indicatorResult,
-    ];
+    return kLineDataList.map((candle: any) => data?.result(candle.time));
   },
 };
 

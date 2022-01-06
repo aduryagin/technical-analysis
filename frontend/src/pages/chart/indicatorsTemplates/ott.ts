@@ -1,6 +1,5 @@
 import { TechnicalIndicatorTemplate } from "klinecharts";
 import { OTT } from "@aduryagin/technical-indicators";
-import { OTTResultItem } from "@aduryagin/technical-indicators/src/ott";
 
 const ottIndicatorTemplate: TechnicalIndicatorTemplate = {
   calcParams: [
@@ -9,7 +8,6 @@ const ottIndicatorTemplate: TechnicalIndicatorTemplate = {
   ],
 
   name: "OTT",
-  precision: 0,
   series: "normal",
   plots: [
     {
@@ -32,16 +30,7 @@ const ottIndicatorTemplate: TechnicalIndicatorTemplate = {
       percent: params[1],
     });
 
-    const indicatorResult = Array.from<[number, OTTResultItem]>(
-      data?.result() as any
-    )?.map((item) => ({
-      ...item[1],
-    }));
-
-    return [
-      ...Array(kLineDataList.length - indicatorResult.length).fill({}),
-      ...indicatorResult,
-    ];
+    return kLineDataList.map((candle: any) => data?.result(candle.time));
   },
 };
 

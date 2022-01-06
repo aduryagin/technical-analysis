@@ -1,12 +1,10 @@
 import { TechnicalIndicatorTemplate } from "klinecharts";
 import { PMax } from "@aduryagin/technical-indicators";
-import { PMaxResultItem } from "@aduryagin/technical-indicators/src/pmax";
 
 const pmaxIndicatorTemplate: TechnicalIndicatorTemplate = {
   calcParams: [10, 10, { value: 3, allowDecimal: true }],
 
   name: "PMAX",
-  precision: 0,
   series: "normal",
   plots: [
     {
@@ -30,16 +28,7 @@ const pmaxIndicatorTemplate: TechnicalIndicatorTemplate = {
       multiplier: params[2],
     });
 
-    const indicatorResult = Array.from<[number, PMaxResultItem]>(
-      data?.result() as any
-    )?.map((item) => ({
-      ...item[1],
-    }));
-
-    return [
-      ...Array(kLineDataList.length - indicatorResult.length).fill({}),
-      ...indicatorResult,
-    ];
+    return kLineDataList.map((candle: any) => data?.result(candle.time));
   },
 };
 

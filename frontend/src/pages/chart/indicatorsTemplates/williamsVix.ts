@@ -1,6 +1,5 @@
 import { TechnicalIndicatorTemplate } from "klinecharts";
 import { WilliamsVix } from "@aduryagin/technical-indicators";
-import { WilliamsVixResultItem } from "@aduryagin/technical-indicators/src/williamsVix";
 import THEME from "../../../theme";
 
 const williamsVixIndicatorTemplate: TechnicalIndicatorTemplate = {
@@ -14,7 +13,6 @@ const williamsVixIndicatorTemplate: TechnicalIndicatorTemplate = {
   ],
 
   name: "WVX",
-  precision: 0,
   series: "normal",
   plots: [
     {
@@ -44,16 +42,7 @@ const williamsVixIndicatorTemplate: TechnicalIndicatorTemplate = {
       lowestPercentile: params[5],
     });
 
-    const indicatorResult = Array.from<[number, WilliamsVixResultItem]>(
-      data?.result() as any
-    )?.map((item) => ({
-      ...item[1],
-    }));
-
-    return [
-      ...Array(kLineDataList.length - indicatorResult.length).fill({}),
-      ...indicatorResult,
-    ];
+    return kLineDataList.map((candle: any) => data?.result(candle.time));
   },
 };
 
