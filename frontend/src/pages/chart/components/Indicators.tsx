@@ -202,9 +202,7 @@ export const INDICATORS: { [key: string]: any } = {
     paneId: null,
     label: "Bollinger Bands (BOLL)",
     ...standardIndicators.BOLL,
-    options: {
-      id: "candle_pane",
-    },
+    options: {},
   },
   SAR: {
     paneId: null,
