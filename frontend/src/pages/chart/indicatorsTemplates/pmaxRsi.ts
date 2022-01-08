@@ -22,6 +22,21 @@ const pmaxRsiIndicatorTemplate: TechnicalIndicatorTemplate = {
       title: "PMax",
       type: "line",
     },
+    {
+      key: "overbought",
+      title: "Overbought",
+      type: "line",
+    },
+    {
+      key: "oversold",
+      title: "Oversold",
+      type: "line",
+    },
+    {
+      key: "middle",
+      title: "Middle",
+      type: "line",
+    },
   ],
 
   // Calculation results
@@ -41,7 +56,12 @@ const pmaxRsiIndicatorTemplate: TechnicalIndicatorTemplate = {
       },
     });
 
-    return kLineDataList.map((candle: any) => data?.result(candle.time));
+    return kLineDataList.map((candle: any) => ({
+      overbought: 70,
+      oversold: 30,
+      middle: 50,
+      ...data?.result(candle.time),
+    }));
   },
 };
 
