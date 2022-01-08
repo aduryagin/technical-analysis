@@ -28,7 +28,9 @@ export const INDICATORS: { [key: string]: any } = {
     ...pmaxRsiIndicatorTemplate,
     paneId: null,
     label: "RSI & PMax (PMAXRSI)",
-    options: {},
+    options: {
+      height: 180,
+    },
     calcParamsLabels: [
       "RSI Period",
       "T3 Period",
@@ -41,7 +43,9 @@ export const INDICATORS: { [key: string]: any } = {
     ...rsiStochTPIndicatorTemplate,
     paneId: null,
     label: "RSI & Stoch Take Profit (RSTP)",
-    options: {},
+    options: {
+      height: 25,
+    },
     calcParamsLabels: ["Period", "K Smoothing"],
   },
   OTT: {
@@ -60,7 +64,7 @@ export const INDICATORS: { [key: string]: any } = {
     options: {
       id: "candle_pane",
     },
-    calcParamsLabels: ["EMA Period", "ATR Period", "Multiplier"],
+    calcParamsLabels: ["Multiplier", "Multiplier", "Multiplier"],
   },
   WVX: {
     ...williamsVixIndicatorTemplate,
