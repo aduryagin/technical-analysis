@@ -1,5 +1,4 @@
 import { Button, Form, InputNumber, notification } from "antd";
-import { Chart } from "klinecharts";
 import {
   IndicatorsQueryHookResult,
   useUpdateIndicatorMutation,
@@ -8,7 +7,7 @@ import { INDICATORS } from "./Indicators";
 
 interface Props {
   indicator: NonNullable<IndicatorsQueryHookResult["data"]>["indicators"][0];
-  chart: Chart | null;
+  chart: any | null;
 }
 
 export default function IndicatorSettingsForm({ indicator, chart }: Props) {

@@ -4,3 +4,4 @@ babel.config.js
 
 # frontend
 frontend/src/graphql.ts
+frontend/src/klinechart

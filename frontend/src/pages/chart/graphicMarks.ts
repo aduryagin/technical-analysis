@@ -1,5 +1,4 @@
-// @ts-ignore
-import { checkCoordinateOnSegment } from "klinecharts/lib/shape/shapeHelper";
+import { checkCoordinateOnSegment } from "../../klinechart/extension/shape/shapeHelper";
 
 export const MEASURE_GRAPHIC_MARK = {
   name: "measure",

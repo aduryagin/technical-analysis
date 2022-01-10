@@ -1,6 +1,6 @@
 import { CloseCircleOutlined } from "@ant-design/icons";
 import { Collapse, List, notification, Select, Typography } from "antd";
-import { extension, Chart } from "klinecharts";
+import { extension } from "../../../klinechart";
 import { useCallback, useEffect } from "react";
 import styled from "styled-components";
 import {
@@ -13,17 +13,33 @@ import ottIndicatorTemplate from "../indicatorsTemplates/ott";
 import pmaxIndicatorTemplate from "../indicatorsTemplates/pmax";
 import pmaxRsiIndicatorTemplate from "../indicatorsTemplates/pmaxRsi";
 import rsiStochTPIndicatorTemplate from "../indicatorsTemplates/rsiStochTP";
+import volumeIndicatorTemplate from "../indicatorsTemplates/volume";
+import vwapIndicatorTemplate from "../indicatorsTemplates/vwap";
 import williamsVixIndicatorTemplate from "../indicatorsTemplates/williamsVix";
 import IndicatorSettingsForm from "./IndicatorSettingsForm";
 
 interface Props {
-  chart: Chart | null;
+  chart: any | null;
 }
 
 // @ts-ignore
 const standardIndicators = extension.technicalIndicatorExtensions;
 
 export const INDICATORS: { [key: string]: any } = {
+  SVOL: {
+    ...volumeIndicatorTemplate,
+    paneId: null,
+    label: "Volume",
+    options: {},
+  },
+  VWAP: {
+    ...vwapIndicatorTemplate,
+    paneId: null,
+    label: "VWAP",
+    options: {
+      id: "candle_pane",
+    },
+  },
   PMAXRSI: {
     ...pmaxRsiIndicatorTemplate,
     paneId: null,
@@ -286,6 +302,8 @@ const indicatorGroups = [
       INDICATORS.OTT,
       INDICATORS.RSTP,
       INDICATORS.PMAXRSI,
+      INDICATORS.VWAP,
+      INDICATORS.SVOL,
     ],
   },
 ];

@@ -1,6 +1,7 @@
 import { TechnicalIndicatorTemplate } from "klinecharts";
-import { WilliamsVix } from "@aduryagin/technical-indicators";
 import THEME from "../../../theme";
+
+const worker = new Worker(new URL("./williamsVixWorker.ts", import.meta.url));
 
 const williamsVixIndicatorTemplate: TechnicalIndicatorTemplate = {
   calcParams: [
@@ -31,18 +32,22 @@ const williamsVixIndicatorTemplate: TechnicalIndicatorTemplate = {
   ],
 
   // Calculation results
-  calcTechnicalIndicator: (kLineDataList: any, { params, plots }: any) => {
-    const data = WilliamsVix({
-      candles: kLineDataList,
-      lookBackPeriodStDevHigh: params[0],
-      bbLength: params[1],
-      bbStandardDeviationUp: params[2],
-      lookBackPeriodPercentileHigh: params[3],
-      highestPercentile: params[4],
-      lowestPercentile: params[5],
-    });
+  calcTechnicalIndicator: (kLineDataList: any, { params }: any) => {
+    return new Promise((resolve) => {
+      worker.postMessage({
+        candles: kLineDataList,
+        lookBackPeriodStDevHigh: params[0],
+        bbLength: params[1],
+        bbStandardDeviationUp: params[2],
+        lookBackPeriodPercentileHigh: params[3],
+        highestPercentile: params[4],
+        lowestPercentile: params[5],
+      });
 
-    return kLineDataList.map((candle: any) => data?.result(candle.time));
+      worker.onmessage = ({ data }) => {
+        resolve(data || []);
+      };
+    });
   },
 };
 

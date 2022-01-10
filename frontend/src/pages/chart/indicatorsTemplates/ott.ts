@@ -1,5 +1,5 @@
-import { TechnicalIndicatorTemplate } from "klinecharts";
 import { OTT } from "@aduryagin/technical-indicators";
+import { TechnicalIndicatorTemplate } from "klinecharts";
 
 const ottIndicatorTemplate: TechnicalIndicatorTemplate = {
   calcParams: [

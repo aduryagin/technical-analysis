@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Button, notification, Select, Spin, Typography } from "antd";
 import styled from "styled-components";
 import Helmet from "react-helmet";
-import { init, dispose, Chart as KChart } from "klinecharts";
+import { init, dispose } from "../../klinechart";
 import { findGetParameter, intervalLabels } from "./helpers";
 import { CHART_OPTIONS } from "./constants";
 import WatchList from "./components/WatchList";
@@ -19,12 +19,14 @@ import {
 } from "../../graphql";
 import Indicators from "./components/Indicators";
 import { DRAWINGS } from "./drawings";
-import { useDebouncedCallback } from "use-debounce/lib";
+import { useDebouncedCallback } from "use-debounce";
 import williamsVixIndicatorTemplate from "./indicatorsTemplates/williamsVix";
 import pmaxIndicatorTemplate from "./indicatorsTemplates/pmax";
 import ottIndicatorTemplate from "./indicatorsTemplates/ott";
 import rsiStochTPIndicatorTemplate from "./indicatorsTemplates/rsiStochTP";
 import pmaxRsiIndicatorTemplate from "./indicatorsTemplates/pmaxRsi";
+import vwapIndicatorTemplate from "./indicatorsTemplates/vwap";
+import volumeIndicatorTemplate from "./indicatorsTemplates/volume";
 
 const WrapperChart = styled.div`
   display: flex;
@@ -40,7 +42,7 @@ const WATCH_LIST_WIDTH = 320;
 function useChart() {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const unsubscribeFromCandle = useRef<() => void>(() => {});
-  const [chart, setChart] = useState<KChart | null>(null);
+  const [chart, setChart] = useState<any | null>(null);
   const figi = findGetParameter("figi");
   const ticker = findGetParameter("ticker");
   const interval = findGetParameter("interval") || Interval.Day;
@@ -118,6 +120,8 @@ function useChart() {
       ottIndicatorTemplate,
       rsiStochTPIndicatorTemplate,
       pmaxRsiIndicatorTemplate,
+      vwapIndicatorTemplate,
+      volumeIndicatorTemplate,
     ]);
 
     instance?.setStyleOptions({
