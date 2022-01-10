@@ -1,6 +1,7 @@
 import { TechnicalIndicatorTemplate } from "klinecharts";
-import { RSIStochasticTakeProfit } from "@aduryagin/technical-indicators";
 import THEME from "../../../theme";
+
+const worker = new Worker(new URL("./rsiStochTPWorker.ts", import.meta.url));
 
 const rsiStochTPIndicatorTemplate: TechnicalIndicatorTemplate = {
   calcParams: [
@@ -30,17 +31,18 @@ const rsiStochTPIndicatorTemplate: TechnicalIndicatorTemplate = {
   ],
 
   // Calculation results
-  calcTechnicalIndicator: (kLineDataList: any, { params, plots }: any) => {
-    const data = RSIStochasticTakeProfit({
-      candles: kLineDataList,
-      period: params[0],
-      kSmoothing: params[1],
-    });
+  calcTechnicalIndicator: (kLineDataList: any, { params }: any) => {
+    return new Promise((resolve) => {
+      worker.postMessage({
+        candles: kLineDataList,
+        period: params[0],
+        kSmoothing: params[1],
+      });
 
-    return kLineDataList.map((candle: any) => ({
-      ...data?.result(candle.time),
-      tp: 10,
-    }));
+      worker.onmessage = ({ data }) => {
+        resolve(data || []);
+      };
+    });
   },
 };
 

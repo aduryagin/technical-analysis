@@ -13,7 +13,6 @@ const vwapIndicatorTemplate: TechnicalIndicatorTemplate = {
     },
   ],
 
-  // Calculation results
   calcTechnicalIndicator: async (kLineDataList: any) => {
     return new Promise((resolve) => {
       worker.postMessage(kLineDataList);

@@ -23,7 +23,7 @@ const ottIndicatorTemplate: TechnicalIndicatorTemplate = {
   ],
 
   // Calculation results
-  calcTechnicalIndicator: (kLineDataList: any, { params, plots }: any) => {
+  calcTechnicalIndicator: (kLineDataList: any, { params }: any) => {
     const data = OTT({
       candles: kLineDataList,
       period: params[0],

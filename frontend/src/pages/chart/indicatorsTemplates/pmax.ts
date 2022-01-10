@@ -1,5 +1,6 @@
 import { TechnicalIndicatorTemplate } from "klinecharts";
-import { PMax } from "@aduryagin/technical-indicators";
+
+const worker = new Worker(new URL("./pmaxWorker.ts", import.meta.url));
 
 const pmaxIndicatorTemplate: TechnicalIndicatorTemplate = {
   calcParams: [
@@ -35,25 +36,18 @@ const pmaxIndicatorTemplate: TechnicalIndicatorTemplate = {
   },
 
   // Calculation results
-  calcTechnicalIndicator: (kLineDataList: any, { params, plots }: any) => {
-    const data = params.reduce((accum, param) => {
-      const pmax = PMax({
+  calcTechnicalIndicator: (kLineDataList: any, { params }: any) => {
+    return new Promise((resolve) => {
+      worker.postMessage({
         candles: kLineDataList,
         emaPeriod: 10,
         atrPeriod: 10,
-        multiplier: param,
+        params,
       });
 
-      return { ...accum, [param]: pmax };
-    }, {});
-
-    return kLineDataList.map((candle: any) => {
-      return params.reduce((accum, param) => {
-        return {
-          ...accum,
-          [`pmax${param}`]: data[param]?.result(candle.time)?.pmax,
-        };
-      }, {});
+      worker.onmessage = ({ data }) => {
+        resolve(data || []);
+      };
     });
   },
 };

@@ -1,5 +1,6 @@
 import { TechnicalIndicatorTemplate } from "klinecharts";
-import { PMaxRSI } from "@aduryagin/technical-indicators";
+
+const worker = new Worker(new URL("./pmaxRsiWorker.ts", import.meta.url));
 
 const pmaxRsiIndicatorTemplate: TechnicalIndicatorTemplate = {
   calcParams: [
@@ -46,28 +47,27 @@ const pmaxRsiIndicatorTemplate: TechnicalIndicatorTemplate = {
   ],
 
   // Calculation results
-  calcTechnicalIndicator: (kLineDataList: any, { params, plots }: any) => {
-    const data = PMaxRSI({
-      candles: kLineDataList,
-      rsi: {
-        period: params[0],
-      },
-      t3: {
-        period: params[1],
-        volumeFactor: params[2],
-      },
-      atr: {
-        multiplier: params[3],
-        period: params[4],
-      },
-    });
+  calcTechnicalIndicator: (kLineDataList: any, { params }: any) => {
+    return new Promise((resolve) => {
+      worker.postMessage({
+        candles: kLineDataList,
+        rsi: {
+          period: params[0],
+        },
+        t3: {
+          period: params[1],
+          volumeFactor: params[2],
+        },
+        atr: {
+          multiplier: params[3],
+          period: params[4],
+        },
+      });
 
-    return kLineDataList.map((candle: any) => ({
-      overbought: 70,
-      oversold: 30,
-      middle: 50,
-      ...data?.result(candle.time),
-    }));
+      worker.onmessage = ({ data }) => {
+        resolve(data || []);
+      };
+    });
   },
 };
 
