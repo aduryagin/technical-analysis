@@ -2,7 +2,13 @@ import { TechnicalIndicatorTemplate } from "klinecharts";
 import { PMaxRSI } from "@aduryagin/technical-indicators";
 
 const pmaxRsiIndicatorTemplate: TechnicalIndicatorTemplate = {
-  calcParams: [14, 8, { value: 0.7, allowDecimal: true }, 3, 10],
+  calcParams: [
+    14,
+    8,
+    { value: 0.7, allowDecimal: true },
+    { value: 3, allowDecimal: true },
+    10,
+  ],
 
   name: "PMAXRSI",
   series: "normal",
