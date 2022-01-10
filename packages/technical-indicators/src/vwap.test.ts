@@ -18,13 +18,21 @@ const inputVWAP = {
     9925, 5540, 10803, 19400,
   ],
 };
-const expectedResult = [
-  127.21, 127.2, 127.2, 127.17, 127.15, 127.14, 127.13, 127.12, 127.12, 127.12,
-  127.12, 127.13, 127.13, 127.14, 127.15,
-].map((item, index) => ({
-  time: index,
-  value: item,
-}));
+const expectedResult = new Map(
+  [
+    127.21, 127.2043897559403, 127.19555952224567, 127.1741269460546,
+    127.14941792318422, 127.14244637011556, 127.12667351484882,
+    127.11912676668281, 127.11880099814533, 127.11883264716504,
+    127.12458386414268, 127.1300213017865, 127.13315151386719,
+    127.13744596137772, 127.14668471941644,
+  ].map((item, index) => [
+    index,
+    {
+      time: index,
+      value: item,
+    },
+  ])
+);
 const candles = inputVWAP.high.map((item, index) => ({
   time: index,
   high: item,
@@ -34,14 +42,7 @@ const candles = inputVWAP.high.map((item, index) => ({
 }));
 
 it("vwap", () => {
-  expect(
-    VWAP({ candles })
-      .result()
-      .map((item) => ({
-        ...item,
-        value: parseFloat(item.value.toFixed(2)),
-      }))
-  ).toEqual(expectedResult);
+  expect(VWAP({ candles }).result()).toEqual(expectedResult);
 });
 
 it("vwap add", () => {
@@ -54,9 +55,9 @@ it("vwap add", () => {
   expect(
     result.map((item) => ({
       ...item,
-      value: parseFloat(item.value.toFixed(2)),
+      value: item.value,
     }))
-  ).toEqual(expectedResult);
+  ).toEqual(Array.from(expectedResult.values()));
 });
 
 it("vwap update", () => {
@@ -69,9 +70,9 @@ it("vwap update", () => {
   expect(
     result.map((item) => ({
       ...item,
-      value: parseFloat(item.value.toFixed(2)),
+      value: item.value,
     }))
-  ).toEqual(expectedResult);
+  ).toEqual(Array.from(expectedResult.values()));
 
   expect(
     vwap.update({ time: 14, close: 200, high: 200, low: 200, volume: 20000 })

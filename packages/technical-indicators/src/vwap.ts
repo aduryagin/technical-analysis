@@ -7,10 +7,9 @@ interface VWAPResultItem {
   time: Candle["time"];
   value: number;
 }
-type VWAPResult = VWAPResultItem[];
 
 export function VWAP({ candles }: VWAPInput) {
-  let result: VWAPResult = [];
+  const result = new Map<Candle["time"], VWAPResultItem>();
   let cumulativeTotal = 0;
   let cumulativeVolume = 0;
   let lastCumulativeTotal = 0;
@@ -29,21 +28,28 @@ export function VWAP({ candles }: VWAPInput) {
 
   candles.forEach((item) => {
     const res = calculate(item);
-    if (res) result.push(res);
+    if (res) result.set(item.time, res);
   });
 
   return {
-    result: () => result,
+    result: (time?: Candle["time"]) => {
+      if (time) return result.get(time);
+      return result;
+    },
     update: (candle: Candle) => {
-      if (result.length && result[result.length - 1].time === candle.time) {
-        result = result.slice(0, -1);
+      const prevResult = Array.from(result.values()).pop();
 
+      if (result.size && prevResult.time > candle.time) {
+        return prevResult;
+      }
+
+      if (result.size && prevResult.time === candle.time) {
         cumulativeVolume = lastCumulativeVolume;
         cumulativeTotal = lastCumulativeTotal;
       }
 
       const item = calculate(candle);
-      if (item) result.push(item);
+      if (item) result.set(item.time, item);
 
       return item;
     },
