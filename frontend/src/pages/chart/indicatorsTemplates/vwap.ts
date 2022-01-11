@@ -1,25 +1,35 @@
 import { TechnicalIndicatorTemplate } from "klinecharts";
-
-const worker = new Worker(new URL("./vwapWorker.ts", import.meta.url));
+import config from "../../../config";
 
 const vwapIndicatorTemplate: TechnicalIndicatorTemplate = {
   name: "VWAP",
   series: "normal",
   plots: [
     {
-      key: "value",
+      key: "VWAP_D",
       title: "VWAP",
       type: "line",
     },
   ],
 
   calcTechnicalIndicator: async (kLineDataList: any) => {
-    return new Promise((resolve) => {
-      worker.postMessage(kLineDataList);
+    return new Promise(async (resolve) => {
+      if (kLineDataList.length) {
+        const response = await fetch(`${config.python}/indicator-calculator`, {
+          method: "post",
+          headers: new Headers({
+            "Content-Type": "application/json",
+          }),
+          body: JSON.stringify({
+            candles: kLineDataList,
+            indicator: "vwap",
+          }),
+        });
 
-      worker.onmessage = ({ data }) => {
-        resolve(data || []);
-      };
+        const data = await response.json();
+
+        return resolve(data);
+      }
     });
   },
 };

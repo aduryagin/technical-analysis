@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "indicators"
+version = "0.1.0"
+description = ""
+authors = ["Alexey Duryagin <aiduryagih@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pandas-ta = "^0.3.14-beta.0"
+Flask-RESTful = "^0.3.9"
+Flask-Cors = "^3.0.10"
+sanic = "^21.12.1"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
