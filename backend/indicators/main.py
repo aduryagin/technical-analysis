@@ -31,7 +31,6 @@ async def test(request):
   indicator = df.ta(kind=indicator)
   result = pd.merge(left=df, right=indicator, left_index=True, right_index=True)
   result['Date'] = result['Date'].apply(lambda x: x.value / 1000000)
-  print(result)
 
   return json(result.to_dict('records'))
 
