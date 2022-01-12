@@ -78,9 +78,14 @@ function useChart() {
           prev,
           {
             subscriptionData,
-          }: { subscriptionData: { data: { candle: { candle: Candle } } } }
+          }: {
+            subscriptionData: {
+              data: { candle: { instrument: any; candle: Candle } };
+            };
+          }
         ) => {
-          chartInstance?.updateData(subscriptionData.data.candle.candle);
+          if (subscriptionData.data.candle.instrument.figi === figi)
+            chartInstance?.updateData(subscriptionData.data.candle.candle);
 
           // don't update the data
           return { ...prev, candles: [...(prev.candles || [])] };
@@ -221,7 +226,7 @@ function useChart() {
             onPressedMove: (e) => {
               onUpdateShape({
                 id: shape.id,
-                // @ts-ignore
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 points: e.points?.map(({ __typename, ...point }) => point),
               });
             },
@@ -394,8 +399,8 @@ export default function Chart() {
                           onPressedMove: (e) => {
                             onUpdateShape({
                               id: e.id,
-                              // @ts-ignore
                               points: e.points?.map(
+                                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                                 ({ __typename, ...point }: any) => point
                               ),
                             });
