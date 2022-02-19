@@ -20,12 +20,12 @@ const HeaderStyled = styled(Header)`
   background: #fff;
   padding: 0;
   box-shadow: 0 2px 8px #f0f1f2;
+  position: relative;
 `;
 
 const ContentStyled = styled(Content)`
   background: #fff;
   padding: 0;
-  margin-top: 20px;
 `;
 
 function App() {

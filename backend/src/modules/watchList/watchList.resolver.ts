@@ -5,6 +5,7 @@ import { WatchListService } from "./watchList.service";
 import { WatchInput } from "./watchList.types";
 import { TinkoffService } from "../tinkoff/tinkoff.service";
 import { sub } from "date-fns";
+import { AlgorithmTestingResolver } from "../algorithmTesting/algorithmTesting.resolver";
 
 @Resolver()
 export class WatchListResolver {
@@ -12,7 +13,8 @@ export class WatchListResolver {
 
   constructor(
     private readonly watchListService: WatchListService,
-    private readonly tinkoffService: TinkoffService
+    private readonly tinkoffService: TinkoffService,
+    private readonly algorithmTestingResolver: AlgorithmTestingResolver
   ) {}
 
   candleUnsubscribe: {
@@ -53,7 +55,7 @@ export class WatchListResolver {
                 return {
                   ...item,
                   price: this.instrumentPrice[item.id].close,
-                  pricePercentChange: percentDiff,
+                  pricePercentChange: percentDiff || 0,
                 };
               }),
             });
@@ -96,12 +98,14 @@ export class WatchListResolver {
   async watch(@Args("input", { type: () => WatchInput }) input: WatchInput) {
     const instrument = await this.watchListService.addInstrument(input);
     await this.getInitialCandles(instrument);
+    await this.algorithmTestingResolver.subscribe(instrument);
     this.publish();
     return instrument;
   }
 
   @Mutation(() => Boolean)
   async unwatch(@Args("id") id: number) {
+    await this.algorithmTestingResolver.unsubscribe(id);
     await this.watchListService.removeInstrument(id);
     this.publish();
     return true;

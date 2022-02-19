@@ -27,3 +27,9 @@ export const intervalLabels = {
   [Interval.Week]: "Week",
   [Interval.Month]: "Month",
 };
+
+export function formatNumber(number: number) {
+  return Intl.NumberFormat("en-US", {
+    maximumSignificantDigits: 2,
+  }).format(number);
+}

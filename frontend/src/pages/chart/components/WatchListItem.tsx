@@ -30,11 +30,10 @@ export default function WatchListItem({ item, onClick }: Props) {
         style={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
           width: "100%",
         }}
       >
-        <span>
+        <span style={{ width: 61 }}>
           <a
             style={{ marginRight: 5 }}
             target="__blank"
@@ -68,6 +67,7 @@ export default function WatchListItem({ item, onClick }: Props) {
           </a>
         </span>
         <span
+          style={{ width: 50 }}
           onClick={() => {
             onClick(item);
           }}
@@ -75,6 +75,7 @@ export default function WatchListItem({ item, onClick }: Props) {
           {item.ticker}
         </span>
         <span
+          style={{ width: 90 }}
           onClick={() => {
             onClick(item);
           }}
@@ -85,6 +86,7 @@ export default function WatchListItem({ item, onClick }: Props) {
           style={{
             marginRight: 10,
             textAlign: "right",
+            width: 65,
             color:
               (item.pricePercentChange || 0) >= 0
                 ? THEME.colors.green

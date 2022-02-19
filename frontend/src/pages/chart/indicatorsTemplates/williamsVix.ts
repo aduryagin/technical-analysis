@@ -1,4 +1,4 @@
-import { TechnicalIndicatorTemplate } from "klinecharts";
+import { TechnicalIndicatorTemplate } from "../../../KLineChart/types";
 import THEME from "../../../theme";
 
 const worker = new Worker(new URL("./williamsVixWorker.ts", import.meta.url));

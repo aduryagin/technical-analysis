@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { AlgorithmTestingModule } from "./modules/algorithmTesting/algorithmTesting.module";
 import { IndicatorModule } from "./modules/indicator/indicator.module";
 import { ShapeModule } from "./modules/shape/shape.module";
 import { TinkoffModule } from "./modules/tinkoff/tinkoff.module";
@@ -31,6 +32,7 @@ import { WatchListModule } from "./modules/watchList/watchList.module";
     TipRanksModule,
     IndicatorModule,
     ShapeModule,
+    AlgorithmTestingModule,
   ],
   controllers: [],
   providers: [],

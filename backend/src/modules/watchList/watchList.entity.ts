@@ -1,5 +1,6 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { AlgorithmTrade } from "../algorithmTesting/algorithmTesting.entity";
 
 @Entity()
 @ObjectType()
@@ -21,4 +22,7 @@ export class Instrument {
 
   @Field({ nullable: true })
   pricePercentChange?: number;
+
+  @OneToMany(() => AlgorithmTrade, (trade) => trade.instrument)
+  trades: AlgorithmTrade[];
 }

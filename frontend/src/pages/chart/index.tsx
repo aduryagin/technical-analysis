@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Button, notification, Select, Spin, Typography } from "antd";
 import styled from "styled-components";
 import Helmet from "react-helmet";
-import { init, dispose } from "../../klinechart";
+import { init, dispose } from "../../KLineChart/src";
 import { findGetParameter, intervalLabels } from "./helpers";
 import { CHART_OPTIONS } from "./constants";
 import WatchList from "./components/WatchList";
@@ -27,13 +27,16 @@ import rsiStochTPIndicatorTemplate from "./indicatorsTemplates/rsiStochTP";
 import pmaxRsiIndicatorTemplate from "./indicatorsTemplates/pmaxRsi";
 import vwapIndicatorTemplate from "./indicatorsTemplates/vwap";
 import volumeIndicatorTemplate from "./indicatorsTemplates/volume";
+import AlgorithmTesting from "./components/AlgorithmTesing";
 
 const WrapperChart = styled.div`
   display: flex;
 `;
 const SideBarWrapper = styled.div`
-  padding: 0 15px;
+  padding: 10px 15px 0;
   width: 100%;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
 `;
 
 // constants
@@ -323,7 +326,7 @@ export default function Chart() {
             id="chart"
             style={{
               width: `calc(100vw - ${WATCH_LIST_WIDTH}px)`,
-              height: "calc(100vh - 86px)",
+              height: "calc(100vh - 64px)",
             }}
           />
         </Spin>
@@ -419,6 +422,7 @@ export default function Chart() {
             ))}
           </div>
           <Indicators chart={chart} />
+          <AlgorithmTesting onTickerSelect={onTickerSelect} />
         </SideBarWrapper>
       </WrapperChart>
     </div>

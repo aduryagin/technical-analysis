@@ -1,6 +1,6 @@
 import { CloseCircleOutlined } from "@ant-design/icons";
 import { Collapse, List, notification, Select, Typography } from "antd";
-import { extension } from "../../../klinechart";
+import { extension } from "../../../KLineChart/src";
 import { useCallback, useEffect } from "react";
 import styled from "styled-components";
 import {
@@ -30,6 +30,14 @@ export const INDICATORS: { [key: string]: any } = {
     ...volumeIndicatorTemplate,
     paneId: null,
     label: "Volume",
+    calcParamsLabels: [
+      "MA Period",
+      "STD Period",
+      "Extra High Volume Threshold",
+      "High Volume Threshold",
+      "Medium Volume Threshold",
+      "Normal Volume Threshold",
+    ],
     options: {},
   },
   VWAP: {

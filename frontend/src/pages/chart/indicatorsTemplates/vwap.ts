@@ -1,4 +1,4 @@
-import { TechnicalIndicatorTemplate } from "klinecharts";
+import { TechnicalIndicatorTemplate } from "../../../KLineChart/types";
 import config from "../../../config";
 
 const vwapIndicatorTemplate: TechnicalIndicatorTemplate = {
@@ -22,7 +22,7 @@ const vwapIndicatorTemplate: TechnicalIndicatorTemplate = {
           }),
           body: JSON.stringify({
             candles: kLineDataList,
-            indicator: "vwap",
+            indicator: { name: "vwap" },
           }),
         });
 

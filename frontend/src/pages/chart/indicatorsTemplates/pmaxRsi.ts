@@ -1,4 +1,4 @@
-import { TechnicalIndicatorTemplate } from "klinecharts";
+import { TechnicalIndicatorTemplate } from "../../../KLineChart/types";
 
 const worker = new Worker(new URL("./pmaxRsiWorker.ts", import.meta.url));
 

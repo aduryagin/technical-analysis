@@ -4,3 +4,4 @@ node_modules
 backend/.env
 backend/database.sqlite
 __pycache__
+backend/indicators/notebooks/candles

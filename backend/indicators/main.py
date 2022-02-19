@@ -6,6 +6,12 @@ from sanic.response import json
 from cors import add_cors_headers
 from options import setup_options
 from datetime import datetime
+from pandas_ta.custom import create_dir, import_dir
+
+# custom indicators
+ta_dir = "./indicators"
+create_dir(ta_dir)
+import_dir(ta_dir)
 
 app = Sanic(__name__)
 
@@ -28,11 +34,17 @@ async def test(request):
   for candle in candles)
   df.set_index(pd.DatetimeIndex(df['Date']), inplace=True, drop=True)
 
-  indicator = df.ta(kind=indicator)
-  result = pd.merge(left=df, right=indicator, left_index=True, right_index=True)
+  if indicator['name'] == "pmax":
+    indicator_result = df.ta.pmax(high=df["High"], low=df["Low"], close=df["Close"], multiplier=3)
+  elif indicator['name'] == "heatmap_volume":
+    indicator_result = df.ta.heatmap_volume(volume=df["Volume"], **indicator['parameters'])
+  else:
+    indicator_result = df.ta(kind=indicator['name'])
+
+  result = pd.merge(left=df, right=indicator_result, left_index=True, right_index=True)
   result['Date'] = result['Date'].apply(lambda x: x.value / 1000000)
 
-  return json(result.to_dict('records'))
+  return json(result.replace({np.nan: None}).to_dict('records'))
 
 if __name__ == '__main__':
   app.run(debug=True)

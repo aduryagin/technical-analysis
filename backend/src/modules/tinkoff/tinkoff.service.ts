@@ -26,10 +26,12 @@ export class TinkoffService {
     figi,
     interval = "day",
     to,
+    subPeriodLength = 10,
   }: {
     figi: Instrument["figi"];
     interval?: Interval;
     to?: string;
+    subPeriodLength?: number;
   }) {
     const removeTimeDuplicates = (candles: Candle[]): Candle[] => {
       return candles.filter(
@@ -72,7 +74,6 @@ export class TinkoffService {
       }
     };
 
-    const subPeriodLength = 6;
     let subPeriod: any = { days: subPeriodLength };
     let addPeriod: any = { days: 1 };
 

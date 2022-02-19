@@ -2,23 +2,17 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Indicator {
-  id: Float
-  name: String!
-  settings: [Float!]
-}
-
-type ShapePoint {
-  dataIndex: Float
-  timestamp: Float
-  value: Float!
-}
-
-type Shape {
+type AlgorithmTrade {
   id: Float!
-  name: String!
-  ticker: String!
-  points: [ShapePoint!]!
+  instrument: Instrument!
+  price: Float!
+  closePrice: Float
+  interval: String!
+  type: String!
+  closed: Boolean!
+  date: String!
+  closeDate: String
+  pricePercentChange: Float!
 }
 
 type Instrument {
@@ -42,6 +36,25 @@ type Candle {
 type CandleSubscriptionData {
   candle: Candle!
   instrument: Instrument!
+}
+
+type Indicator {
+  id: Float
+  name: String!
+  settings: [Float!]
+}
+
+type ShapePoint {
+  dataIndex: Float
+  timestamp: Float
+  value: Float!
+}
+
+type Shape {
+  id: Float!
+  name: String!
+  ticker: String!
+  points: [ShapePoint!]!
 }
 
 type TipRanksInfo {
@@ -96,6 +109,7 @@ enum Interval {
 type Mutation {
   watch(input: WatchInput!): Instrument!
   unwatch(id: Float!): Boolean!
+  closeTrade(id: Float!): Boolean!
   addIndicator(input: AddIndicatorInput!): Indicator!
   updateIndicator(input: UpdateIndicatorInput!): Indicator!
   removeIndicator(id: Float!): Boolean!
@@ -138,4 +152,5 @@ input UpdateShapeInput {
 type Subscription {
   candle(interval: Interval!, figi: String!): CandleSubscriptionData!
   watchList: [Instrument!]!
+  trades: [AlgorithmTrade!]!
 }

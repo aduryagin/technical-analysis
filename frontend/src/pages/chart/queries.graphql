@@ -149,3 +149,23 @@ mutation addShape($input: AddShapeInput!) {
     }
   }
 }
+
+subscription trades {
+  trades {
+    id
+    price
+    type
+    closed
+    pricePercentChange
+    date
+    instrument {
+      id
+      ticker
+      figi
+    }
+  }
+}
+
+mutation closeTrade($id: Float!) {
+  closeTrade(id: $id)
+}

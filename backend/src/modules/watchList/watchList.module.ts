@@ -1,5 +1,6 @@
 import { forwardRef, Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { AlgorithmTestingModule } from "../algorithmTesting/algorithmTesting.module";
 import { TinkoffModule } from "../tinkoff/tinkoff.module";
 import { Instrument } from "./watchList.entity";
 import { WatchListResolver } from "./watchList.resolver";
@@ -9,6 +10,7 @@ import { WatchListService } from "./watchList.service";
   imports: [
     TypeOrmModule.forFeature([Instrument]),
     forwardRef(() => TinkoffModule),
+    forwardRef(() => AlgorithmTestingModule),
   ],
   providers: [WatchListResolver, WatchListService],
   exports: [WatchListService],

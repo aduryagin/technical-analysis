@@ -26,6 +26,19 @@ export type AddShapeInput = {
   ticker: Scalars['String'];
 };
 
+export type AlgorithmTrade = {
+  __typename?: 'AlgorithmTrade';
+  closePrice?: Maybe<Scalars['Float']>;
+  closed: Scalars['Boolean'];
+  date: Scalars['String'];
+  id: Scalars['Float'];
+  instrument: Instrument;
+  interval: Scalars['String'];
+  price: Scalars['Float'];
+  pricePercentChange: Scalars['Float'];
+  type: Scalars['String'];
+};
+
 export type Candle = {
   __typename?: 'Candle';
   close: Scalars['Float'];
@@ -77,6 +90,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   addIndicator: Indicator;
   addShape: Shape;
+  closeTrade: Scalars['Boolean'];
   removeIndicator: Scalars['Boolean'];
   removeShape: Scalars['Boolean'];
   unwatch: Scalars['Boolean'];
@@ -93,6 +107,11 @@ export type MutationAddIndicatorArgs = {
 
 export type MutationAddShapeArgs = {
   input: AddShapeInput;
+};
+
+
+export type MutationCloseTradeArgs = {
+  id: Scalars['Float'];
 };
 
 
@@ -186,6 +205,7 @@ export type SharePointInput = {
 export type Subscription = {
   __typename?: 'Subscription';
   candle: CandleSubscriptionData;
+  trades: Array<AlgorithmTrade>;
   watchList: Array<Instrument>;
 };
 
@@ -348,6 +368,18 @@ export type AddShapeMutationVariables = Exact<{
 
 
 export type AddShapeMutation = { __typename?: 'Mutation', addShape: { __typename?: 'Shape', id: number, ticker: string, points: Array<{ __typename?: 'ShapePoint', dataIndex?: number | null | undefined, timestamp?: number | null | undefined, value: number }> } };
+
+export type TradesSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TradesSubscription = { __typename?: 'Subscription', trades: Array<{ __typename?: 'AlgorithmTrade', id: number, price: number, type: string, closed: boolean, pricePercentChange: number, date: string, instrument: { __typename?: 'Instrument', id?: number | null | undefined, ticker: string, figi: string } }> };
+
+export type CloseTradeMutationVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type CloseTradeMutation = { __typename?: 'Mutation', closeTrade: boolean };
 
 
 export const CandlesDocument = gql`
@@ -937,3 +969,73 @@ export function useAddShapeMutation(baseOptions?: Apollo.MutationHookOptions<Add
 export type AddShapeMutationHookResult = ReturnType<typeof useAddShapeMutation>;
 export type AddShapeMutationResult = Apollo.MutationResult<AddShapeMutation>;
 export type AddShapeMutationOptions = Apollo.BaseMutationOptions<AddShapeMutation, AddShapeMutationVariables>;
+export const TradesDocument = gql`
+    subscription trades {
+  trades {
+    id
+    price
+    type
+    closed
+    pricePercentChange
+    date
+    instrument {
+      id
+      ticker
+      figi
+    }
+  }
+}
+    `;
+
+/**
+ * __useTradesSubscription__
+ *
+ * To run a query within a React component, call `useTradesSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useTradesSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useTradesSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useTradesSubscription(baseOptions?: Apollo.SubscriptionHookOptions<TradesSubscription, TradesSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<TradesSubscription, TradesSubscriptionVariables>(TradesDocument, options);
+      }
+export type TradesSubscriptionHookResult = ReturnType<typeof useTradesSubscription>;
+export type TradesSubscriptionResult = Apollo.SubscriptionResult<TradesSubscription>;
+export const CloseTradeDocument = gql`
+    mutation closeTrade($id: Float!) {
+  closeTrade(id: $id)
+}
+    `;
+export type CloseTradeMutationFn = Apollo.MutationFunction<CloseTradeMutation, CloseTradeMutationVariables>;
+
+/**
+ * __useCloseTradeMutation__
+ *
+ * To run a mutation, you first call `useCloseTradeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCloseTradeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [closeTradeMutation, { data, loading, error }] = useCloseTradeMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useCloseTradeMutation(baseOptions?: Apollo.MutationHookOptions<CloseTradeMutation, CloseTradeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CloseTradeMutation, CloseTradeMutationVariables>(CloseTradeDocument, options);
+      }
+export type CloseTradeMutationHookResult = ReturnType<typeof useCloseTradeMutation>;
+export type CloseTradeMutationResult = Apollo.MutationResult<CloseTradeMutation>;
+export type CloseTradeMutationOptions = Apollo.BaseMutationOptions<CloseTradeMutation, CloseTradeMutationVariables>;
