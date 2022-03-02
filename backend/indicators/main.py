@@ -38,6 +38,8 @@ async def test(request):
     indicator_result = df.ta.pmax(high=df["High"], low=df["Low"], close=df["Close"], multiplier=3)
   elif indicator['name'] == "heatmap_volume":
     indicator_result = df.ta.heatmap_volume(volume=df["Volume"], **indicator['parameters'])
+  elif indicator['name'] == "vader":
+    indicator_result = df.ta.vader(high=df["High"], low=df["Low"], close=df["Close"], volume=df["Volume"])
   else:
     indicator_result = df.ta(kind=indicator['name'])
 

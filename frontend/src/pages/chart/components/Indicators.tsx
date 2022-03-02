@@ -17,6 +17,7 @@ import volumeIndicatorTemplate from "../indicatorsTemplates/volume";
 import vwapIndicatorTemplate from "../indicatorsTemplates/vwap";
 import williamsVixIndicatorTemplate from "../indicatorsTemplates/williamsVix";
 import IndicatorSettingsForm from "./IndicatorSettingsForm";
+import vaderIndicatorTemplate from "../indicatorsTemplates/vader";
 
 interface Props {
   chart: any | null;
@@ -26,6 +27,13 @@ interface Props {
 const standardIndicators = extension.technicalIndicatorExtensions;
 
 export const INDICATORS: { [key: string]: any } = {
+  VADER: {
+    ...vaderIndicatorTemplate,
+    paneId: null,
+    label: "Vader",
+    calcParamsLabels: [],
+    options: {},
+  },
   SVOL: {
     ...volumeIndicatorTemplate,
     paneId: null,
@@ -312,6 +320,7 @@ const indicatorGroups = [
       INDICATORS.PMAXRSI,
       INDICATORS.VWAP,
       INDICATORS.SVOL,
+      INDICATORS.VADER,
     ],
   },
 ];

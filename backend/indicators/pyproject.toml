@@ -18,6 +18,7 @@ requests = "^2.27.1"
 vectorbt = "^0.23.1"
 kaleido = "0.2.1"
 scikit-learn = "^1.0.2"
+epymetheus = "^0.17.1"
 
 [tool.poetry.dev-dependencies]
 ipykernel = "^6.6.1"

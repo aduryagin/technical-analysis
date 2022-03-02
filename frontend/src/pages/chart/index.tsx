@@ -28,6 +28,7 @@ import pmaxRsiIndicatorTemplate from "./indicatorsTemplates/pmaxRsi";
 import vwapIndicatorTemplate from "./indicatorsTemplates/vwap";
 import volumeIndicatorTemplate from "./indicatorsTemplates/volume";
 import AlgorithmTesting from "./components/AlgorithmTesing";
+import vaderIndicatorTemplate from "./indicatorsTemplates/vader";
 
 const WrapperChart = styled.div`
   display: flex;
@@ -130,6 +131,7 @@ function useChart() {
       pmaxRsiIndicatorTemplate,
       vwapIndicatorTemplate,
       volumeIndicatorTemplate,
+      vaderIndicatorTemplate,
     ]);
 
     instance?.setStyleOptions({

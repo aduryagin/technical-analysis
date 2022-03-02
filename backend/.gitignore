@@ -35,4 +35,7 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 indicators/.env
-indicators/notebooks/
+indicators/notebooks/*
+!indicators/notebooks/get_candles.py
+!indicators/notebooks/pmax_helpers.py
+!indicators/notebooks/volatile_stocks.ipynb
