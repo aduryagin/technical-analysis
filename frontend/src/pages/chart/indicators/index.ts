@@ -135,6 +135,9 @@ export const INDICATORS: { [key: string]: ExtendedTechnicalIndicatorTemplate } =
       ...standardIndicators.BOLL,
       label: "Bollinger Bands",
       name: "BOLL",
+      options: {
+        id: "candle_pane",
+      },
     },
     SAR: {
       ...standardIndicators.SAR,
