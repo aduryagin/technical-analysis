@@ -1,21 +1,24 @@
-import { TechnicalIndicatorTemplate } from "../../../KLineChart/types";
 import config from "../../../config";
+import { ExtendedTechnicalIndicatorTemplate } from "./types";
 
-const volumeIndicatorTemplate: TechnicalIndicatorTemplate = {
+const volumeIndicatorTemplate: ExtendedTechnicalIndicatorTemplate = {
   name: "SVOL",
+  label: "Volume Range",
   series: "volume",
   shouldCheckParamCount: false,
   shouldFormatBigNumber: true,
   precision: 0,
   minValue: 0,
 
+  options: {},
+
   calcParams: [
-    { value: 610, allowDecimal: true },
-    { value: 610, allowDecimal: true },
-    { value: 4, allowDecimal: true },
-    { value: 2.5, allowDecimal: true },
-    { value: 1, allowDecimal: true },
-    { value: -0.5, allowDecimal: true },
+    { value: 610, allowDecimal: true, label: "MA Period" },
+    { value: 610, allowDecimal: true, label: "STD Period" },
+    { value: 4, allowDecimal: true, label: "Extra High Volume Threshold" },
+    { value: 2.5, allowDecimal: true, label: "High Volume Threshold" },
+    { value: 1, allowDecimal: true, label: "Medium Volume Threshold" },
+    { value: -0.5, allowDecimal: true, label: "Normal Volume Threshold" },
   ],
 
   plots: [

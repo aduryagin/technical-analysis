@@ -3,7 +3,7 @@ import {
   IndicatorsQueryHookResult,
   useUpdateIndicatorMutation,
 } from "../../../graphql";
-import { INDICATORS } from "./Indicators";
+import { INDICATORS } from "../indicators";
 
 interface Props {
   indicator: NonNullable<IndicatorsQueryHookResult["data"]>["indicators"][0];
@@ -44,10 +44,7 @@ export default function IndicatorSettingsForm({ indicator, chart }: Props) {
           (param: any, index: number) => (
             <Form.Item
               name={`${indicator.name}${index}`}
-              label={
-                INDICATORS[indicator.name]?.calcParamsLabels?.[index] ||
-                `Param ${index}`
-              }
+              label={param?.label || `Param ${index}`}
               key={`${indicator.name}${index}`}
               initialValue={
                 indicator?.settings?.[index] || param?.value || param

@@ -1,19 +1,21 @@
-import { TechnicalIndicatorTemplate } from "../../../KLineChart/types";
 import THEME from "../../../theme";
+import { ExtendedTechnicalIndicatorTemplate } from "./types";
 
 const worker = new Worker(new URL("./williamsVixWorker.ts", import.meta.url));
 
-const williamsVixIndicatorTemplate: TechnicalIndicatorTemplate = {
+const williamsVixIndicatorTemplate: ExtendedTechnicalIndicatorTemplate = {
+  name: "WVX",
+  label: "Williams VIX",
+
   calcParams: [
-    22,
-    20,
-    2,
-    50,
-    { value: 0.85, allowDecimal: true },
-    { value: 1.01, allowDecimal: true },
+    { value: 22, label: "Look Back Period StDev High" },
+    { value: 20, label: "BB Length" },
+    { value: 2, label: "BB Standard Deviation Up" },
+    { value: 50, label: "Lookback Period Percentile High" },
+    { value: 0.85, allowDecimal: true, label: "Highest Percentile" },
+    { value: 1.01, allowDecimal: true, label: "Lowest Percentile" },
   ],
 
-  name: "WVX",
   series: "normal",
   plots: [
     {

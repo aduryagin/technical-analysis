@@ -1,23 +1,24 @@
-import { TechnicalIndicatorTemplate } from "../../../KLineChart/types";
 import config from "../../../config";
+import { ExtendedTechnicalIndicatorTemplate } from "./types";
 
-const vaderIndicatorTemplate: TechnicalIndicatorTemplate = {
-  name: "VADER",
+const vwapIndicatorTemplate: ExtendedTechnicalIndicatorTemplate = {
+  name: "VWAP",
+  label: "VWAP",
 
+  options: {
+    id: "candle_pane",
+  },
+
+  series: "normal",
   plots: [
     {
-      key: "VaderDemand",
-      title: "VaderDemand",
-      type: "line",
-    },
-    {
-      key: "VaderSupply",
-      title: "VaderSupply",
+      key: "VWAP_D",
+      title: "VWAP",
       type: "line",
     },
   ],
 
-  calcTechnicalIndicator: async (kLineDataList) => {
+  calcTechnicalIndicator: async (kLineDataList: any) => {
     return new Promise(async (resolve) => {
       if (kLineDataList.length) {
         const response = await fetch(`${config.python}/indicator-calculator`, {
@@ -27,9 +28,7 @@ const vaderIndicatorTemplate: TechnicalIndicatorTemplate = {
           }),
           body: JSON.stringify({
             candles: kLineDataList,
-            indicator: {
-              name: "vader",
-            },
+            indicator: { name: "vwap" },
           }),
         });
 
@@ -41,4 +40,4 @@ const vaderIndicatorTemplate: TechnicalIndicatorTemplate = {
   },
 };
 
-export default vaderIndicatorTemplate;
+export default vwapIndicatorTemplate;

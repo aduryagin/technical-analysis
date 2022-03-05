@@ -1,17 +1,23 @@
-import { TechnicalIndicatorTemplate } from "../../../KLineChart/types";
+import { ExtendedTechnicalIndicatorTemplate } from "./types";
 
 const worker = new Worker(new URL("./pmaxRsiWorker.ts", import.meta.url));
 
-const pmaxRsiIndicatorTemplate: TechnicalIndicatorTemplate = {
+const pmaxRsiIndicatorTemplate: ExtendedTechnicalIndicatorTemplate = {
+  name: "PMAXRSI",
+  label: "RSI & PMax",
+
+  options: {
+    height: 180,
+  },
+
   calcParams: [
-    14,
-    8,
-    { value: 0.7, allowDecimal: true },
-    { value: 3, allowDecimal: true },
-    10,
+    { value: 14, label: "RSI Period" },
+    { value: 8, label: "T3 Period" },
+    { value: 0.7, allowDecimal: true, label: "T3 Volume Factor" },
+    { value: 3, allowDecimal: true, label: "ATR Multiplier" },
+    { value: 10, label: "ATR Period" },
   ],
 
-  name: "PMAXRSI",
   series: "normal",
   plots: [
     {

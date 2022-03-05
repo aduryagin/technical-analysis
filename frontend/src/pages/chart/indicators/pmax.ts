@@ -1,15 +1,21 @@
-import { TechnicalIndicatorTemplate } from "../../../KLineChart/types";
+import { ExtendedTechnicalIndicatorTemplate } from "./types";
 
 const worker = new Worker(new URL("./pmaxWorker.ts", import.meta.url));
 
-const pmaxIndicatorTemplate: TechnicalIndicatorTemplate = {
+const pmaxIndicatorTemplate: ExtendedTechnicalIndicatorTemplate = {
+  name: "PMAX",
+  label: "Profit Maximizer",
+
+  options: {
+    id: "candle_pane",
+  },
+
   calcParams: [
-    { value: 1, allowDecimal: true },
-    { value: 3, allowDecimal: true },
-    { value: 5, allowDecimal: true },
+    { value: 1, allowDecimal: true, label: "Multiplier" },
+    { value: 3, allowDecimal: true, label: "Multiplier" },
+    { value: 5, allowDecimal: true, label: "Multiplier" },
   ],
 
-  name: "PMAX",
   series: "normal",
   plots: [
     {

@@ -1,6 +1,5 @@
 import { CloseCircleOutlined } from "@ant-design/icons";
 import { Collapse, List, notification, Select, Typography } from "antd";
-import { extension } from "../../../KLineChart/src";
 import { useCallback, useEffect } from "react";
 import styled from "styled-components";
 import {
@@ -9,321 +8,12 @@ import {
   useIndicatorsQuery,
   useRemoveIndicatorMutation,
 } from "../../../graphql";
-import ottIndicatorTemplate from "../indicatorsTemplates/ott";
-import pmaxIndicatorTemplate from "../indicatorsTemplates/pmax";
-import pmaxRsiIndicatorTemplate from "../indicatorsTemplates/pmaxRsi";
-import rsiStochTPIndicatorTemplate from "../indicatorsTemplates/rsiStochTP";
-import volumeIndicatorTemplate from "../indicatorsTemplates/volume";
-import vwapIndicatorTemplate from "../indicatorsTemplates/vwap";
-import williamsVixIndicatorTemplate from "../indicatorsTemplates/williamsVix";
+import { INDICATORS, INDICATORS_GROUPS } from "../indicators";
 import IndicatorSettingsForm from "./IndicatorSettingsForm";
-import vaderIndicatorTemplate from "../indicatorsTemplates/vader";
 
 interface Props {
   chart: any | null;
 }
-
-// @ts-ignore
-const standardIndicators = extension.technicalIndicatorExtensions;
-
-export const INDICATORS: { [key: string]: any } = {
-  VADER: {
-    ...vaderIndicatorTemplate,
-    paneId: null,
-    label: "Vader",
-    calcParamsLabels: [],
-    options: {},
-  },
-  SVOL: {
-    ...volumeIndicatorTemplate,
-    paneId: null,
-    label: "Volume",
-    calcParamsLabels: [
-      "MA Period",
-      "STD Period",
-      "Extra High Volume Threshold",
-      "High Volume Threshold",
-      "Medium Volume Threshold",
-      "Normal Volume Threshold",
-    ],
-    options: {},
-  },
-  VWAP: {
-    ...vwapIndicatorTemplate,
-    paneId: null,
-    label: "VWAP",
-    options: {
-      id: "candle_pane",
-    },
-  },
-  PMAXRSI: {
-    ...pmaxRsiIndicatorTemplate,
-    paneId: null,
-    label: "RSI & PMax (PMAXRSI)",
-    options: {
-      height: 180,
-    },
-    calcParamsLabels: [
-      "RSI Period",
-      "T3 Period",
-      "T3 Volume Factor",
-      "ATR Multiplier",
-      "ATR Period",
-    ],
-  },
-  RSTP: {
-    ...rsiStochTPIndicatorTemplate,
-    paneId: null,
-    label: "RSI & Stoch Take Profit (RSTP)",
-    options: {
-      height: 25,
-    },
-    calcParamsLabels: ["Period", "K Smoothing"],
-  },
-  OTT: {
-    ...ottIndicatorTemplate,
-    paneId: null,
-    label: "Optimized Trend Tracker (OTT)",
-    options: {
-      id: "candle_pane",
-    },
-    calcParamsLabels: ["Period", "Percent"],
-  },
-  PMAX: {
-    ...pmaxIndicatorTemplate,
-    paneId: null,
-    label: "PMax",
-    options: {
-      id: "candle_pane",
-    },
-    calcParamsLabels: ["Multiplier", "Multiplier", "Multiplier"],
-  },
-  WVX: {
-    ...williamsVixIndicatorTemplate,
-    paneId: null,
-    label: "Williams VIX (WVX)",
-    options: {},
-    calcParamsLabels: [
-      "Look Back Period StDev High",
-      "BB Length",
-      "BB Standard Deviation Up",
-      "Lookback Period Percentile High",
-      "Highest Percentile",
-      "Lowest Percentile",
-    ],
-  },
-  BBI: {
-    ...standardIndicators.BBI,
-    paneId: null,
-    label: "Bull and Bead Index (BBI)",
-    options: {
-      id: "candle_pane",
-    },
-  },
-  DMA: {
-    ...standardIndicators.DMA,
-    paneId: null,
-    label: "DMA",
-    options: {},
-  },
-  DMI: {
-    ...standardIndicators.DMI,
-    paneId: null,
-    label: "Directional Movement Index (DMI)",
-    options: {},
-  },
-  EMA: {
-    ...standardIndicators.EMA,
-    paneId: null,
-    label: "EMA",
-    options: {
-      id: "candle_pane",
-    },
-  },
-  MA: {
-    ...standardIndicators.MA,
-    paneId: null,
-    label: "Moving Average (MA)",
-    options: {
-      id: "candle_pane",
-    },
-  },
-  MACD: {
-    ...standardIndicators.MACD,
-    paneId: null,
-    label: "MACD",
-    options: {},
-  },
-  SMA: {
-    paneId: null,
-    label: "SMA",
-    ...standardIndicators.SMA,
-    options: {
-      id: "candle_pane",
-    },
-  },
-  TRIX: {
-    paneId: null,
-    label: "Tripple EMA (TRIX)",
-    ...standardIndicators.TRIX,
-    options: {},
-  },
-  BRAR: {
-    paneId: null,
-    label: "Emotional index (BRAR)",
-    ...standardIndicators.BRAR,
-    options: {},
-  },
-  MTM: {
-    paneId: null,
-    label: "Momentum (MTM)",
-    ...standardIndicators.MTM,
-    options: {},
-  },
-  PSY: {
-    paneId: null,
-    label: "Psycological Line (PSY)",
-    ...standardIndicators.PSY,
-    options: {},
-  },
-  ROC: {
-    paneId: null,
-    label: "Rate of Change (ROC)",
-    ...standardIndicators.ROC,
-    options: {},
-  },
-  VR: {
-    paneId: null,
-    label: "Volume Ratio (VR)",
-    ...standardIndicators.VR,
-    options: {},
-  },
-  AO: {
-    paneId: null,
-    label: "Awesome Oscillator (AO)",
-    ...standardIndicators.AO,
-    options: {},
-  },
-  BIAS: {
-    paneId: null,
-    label: "BIAS",
-    ...standardIndicators.BIAS,
-    options: {},
-  },
-  CCI: {
-    paneId: null,
-    label: "Commodity Channel Index (CCI)",
-    ...standardIndicators.CCI,
-    options: {},
-  },
-  RSI: {
-    paneId: null,
-    label: "Relative Strength Index (RSI)",
-    ...standardIndicators.RSI,
-    options: {},
-  },
-  KDJ: {
-    paneId: null,
-    label: "KDJ",
-    ...standardIndicators.KDJ,
-    options: {},
-  },
-  WR: {
-    paneId: null,
-    label: "Williams %R (WR)",
-    ...standardIndicators.WR,
-    options: {},
-  },
-  BOLL: {
-    paneId: null,
-    label: "Bollinger Bands (BOLL)",
-    ...standardIndicators.BOLL,
-    options: {},
-  },
-  SAR: {
-    paneId: null,
-    label: "Stop and Reverse (SAR)",
-    ...standardIndicators.SAR,
-    options: {
-      id: "candle_pane",
-    },
-  },
-  VOL: {
-    paneId: null,
-    label: "Volume (VOL)",
-    ...standardIndicators.VOL,
-    options: {},
-  },
-  PVT: {
-    paneId: null,
-    label: "Price and Volume Trend (PVT)",
-    ...standardIndicators.PVT,
-    options: {},
-  },
-  OBV: {
-    paneId: null,
-    label: "On Balance Volume (OBV)",
-    ...standardIndicators.OBV,
-    options: {},
-  },
-};
-
-const indicatorGroups = [
-  {
-    label: "Directional Movement",
-    group: [
-      INDICATORS.BBI,
-      INDICATORS.DMA,
-      INDICATORS.DMI,
-      INDICATORS.EMA,
-      INDICATORS.MA,
-      INDICATORS.MACD,
-      INDICATORS.SMA,
-      INDICATORS.TRIX,
-    ],
-  },
-  {
-    label: "Momentum",
-    group: [
-      INDICATORS.BRAR,
-      INDICATORS.MTM,
-      INDICATORS.PSY,
-      INDICATORS.ROC,
-      INDICATORS.VR,
-    ],
-  },
-  {
-    label: "Oscillators",
-    group: [
-      INDICATORS.AO,
-      INDICATORS.BIAS,
-      INDICATORS.RSI,
-      INDICATORS.KDJ,
-      INDICATORS.WR,
-    ],
-  },
-  {
-    label: "Volatility",
-    group: [INDICATORS.BOLL, INDICATORS.SAR],
-  },
-  {
-    label: "Volume",
-    group: [INDICATORS.VOL, INDICATORS.PVT, INDICATORS.OBV],
-  },
-  {
-    label: "Custom",
-    group: [
-      INDICATORS.WVX,
-      INDICATORS.PMAX,
-      INDICATORS.OTT,
-      INDICATORS.RSTP,
-      INDICATORS.PMAXRSI,
-      INDICATORS.VWAP,
-      INDICATORS.SVOL,
-      INDICATORS.VADER,
-    ],
-  },
-];
 
 const CollapseWrapper = styled.div`
   width: 100%;
@@ -347,29 +37,39 @@ const CollapseWrapper = styled.div`
   }
 `;
 
+const paneIds = {};
+
 export default function Indicators({ chart }: Props) {
   const { data, loading } = useIndicatorsQuery({
     fetchPolicy: "no-cache",
     onError: notification.error,
   });
 
+  const indicatorInfo = useCallback((name) => {
+    return Object.values(INDICATORS).find(
+      (indicator) => indicator.name === name
+    );
+  }, []);
+  const formatIndicatorName = useCallback((name) => {
+    const indicatorName = indicatorInfo(name);
+    return `${indicatorName.label || ""}${
+      indicatorName.label ? ` (${indicatorName.name})` : indicatorName.name
+    }`;
+  }, []);
+
   const addIndicatorToChart = useCallback(
     (name: string) => {
-      if (!INDICATORS[name as keyof typeof INDICATORS].paneId) {
-        // @ts-ignore
-        INDICATORS[name as keyof typeof INDICATORS].paneId =
-          chart?.createTechnicalIndicator(
-            {
-              name: name,
-              // @ts-ignore
-              calcParams: data?.indicators?.find((item) => item.name === name)
-                ?.settings,
-            },
-            true,
-            INDICATORS[name as keyof typeof INDICATORS]?.options || {
-              id: "candle_pane",
-            }
-          );
+      if (!paneIds[name]) {
+        paneIds[name] = chart?.createTechnicalIndicator(
+          {
+            name: indicatorInfo(name).name,
+            // @ts-ignore
+            calcParams: data?.indicators?.find((item) => item.name === name)
+              ?.settings,
+          },
+          true,
+          indicatorInfo(name)?.options || {}
+        );
       }
     },
     [chart, data]
@@ -379,6 +79,9 @@ export default function Indicators({ chart }: Props) {
     data?.indicators?.forEach((indicator) => {
       addIndicatorToChart(indicator.name);
     });
+
+    // hack for update
+    chart?.resize();
 
     // return () => {
     //   Object.keys(indicators).forEach((indicator) => {
@@ -428,11 +131,11 @@ export default function Indicators({ chart }: Props) {
         placeholder="Indicator"
         style={{ width: "100%" }}
       >
-        {indicatorGroups.map(({ label, group }) => (
+        {INDICATORS_GROUPS.map(({ label, group }) => (
           <Select.OptGroup label={label} key={label}>
             {group.map((item) => (
               <Select.Option key={item.name} value={item.name}>
-                {item.label}
+                {formatIndicatorName(item.name)}
               </Select.Option>
             ))}
           </Select.OptGroup>
@@ -449,9 +152,7 @@ export default function Indicators({ chart }: Props) {
             <CollapseWrapper>
               <Collapse ghost expandIconPosition="left">
                 <Collapse.Panel
-                  header={
-                    INDICATORS[item.name as keyof typeof INDICATORS].label
-                  }
+                  header={formatIndicatorName(item.name)}
                   key={item.name}
                   extra={
                     <CloseCircleOutlined
@@ -462,12 +163,15 @@ export default function Indicators({ chart }: Props) {
                           },
                         });
 
-                        const paneId =
-                          INDICATORS[item.name as keyof typeof INDICATORS]
-                            .paneId;
+                        const paneId = paneIds[item.name];
 
-                        if (paneId)
-                          chart?.removeTechnicalIndicator(paneId, item.name);
+                        if (paneId) {
+                          chart?.removeTechnicalIndicator(
+                            paneId,
+                            indicatorInfo(item.name).name
+                          );
+                          delete paneIds[item.name];
+                        }
                       }}
                     />
                   }

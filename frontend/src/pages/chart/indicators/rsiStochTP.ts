@@ -1,15 +1,21 @@
-import { TechnicalIndicatorTemplate } from "../../../KLineChart/types";
 import THEME from "../../../theme";
+import { ExtendedTechnicalIndicatorTemplate } from "./types";
 
 const worker = new Worker(new URL("./rsiStochTPWorker.ts", import.meta.url));
 
-const rsiStochTPIndicatorTemplate: TechnicalIndicatorTemplate = {
+const rsiStochTPIndicatorTemplate: ExtendedTechnicalIndicatorTemplate = {
+  name: "RSTP",
+  label: "RSI & Stoch Take Profit",
+
+  options: {
+    height: 25,
+  },
+
   calcParams: [
-    { value: 14, allowDecimal: true },
-    { value: 3, allowDecimal: true },
+    { value: 14, allowDecimal: true, label: "Period" },
+    { value: 3, allowDecimal: true, label: "K Smoothing" },
   ],
 
-  name: "RSTP",
   series: "normal",
   plots: [
     {

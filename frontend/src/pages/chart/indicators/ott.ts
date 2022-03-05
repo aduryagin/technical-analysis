@@ -1,13 +1,19 @@
 import { OTT } from "@aduryagin/technical-indicators";
-import { TechnicalIndicatorTemplate } from "../../../KLineChart/types";
+import { ExtendedTechnicalIndicatorTemplate } from "./types";
 
-const ottIndicatorTemplate: TechnicalIndicatorTemplate = {
+const ottIndicatorTemplate: ExtendedTechnicalIndicatorTemplate = {
+  name: "OTT",
+  label: "Optimized Trend Tracker",
+
+  options: {
+    id: "candle_pane",
+  },
+
   calcParams: [
-    { value: 2, allowDecimal: true },
-    { value: 1.4, allowDecimal: true },
+    { value: 2, allowDecimal: true, label: "Period" },
+    { value: 1.4, allowDecimal: true, label: "Percent" },
   ],
 
-  name: "OTT",
   series: "normal",
   plots: [
     {

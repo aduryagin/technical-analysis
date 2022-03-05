@@ -20,15 +20,8 @@ import {
 import Indicators from "./components/Indicators";
 import { DRAWINGS } from "./drawings";
 import { useDebouncedCallback } from "use-debounce";
-import williamsVixIndicatorTemplate from "./indicatorsTemplates/williamsVix";
-import pmaxIndicatorTemplate from "./indicatorsTemplates/pmax";
-import ottIndicatorTemplate from "./indicatorsTemplates/ott";
-import rsiStochTPIndicatorTemplate from "./indicatorsTemplates/rsiStochTP";
-import pmaxRsiIndicatorTemplate from "./indicatorsTemplates/pmaxRsi";
-import vwapIndicatorTemplate from "./indicatorsTemplates/vwap";
-import volumeIndicatorTemplate from "./indicatorsTemplates/volume";
 import AlgorithmTesting from "./components/AlgorithmTesing";
-import vaderIndicatorTemplate from "./indicatorsTemplates/vader";
+import { customIndicators } from "./indicators";
 
 const WrapperChart = styled.div`
   display: flex;
@@ -123,16 +116,7 @@ function useChart() {
     setChart(instance);
 
     instance?.addShapeTemplate(MEASURE_GRAPHIC_MARK as any);
-    instance?.addTechnicalIndicatorTemplate([
-      williamsVixIndicatorTemplate,
-      pmaxIndicatorTemplate,
-      ottIndicatorTemplate,
-      rsiStochTPIndicatorTemplate,
-      pmaxRsiIndicatorTemplate,
-      vwapIndicatorTemplate,
-      volumeIndicatorTemplate,
-      vaderIndicatorTemplate,
-    ]);
+    instance?.addTechnicalIndicatorTemplate(customIndicators);
 
     instance?.setStyleOptions({
       candle: {
