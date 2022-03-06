@@ -1,6 +1,10 @@
 # Technical Analysis 
 
-This is Tinkoff API based terminal that gives you an ability to check your algorithm or a strategy.
+Terminal that gives you an ability to check your algorithm or a strategy.
+
+#### Supported API
+* Tinkoff
+* Binance (WIP)
 
 <img src="./images/screenshot.png" />
 
