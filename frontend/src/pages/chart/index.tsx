@@ -22,6 +22,7 @@ import { DRAWINGS } from "./drawings";
 import { useDebouncedCallback } from "use-debounce";
 import AlgorithmTesting from "./components/AlgorithmTesing";
 import { customIndicators } from "./indicators";
+import Sources from "./components/Sources";
 
 const WrapperChart = styled.div`
   display: flex;
@@ -317,6 +318,7 @@ export default function Chart() {
           />
         </Spin>
         <SideBarWrapper>
+          <Sources />
           <Typography.Title style={{ fontSize: 16, marginBottom: 3 }} level={4}>
             Interval
           </Typography.Title>

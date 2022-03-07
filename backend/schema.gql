@@ -57,6 +57,13 @@ type Shape {
   points: [ShapePoint!]!
 }
 
+type Source {
+  id: Float
+  name: String!
+  key: String
+  secret: String
+}
+
 type TipRanksInfo {
   priceTarget: Float!
   priceTargetHigh: Float!
@@ -90,6 +97,7 @@ type Query {
   tipRanksInfo(ticker: String!): TipRanksInfo!
   indicators: [Indicator!]!
   shapes(ticker: String!): [Shape!]!
+  sources: [Source!]!
 }
 
 enum Interval {
@@ -116,6 +124,9 @@ type Mutation {
   addShape(input: AddShapeInput!): Shape!
   updateShape(input: UpdateShapeInput!): Shape!
   removeShape(id: Float!): Boolean!
+  addSource(input: AddSourceInput!): Source!
+  updateSource(input: UpdateSourceInput!): Source!
+  removeSource(id: Float!): Boolean!
 }
 
 input WatchInput {
@@ -147,6 +158,18 @@ input SharePointInput {
 input UpdateShapeInput {
   id: Float!
   points: [SharePointInput!]!
+}
+
+input AddSourceInput {
+  name: String!
+  key: String
+  secret: String
+}
+
+input UpdateSourceInput {
+  id: Float!
+  key: String
+  secret: String
 }
 
 type Subscription {

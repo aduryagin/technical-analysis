@@ -62,7 +62,7 @@ function WatchList({ onTickerSelect }: Props) {
               },
             });
         }}
-        placeholder="Ticker"
+        placeholder="Ticker / Pair"
         showArrow={false}
         filterOption={false}
       >

@@ -15,7 +15,7 @@ interface Props {
   chart: any | null;
 }
 
-const CollapseWrapper = styled.div`
+export const CollapseWrapper = styled.div`
   width: 100%;
 
   .ant-collapse-header {

@@ -5,6 +5,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { AlgorithmTestingModule } from "./modules/algorithmTesting/algorithmTesting.module";
 import { IndicatorModule } from "./modules/indicator/indicator.module";
 import { ShapeModule } from "./modules/shape/shape.module";
+import { SourceModule } from "./modules/source/source.module";
 import { TinkoffModule } from "./modules/tinkoff/tinkoff.module";
 import { TipRanksModule } from "./modules/tipranks/tipranks.module";
 import { TradingViewModule } from "./modules/tradingview/tradingview.module";
@@ -33,6 +34,7 @@ import { WatchListModule } from "./modules/watchList/watchList.module";
     IndicatorModule,
     ShapeModule,
     AlgorithmTestingModule,
+    SourceModule,
   ],
   controllers: [],
   providers: [],

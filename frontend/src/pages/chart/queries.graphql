@@ -86,6 +86,7 @@ query tipRanksInfo($ticker:String!) {
   }
 }
 
+# indicators
 
 query indicators {
   indicators {
@@ -110,6 +111,35 @@ mutation updateIndicator($input: UpdateIndicatorInput!) {
     id
   }
 }
+
+# sources
+
+query sources {
+  sources {
+    id
+    name
+    key
+    secret
+  }
+}
+
+mutation addSource ($input: AddSourceInput!) {
+  addSource(input: $input) {
+    id
+  }
+}
+
+mutation removeSource($id: Float!) {
+  removeSource(id: $id)
+}
+
+mutation updateSource($input: UpdateSourceInput!) {
+  updateSource(input: $input) {
+    id
+  }
+}
+
+# shapes
 
 query shapes($ticker: String!) {
   shapes(ticker: $ticker) {

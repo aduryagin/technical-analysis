@@ -18,8 +18,14 @@ app = Sanic(__name__)
 app.register_listener(setup_options, "before_server_start")
 app.register_middleware(add_cors_headers, "response")
 
+@app.route('/indicators', methods=["GET"])
+def indicators(request):
+  df = pd.DataFrame()
+  indicators = df.ta.indicators(as_list=True)
+  return json(indicators) 
+
 @app.route('/indicator-calculator', methods=["POST"])
-async def test(request):
+def calculator(request):
   candles = request.json['candles']
   indicator = request.json['indicator']
 

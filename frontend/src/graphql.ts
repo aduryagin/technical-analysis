@@ -26,8 +26,15 @@ export type AddShapeInput = {
   ticker: Scalars['String'];
 };
 
+export type AddSourceInput = {
+  key?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  secret?: InputMaybe<Scalars['String']>;
+};
+
 export type AlgorithmTrade = {
   __typename?: 'AlgorithmTrade';
+  closeDate?: Maybe<Scalars['String']>;
   closePrice?: Maybe<Scalars['Float']>;
   closed: Scalars['Boolean'];
   date: Scalars['String'];
@@ -90,12 +97,15 @@ export type Mutation = {
   __typename?: 'Mutation';
   addIndicator: Indicator;
   addShape: Shape;
+  addSource: Source;
   closeTrade: Scalars['Boolean'];
   removeIndicator: Scalars['Boolean'];
   removeShape: Scalars['Boolean'];
+  removeSource: Scalars['Boolean'];
   unwatch: Scalars['Boolean'];
   updateIndicator: Indicator;
   updateShape: Shape;
+  updateSource: Source;
   watch: Instrument;
 };
 
@@ -110,6 +120,11 @@ export type MutationAddShapeArgs = {
 };
 
 
+export type MutationAddSourceArgs = {
+  input: AddSourceInput;
+};
+
+
 export type MutationCloseTradeArgs = {
   id: Scalars['Float'];
 };
@@ -121,6 +136,11 @@ export type MutationRemoveIndicatorArgs = {
 
 
 export type MutationRemoveShapeArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type MutationRemoveSourceArgs = {
   id: Scalars['Float'];
 };
 
@@ -140,6 +160,11 @@ export type MutationUpdateShapeArgs = {
 };
 
 
+export type MutationUpdateSourceArgs = {
+  input: UpdateSourceInput;
+};
+
+
 export type MutationWatchArgs = {
   input: WatchInput;
 };
@@ -150,6 +175,7 @@ export type Query = {
   indicators: Array<Indicator>;
   searchInstrument: Array<Instrument>;
   shapes: Array<Shape>;
+  sources: Array<Source>;
   tipRanksInfo: TipRanksInfo;
   tradingViewIdeas: Array<TradingViewIdea>;
 };
@@ -202,6 +228,14 @@ export type SharePointInput = {
   value?: InputMaybe<Scalars['Float']>;
 };
 
+export type Source = {
+  __typename?: 'Source';
+  id?: Maybe<Scalars['Float']>;
+  key?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  secret?: Maybe<Scalars['String']>;
+};
+
 export type Subscription = {
   __typename?: 'Subscription';
   candle: CandleSubscriptionData;
@@ -251,6 +285,12 @@ export type UpdateIndicatorInput = {
 export type UpdateShapeInput = {
   id: Scalars['Float'];
   points: Array<SharePointInput>;
+};
+
+export type UpdateSourceInput = {
+  id: Scalars['Float'];
+  key?: InputMaybe<Scalars['String']>;
+  secret: Scalars['String'];
 };
 
 export type WatchInput = {
@@ -340,6 +380,32 @@ export type UpdateIndicatorMutationVariables = Exact<{
 
 
 export type UpdateIndicatorMutation = { __typename?: 'Mutation', updateIndicator: { __typename?: 'Indicator', id?: number | null | undefined } };
+
+export type SourcesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SourcesQuery = { __typename?: 'Query', sources: Array<{ __typename?: 'Source', id?: number | null | undefined, name: string, key?: string | null | undefined, secret?: string | null | undefined }> };
+
+export type AddSourceMutationVariables = Exact<{
+  input: AddSourceInput;
+}>;
+
+
+export type AddSourceMutation = { __typename?: 'Mutation', addSource: { __typename?: 'Source', id?: number | null | undefined } };
+
+export type RemoveSourceMutationVariables = Exact<{
+  id: Scalars['Float'];
+}>;
+
+
+export type RemoveSourceMutation = { __typename?: 'Mutation', removeSource: boolean };
+
+export type UpdateSourceMutationVariables = Exact<{
+  input: UpdateSourceInput;
+}>;
+
+
+export type UpdateSourceMutation = { __typename?: 'Mutation', updateSource: { __typename?: 'Source', id?: number | null | undefined } };
 
 export type ShapesQueryVariables = Exact<{
   ticker: Scalars['String'];
@@ -824,6 +890,140 @@ export function useUpdateIndicatorMutation(baseOptions?: Apollo.MutationHookOpti
 export type UpdateIndicatorMutationHookResult = ReturnType<typeof useUpdateIndicatorMutation>;
 export type UpdateIndicatorMutationResult = Apollo.MutationResult<UpdateIndicatorMutation>;
 export type UpdateIndicatorMutationOptions = Apollo.BaseMutationOptions<UpdateIndicatorMutation, UpdateIndicatorMutationVariables>;
+export const SourcesDocument = gql`
+    query sources {
+  sources {
+    id
+    name
+    key
+    secret
+  }
+}
+    `;
+
+/**
+ * __useSourcesQuery__
+ *
+ * To run a query within a React component, call `useSourcesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSourcesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSourcesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSourcesQuery(baseOptions?: Apollo.QueryHookOptions<SourcesQuery, SourcesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SourcesQuery, SourcesQueryVariables>(SourcesDocument, options);
+      }
+export function useSourcesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SourcesQuery, SourcesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SourcesQuery, SourcesQueryVariables>(SourcesDocument, options);
+        }
+export type SourcesQueryHookResult = ReturnType<typeof useSourcesQuery>;
+export type SourcesLazyQueryHookResult = ReturnType<typeof useSourcesLazyQuery>;
+export type SourcesQueryResult = Apollo.QueryResult<SourcesQuery, SourcesQueryVariables>;
+export const AddSourceDocument = gql`
+    mutation addSource($input: AddSourceInput!) {
+  addSource(input: $input) {
+    id
+  }
+}
+    `;
+export type AddSourceMutationFn = Apollo.MutationFunction<AddSourceMutation, AddSourceMutationVariables>;
+
+/**
+ * __useAddSourceMutation__
+ *
+ * To run a mutation, you first call `useAddSourceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddSourceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addSourceMutation, { data, loading, error }] = useAddSourceMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddSourceMutation(baseOptions?: Apollo.MutationHookOptions<AddSourceMutation, AddSourceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddSourceMutation, AddSourceMutationVariables>(AddSourceDocument, options);
+      }
+export type AddSourceMutationHookResult = ReturnType<typeof useAddSourceMutation>;
+export type AddSourceMutationResult = Apollo.MutationResult<AddSourceMutation>;
+export type AddSourceMutationOptions = Apollo.BaseMutationOptions<AddSourceMutation, AddSourceMutationVariables>;
+export const RemoveSourceDocument = gql`
+    mutation removeSource($id: Float!) {
+  removeSource(id: $id)
+}
+    `;
+export type RemoveSourceMutationFn = Apollo.MutationFunction<RemoveSourceMutation, RemoveSourceMutationVariables>;
+
+/**
+ * __useRemoveSourceMutation__
+ *
+ * To run a mutation, you first call `useRemoveSourceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveSourceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeSourceMutation, { data, loading, error }] = useRemoveSourceMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRemoveSourceMutation(baseOptions?: Apollo.MutationHookOptions<RemoveSourceMutation, RemoveSourceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveSourceMutation, RemoveSourceMutationVariables>(RemoveSourceDocument, options);
+      }
+export type RemoveSourceMutationHookResult = ReturnType<typeof useRemoveSourceMutation>;
+export type RemoveSourceMutationResult = Apollo.MutationResult<RemoveSourceMutation>;
+export type RemoveSourceMutationOptions = Apollo.BaseMutationOptions<RemoveSourceMutation, RemoveSourceMutationVariables>;
+export const UpdateSourceDocument = gql`
+    mutation updateSource($input: UpdateSourceInput!) {
+  updateSource(input: $input) {
+    id
+  }
+}
+    `;
+export type UpdateSourceMutationFn = Apollo.MutationFunction<UpdateSourceMutation, UpdateSourceMutationVariables>;
+
+/**
+ * __useUpdateSourceMutation__
+ *
+ * To run a mutation, you first call `useUpdateSourceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateSourceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateSourceMutation, { data, loading, error }] = useUpdateSourceMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateSourceMutation(baseOptions?: Apollo.MutationHookOptions<UpdateSourceMutation, UpdateSourceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateSourceMutation, UpdateSourceMutationVariables>(UpdateSourceDocument, options);
+      }
+export type UpdateSourceMutationHookResult = ReturnType<typeof useUpdateSourceMutation>;
+export type UpdateSourceMutationResult = Apollo.MutationResult<UpdateSourceMutation>;
+export type UpdateSourceMutationOptions = Apollo.BaseMutationOptions<UpdateSourceMutation, UpdateSourceMutationVariables>;
 export const ShapesDocument = gql`
     query shapes($ticker: String!) {
   shapes(ticker: $ticker) {
