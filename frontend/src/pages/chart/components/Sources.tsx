@@ -1,13 +1,12 @@
 import {
-  Collapse,
   Form,
   Input,
   List,
+  Modal,
   notification,
   Select,
   Typography,
 } from "antd";
-import { CollapseWrapper } from "./Indicators";
 import {
   SourcesDocument,
   useAddSourceMutation,
@@ -15,9 +14,24 @@ import {
   useSourcesQuery,
   useUpdateSourceMutation,
 } from "../../../graphql";
-import { CloseCircleOutlined } from "@ant-design/icons";
+import { CloseCircleOutlined, EditOutlined } from "@ant-design/icons";
+import { useCallback, useState } from "react";
 
 export default function Sources() {
+  const [isSettingsModalVisible, setIsSettingsModalVisible] = useState(false);
+  const [activeSource, setActiveSource] = useState(null);
+  const [form] = Form.useForm();
+  const [isAdd, setIsAdd] = useState(false);
+  const resetSourceData = useCallback(() => {
+    setActiveSource(null);
+    setIsSettingsModalVisible(false);
+    form.setFieldsValue({
+      key: "",
+      secret: "",
+    });
+    setIsAdd(false);
+  }, []);
+
   const { data, loading } = useSourcesQuery({
     fetchPolicy: "no-cache",
     onError: notification.error,
@@ -26,11 +40,22 @@ export default function Sources() {
     onError: notification.error,
     refetchQueries: [SourcesDocument],
   });
-  const [removeSource, { loading: removingingSource }] =
-    useRemoveSourceMutation({
-      onError: notification.error,
-      refetchQueries: [SourcesDocument],
-    });
+  const [removeSource] = useRemoveSourceMutation({
+    onError: notification.error,
+    refetchQueries: [SourcesDocument],
+  });
+  const showEditModal = useCallback(
+    (source) => {
+      setIsSettingsModalVisible(true);
+      setActiveSource(source);
+      form.setFieldsValue({
+        key: source?.key,
+        secret: source?.secret,
+      });
+    },
+    [form]
+  );
+
   const [updateSource] = useUpdateSourceMutation({
     onError: notification.error,
   });
@@ -43,17 +68,12 @@ export default function Sources() {
       <Select
         value={null}
         showSearch
-        loading={addingSource || removingingSource}
         placeholder="Source"
         style={{ width: "100%" }}
         onChange={(source: string) => {
-          addSource({
-            variables: {
-              input: {
-                name: source,
-              },
-            },
-          });
+          setIsSettingsModalVisible(true);
+          setActiveSource({ name: source });
+          setIsAdd(true);
         }}
         options={[
           {
@@ -80,55 +100,91 @@ export default function Sources() {
         rowKey="id"
         renderItem={(item) => (
           <List.Item style={{ cursor: "pointer", padding: "8px 0" }}>
-            <CollapseWrapper>
-              <Collapse ghost expandIconPosition="left">
-                <Collapse.Panel
-                  header={item.name}
-                  key={item.name}
-                  extra={
-                    <CloseCircleOutlined
-                      onClick={() => {
-                        removeSource({
-                          variables: {
-                            id: item.id,
-                          },
-                        });
-                      }}
-                    />
-                  }
-                >
-                  <Form
-                    initialValues={{
-                      key: item.key,
-                      secret: item.secret,
-                    }}
-                    onFieldsChange={(changed) => {
-                      updateSource({
+            <div style={{ width: "100%" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  width: "100%",
+                }}
+                onClick={() => showEditModal(item)}
+              >
+                <span>{item.name}</span>
+                <span>
+                  <EditOutlined style={{ marginRight: 10 }} />
+                  <CloseCircleOutlined
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      removeSource({
                         variables: {
-                          input: {
-                            id: item.id,
-                            [changed[0].name[0] as "secret"]: changed[0].value,
-                          },
+                          id: item.id,
                         },
+                      }).then(() => {
+                        window.location.reload();
                       });
                     }}
-                    layout={"vertical"}
-                  >
-                    {item.name === "Binance" && (
-                      <Form.Item name="key" label="Key">
-                        <Input />
-                      </Form.Item>
-                    )}
-                    <Form.Item name="secret" label="Secret">
-                      <Input />
-                    </Form.Item>
-                  </Form>
-                </Collapse.Panel>
-              </Collapse>
-            </CollapseWrapper>
+                  />
+                </span>
+              </div>
+            </div>
           </List.Item>
         )}
       />
+
+      <Modal
+        title={activeSource?.name}
+        visible={isSettingsModalVisible}
+        okText={isAdd ? "Add" : "Save"}
+        confirmLoading={addingSource}
+        onOk={() => {
+          form.submit();
+        }}
+        onCancel={() => {
+          resetSourceData();
+        }}
+      >
+        <Form
+          form={form}
+          onFinish={(values) => {
+            if (isAdd) {
+              addSource({
+                variables: {
+                  input: {
+                    name: activeSource?.name,
+                    secret: values?.secret,
+                    key: values?.key,
+                  },
+                },
+              }).then(() => window.location.reload());
+            } else {
+              updateSource({
+                variables: {
+                  input: {
+                    id: activeSource.id,
+                    secret: values?.secret,
+                    key: values?.key,
+                  },
+                },
+              }).then(() => window.location.reload());
+            }
+          }}
+          initialValues={{
+            key: activeSource?.key,
+            secret: activeSource?.secret,
+          }}
+          layout={"vertical"}
+        >
+          {activeSource?.name === "Binance" && (
+            <Form.Item rules={[{ required: true }]} name="key" label="Key">
+              <Input />
+            </Form.Item>
+          )}
+          <Form.Item rules={[{ required: true }]} name="secret" label="Secret">
+            <Input />
+          </Form.Item>
+        </Form>
+      </Modal>
     </>
   );
 }

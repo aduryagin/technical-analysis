@@ -12,7 +12,7 @@ interface Props {
 }
 
 function WatchList({ onTickerSelect }: Props) {
-  const { data, loading } = useWatchListSubscription({
+  const { data } = useWatchListSubscription({
     fetchPolicy: "no-cache",
   });
   const [
@@ -45,6 +45,7 @@ function WatchList({ onTickerSelect }: Props) {
             watch({
               variables: {
                 input: {
+                  source: instrument.source,
                   ticker: instrument.ticker,
                   figi: instrument.figi,
                 },
@@ -68,14 +69,13 @@ function WatchList({ onTickerSelect }: Props) {
       >
         {searchInstrumentData?.searchInstrument.map((item) => (
           <Select.Option value={item.figi} key={item.figi}>
-            {item.ticker}
+            {item.ticker} ({item.source})
           </Select.Option>
         ))}
       </Select>
       <List
         size="small"
         style={{ marginBottom: 2 }}
-        loading={loading}
         dataSource={data?.watchList}
         rowKey="ticker"
         renderItem={(item) => (

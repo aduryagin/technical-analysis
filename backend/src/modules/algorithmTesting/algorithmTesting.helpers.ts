@@ -1,4 +1,4 @@
-import { Candle } from "../tinkoff/tinkoff.types";
+import { Candle } from "../candle/candle.types";
 
 export function candles(candles: Candle[]) {
   const result = new Map<Candle["time"], Candle>();

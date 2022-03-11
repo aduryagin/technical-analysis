@@ -1,24 +1,61 @@
-import { Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import OpenAPI, {
   CandleResolution,
   Interval,
-  Candle as TinkoffCandle,
-  CandleStreaming,
 } from "@tinkoff/invest-openapi-js-sdk";
-import { Candle } from "./tinkoff.types";
+import { Candle } from "../candle/candle.types";
 import { add, sub } from "date-fns";
 import { Instrument } from "../watchList/watchList.entity";
+import { SourceService } from "../source/source.service";
+import { CandleService } from "../candle/candle.service";
 
 @Injectable()
 export class TinkoffService {
-  instance: OpenAPI;
+  instance?: OpenAPI;
 
-  constructor(configService: ConfigService) {
-    this.instance = new OpenAPI({
-      apiURL: "https://api-invest.tinkoff.ru/openapi",
-      secretToken: configService.get("TINKOFF_SECRET"),
-      socketURL: "wss://api-invest.tinkoff.ru/openapi/md/v1/md-openapi/ws",
+  constructor(
+    private readonly sourceService: SourceService,
+    private readonly candleService: CandleService
+  ) {
+    this.updateInstance();
+  }
+
+  checkInstance() {
+    if (!this.instance) {
+      return new HttpException(
+        "Please add tinkoff api secret key.",
+        HttpStatus.BAD_REQUEST
+      );
+    }
+  }
+
+  async updateInstance() {
+    this.instance = null;
+    const tinkoff = await this.sourceService.find("Tinkoff");
+
+    if (tinkoff) {
+      this.instance = new OpenAPI({
+        apiURL: "https://api-invest.tinkoff.ru/openapi",
+        secretToken: tinkoff.secret,
+        socketURL: "wss://api-invest.tinkoff.ru/openapi/md/v1/md-openapi/ws",
+      });
+    }
+  }
+
+  async searchInstrument(ticker: string) {
+    const instanceError = this.checkInstance();
+    if (instanceError) return [];
+
+    const data = await this.instance.search({
+      ticker: ticker,
+    });
+
+    return data.instruments.map((item) => {
+      const instrument = new Instrument();
+      instrument.figi = item.figi;
+      instrument.ticker = item.ticker;
+      instrument.source = "Tinkoff";
+      return instrument;
     });
   }
 
@@ -33,6 +70,9 @@ export class TinkoffService {
     to?: string;
     subPeriodLength?: number;
   }) {
+    const instanceError = this.checkInstance();
+    if (instanceError) return [];
+
     const removeTimeDuplicates = (candles: Candle[]): Candle[] => {
       return candles.filter(
         (thing, index, self) =>
@@ -49,7 +89,7 @@ export class TinkoffService {
           interval: interval as CandleResolution,
         });
 
-        return data.candles.map(this.mapToCandle);
+        return data.candles.map(this.candleService.mapToCandle);
       };
 
       try {
@@ -147,17 +187,5 @@ export class TinkoffService {
     }
 
     return removeTimeDuplicates(candles);
-  }
-
-  mapToCandle(candle: TinkoffCandle | CandleStreaming): Candle {
-    return {
-      time: candle.time,
-      timestamp: new Date(candle.time).getTime(),
-      open: candle.o,
-      close: candle.c,
-      high: candle.h,
-      low: candle.l,
-      volume: candle.v,
-    };
   }
 }

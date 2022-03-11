@@ -2,7 +2,6 @@ import { Layout, ConfigProvider } from "antd";
 import styled from "styled-components";
 import { ApolloProvider } from "@apollo/client";
 import "antd/dist/antd.min.css";
-import ruRu from "antd/es/locale/ru_RU";
 import client from "./apollo";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Navigation } from "./Navigation";
@@ -30,7 +29,7 @@ const ContentStyled = styled(Content)`
 
 function App() {
   return (
-    <ConfigProvider locale={ruRu}>
+    <ConfigProvider>
       <ApolloProvider client={client}>
         <BrowserRouter>
           <HeaderStyled>

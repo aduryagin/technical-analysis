@@ -16,7 +16,7 @@ import TradingViewIdeas from "./TradingViewIdeas";
 
 interface Props {
   item: NonNullable<WatchListSubscriptionHookResult["data"]>["watchList"][0];
-  onClick: (instrument: Instrument) => void;
+  onClick: (instrument: Partial<Instrument>) => void;
 }
 
 export default function WatchListItem({ item, onClick }: Props) {

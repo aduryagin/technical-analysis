@@ -17,6 +17,10 @@ export class Instrument {
   @Field()
   figi: string;
 
+  @Column({ nullable: true })
+  @Field()
+  source: string;
+
   @Field({ nullable: true })
   price?: number;
 

@@ -19,8 +19,16 @@ type Instrument {
   id: Float
   ticker: String!
   figi: String!
+  source: String!
   price: Float
   pricePercentChange: Float
+}
+
+type Source {
+  id: Float
+  name: String!
+  key: String
+  secret: String
 }
 
 type Candle {
@@ -57,13 +65,6 @@ type Shape {
   points: [ShapePoint!]!
 }
 
-type Source {
-  id: Float
-  name: String!
-  key: String
-  secret: String
-}
-
 type TipRanksInfo {
   priceTarget: Float!
   priceTargetHigh: Float!
@@ -91,13 +92,13 @@ type TradingViewIdea {
 }
 
 type Query {
-  candles(to: String, interval: Interval!, figi: String!): [Candle!]!
   searchInstrument(ticker: String!): [Instrument!]!
+  sources: [Source!]!
+  candles(to: String, interval: Interval!, figi: String!): [Candle!]!
   tradingViewIdeas(ticker: String!): [TradingViewIdea!]!
   tipRanksInfo(ticker: String!): TipRanksInfo!
   indicators: [Indicator!]!
   shapes(ticker: String!): [Shape!]!
-  sources: [Source!]!
 }
 
 enum Interval {
@@ -117,6 +118,9 @@ enum Interval {
 type Mutation {
   watch(input: WatchInput!): Instrument!
   unwatch(id: Float!): Boolean!
+  addSource(input: AddSourceInput!): Source!
+  updateSource(input: UpdateSourceInput!): Source!
+  removeSource(id: Float!): Boolean!
   closeTrade(id: Float!): Boolean!
   addIndicator(input: AddIndicatorInput!): Indicator!
   updateIndicator(input: UpdateIndicatorInput!): Indicator!
@@ -124,14 +128,24 @@ type Mutation {
   addShape(input: AddShapeInput!): Shape!
   updateShape(input: UpdateShapeInput!): Shape!
   removeShape(id: Float!): Boolean!
-  addSource(input: AddSourceInput!): Source!
-  updateSource(input: UpdateSourceInput!): Source!
-  removeSource(id: Float!): Boolean!
 }
 
 input WatchInput {
   ticker: String!
-  figi: String!
+  figi: String
+  source: String!
+}
+
+input AddSourceInput {
+  name: String!
+  key: String
+  secret: String
+}
+
+input UpdateSourceInput {
+  id: Float!
+  key: String
+  secret: String
 }
 
 input AddIndicatorInput {
@@ -160,20 +174,8 @@ input UpdateShapeInput {
   points: [SharePointInput!]!
 }
 
-input AddSourceInput {
-  name: String!
-  key: String
-  secret: String
-}
-
-input UpdateSourceInput {
-  id: Float!
-  key: String
-  secret: String
-}
-
 type Subscription {
-  candle(interval: Interval!, figi: String!): CandleSubscriptionData!
   watchList: [Instrument!]!
+  candle(interval: Interval!, figi: String!): CandleSubscriptionData!
   trades: [AlgorithmTrade!]!
 }

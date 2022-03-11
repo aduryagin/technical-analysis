@@ -5,6 +5,9 @@ export class WatchInput {
   @Field(() => String)
   ticker: string;
 
+  @Field(() => String, { nullable: true })
+  figi?: string;
+
   @Field(() => String)
-  figi: string;
+  source: string;
 }

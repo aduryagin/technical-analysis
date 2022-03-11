@@ -1,6 +1,6 @@
 import Axios from "axios";
 import config from "../../../config";
-import { Candle } from "../../tinkoff/tinkoff.types";
+import { Candle } from "../../candle/candle.types";
 import { Instrument } from "../../watchList/watchList.entity";
 import { candles as candlesStorage } from "../algorithmTesting.helpers";
 

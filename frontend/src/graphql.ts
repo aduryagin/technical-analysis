@@ -76,6 +76,7 @@ export type Instrument = {
   id?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
   pricePercentChange?: Maybe<Scalars['Float']>;
+  source: Scalars['String'];
   ticker: Scalars['String'];
 };
 
@@ -290,11 +291,12 @@ export type UpdateShapeInput = {
 export type UpdateSourceInput = {
   id: Scalars['Float'];
   key?: InputMaybe<Scalars['String']>;
-  secret: Scalars['String'];
+  secret?: InputMaybe<Scalars['String']>;
 };
 
 export type WatchInput = {
-  figi: Scalars['String'];
+  figi?: InputMaybe<Scalars['String']>;
+  source: Scalars['String'];
   ticker: Scalars['String'];
 };
 
@@ -312,7 +314,7 @@ export type SearchInstrumentQueryVariables = Exact<{
 }>;
 
 
-export type SearchInstrumentQuery = { __typename?: 'Query', searchInstrument: Array<{ __typename?: 'Instrument', ticker: string, id?: number | null | undefined, figi: string }> };
+export type SearchInstrumentQuery = { __typename?: 'Query', searchInstrument: Array<{ __typename?: 'Instrument', ticker: string, id?: number | null | undefined, figi: string, source: string }> };
 
 export type WatchListSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
@@ -438,7 +440,7 @@ export type AddShapeMutation = { __typename?: 'Mutation', addShape: { __typename
 export type TradesSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type TradesSubscription = { __typename?: 'Subscription', trades: Array<{ __typename?: 'AlgorithmTrade', id: number, price: number, type: string, closed: boolean, pricePercentChange: number, date: string, instrument: { __typename?: 'Instrument', id?: number | null | undefined, ticker: string, figi: string } }> };
+export type TradesSubscription = { __typename?: 'Subscription', trades: Array<{ __typename?: 'AlgorithmTrade', id: number, price: number, type: string, closed: boolean, pricePercentChange: number, date: string, instrument: { __typename?: 'Instrument', id?: number | null | undefined, ticker: string, figi: string, source: string } }> };
 
 export type CloseTradeMutationVariables = Exact<{
   id: Scalars['Float'];
@@ -497,6 +499,7 @@ export const SearchInstrumentDocument = gql`
     ticker
     id
     figi
+    source
   }
 }
     `;
@@ -1182,6 +1185,7 @@ export const TradesDocument = gql`
       id
       ticker
       figi
+      source
     }
   }
 }

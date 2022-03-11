@@ -1,4 +1,4 @@
-import { Args, Mutation, Resolver, Subscription } from "@nestjs/graphql";
+import { Args, Mutation, Query, Resolver, Subscription } from "@nestjs/graphql";
 import { PubSub } from "graphql-subscriptions";
 import { Instrument } from "./watchList.entity";
 import { WatchListService } from "./watchList.service";
@@ -6,6 +6,9 @@ import { WatchInput } from "./watchList.types";
 import { TinkoffService } from "../tinkoff/tinkoff.service";
 import { sub } from "date-fns";
 import { AlgorithmTestingResolver } from "../algorithmTesting/algorithmTesting.resolver";
+import { CandleService } from "../candle/candle.service";
+import { SourceService } from "../source/source.service";
+import { HttpException } from "@nestjs/common";
 
 @Resolver()
 export class WatchListResolver {
@@ -14,6 +17,8 @@ export class WatchListResolver {
   constructor(
     private readonly watchListService: WatchListService,
     private readonly tinkoffService: TinkoffService,
+    private readonly candleService: CandleService,
+    private readonly sourceService: SourceService,
     private readonly algorithmTestingResolver: AlgorithmTestingResolver
   ) {}
 
@@ -28,6 +33,8 @@ export class WatchListResolver {
   } = {};
 
   async publish() {
+    if (!this.tinkoffService.instance) return;
+
     const watchList = await this.watchListService.instruments();
 
     Object.values(this.candleUnsubscribe).forEach((unsubscribe) =>
@@ -38,7 +45,7 @@ export class WatchListResolver {
         this.tinkoffService.instance.candle(
           { figi: instrument.figi, interval: "day" },
           (streamCandle) => {
-            const candle = this.tinkoffService.mapToCandle(streamCandle);
+            const candle = this.candleService.mapToCandle(streamCandle);
             this.instrumentPrice[instrument.id] = {
               open: candle.open,
               close: candle.close,
@@ -81,8 +88,10 @@ export class WatchListResolver {
   }
 
   async getInitialCandles(instrument: Instrument) {
+    if (!this.tinkoffService.instance) return;
+
     const data = await this.tinkoffService.instance.candlesGet({
-      from: sub(new Date(), { days: 1 }).toISOString(),
+      from: sub(new Date(), { days: 2 }).toISOString(),
       to: new Date().toISOString(),
       figi: instrument.figi,
       interval: "day",
@@ -92,6 +101,17 @@ export class WatchListResolver {
       open: data.candles[data.candles.length - 1]?.o || 0,
       close: data.candles[data.candles.length - 1]?.c || 0,
     };
+  }
+
+  @Query(() => [Instrument])
+  async searchInstrument(
+    @Args("ticker", { type: () => String }) ticker: string
+  ) {
+    const sources = await this.sourceService.sources();
+    if (!sources.length)
+      return new HttpException("Please add at least one source", 400);
+
+    return this.tinkoffService.searchInstrument(ticker);
   }
 
   @Mutation(() => Instrument)

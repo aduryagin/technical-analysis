@@ -14,6 +14,12 @@ export class SourceService {
     return this.sourceRepository.find();
   }
 
+  find(name: string) {
+    return this.sourceRepository.findOne({
+      name,
+    });
+  }
+
   async addSource(source: Partial<Source>) {
     const exist = await this.sourceRepository.findOne({
       name: source.name,

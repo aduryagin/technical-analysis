@@ -8,6 +8,7 @@ import { candles } from "./algorithmTesting.helpers";
 import { Interval } from "@tinkoff/invest-openapi-js-sdk";
 import { AlgorithmTestingService } from "./algorithmTesting.service";
 import { algorithm } from "./algorithms";
+import { CandleService } from "../candle/candle.service";
 
 @Resolver()
 export class AlgorithmTestingResolver {
@@ -24,12 +25,15 @@ export class AlgorithmTestingResolver {
   constructor(
     private readonly watchListService: WatchListService,
     private readonly tinkoffService: TinkoffService,
-    private readonly algorithmTestingService: AlgorithmTestingService
+    private readonly algorithmTestingService: AlgorithmTestingService,
+    private readonly candleService: CandleService
   ) {
     this.init();
   }
 
   async init() {
+    if (!this.tinkoffService.instance) return;
+
     const watchList = await this.watchListService.instruments();
 
     for (const instrument of watchList) {
@@ -55,7 +59,7 @@ export class AlgorithmTestingResolver {
     this.candleUnsubscribe[instrument.id] = this.tinkoffService.instance.candle(
       { figi: instrument.figi, interval: this.interval },
       async (streamCandle) => {
-        const candle = this.tinkoffService.mapToCandle(streamCandle);
+        const candle = this.candleService.mapToCandle(streamCandle);
         const isNewCandle = !Boolean(
           this.candlesStorage[instrument.id].result().get(candle.time)
         );

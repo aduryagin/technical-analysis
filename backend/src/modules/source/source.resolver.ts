@@ -1,17 +1,23 @@
 import { Args, Query, Mutation, Resolver } from "@nestjs/graphql";
+import { TinkoffService } from "../tinkoff/tinkoff.service";
 import { Source } from "./source.entity";
 import { SourceService } from "./source.service";
 import { AddSourceInput, UpdateSourceInput } from "./source.types";
 
 @Resolver()
 export class SourceResolver {
-  constructor(private readonly sourceService: SourceService) {}
+  constructor(
+    private readonly sourceService: SourceService,
+    private readonly tinkoffService: TinkoffService
+  ) {}
 
   @Mutation(() => Source)
   async addSource(
     @Args("input", { type: () => AddSourceInput }) input: AddSourceInput
   ) {
-    return this.sourceService.addSource(input);
+    const source = await this.sourceService.addSource(input);
+    await this.tinkoffService.updateInstance();
+    return source;
   }
 
   @Mutation(() => Source)
@@ -19,12 +25,15 @@ export class SourceResolver {
     @Args("input", { type: () => UpdateSourceInput })
     input: UpdateSourceInput
   ) {
-    return this.sourceService.updateSource(input);
+    const result = await this.sourceService.updateSource(input);
+    await this.tinkoffService.updateInstance();
+    return result;
   }
 
   @Mutation(() => Boolean)
   async removeSource(@Args("id") id: number) {
     await this.sourceService.removeSource(id);
+    await this.tinkoffService.updateInstance();
     return true;
   }
 

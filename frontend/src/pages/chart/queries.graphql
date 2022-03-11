@@ -15,6 +15,7 @@ query searchInstrument($ticker: String!) {
     ticker
     id
     figi
+    source
   }
 }
 
@@ -192,6 +193,7 @@ subscription trades {
       id
       ticker
       figi
+      source
     }
   }
 }
