@@ -54,3 +54,27 @@ const candles = [
     { time: 2, value: 0, candle: { time: 2, close: 1 } }
   */
 ```
+
+## Binance RSI Code Sample
+```js script
+const APIKEY = "";
+const APISECRET = "";
+const ta = require("@aduryagin/technical-indicators");
+const Binance = require('node-binance-api');
+const binance = new Binance().options({
+  APIKEY,
+  APISECRET
+});
+
+let rsi = null
+binance.websockets.chart("BNBBTC", "1m", (symbol, interval, chart) => {
+  if (!rsi) rsi = ta.RSI({ candles: Object.keys(chart).map((time) => ({ ...chart[time], time })), period: 14 })
+  else {
+    let time = binance.last(chart);
+    rsi.update({ ...chart[time], time })
+  }
+
+  const lastRsi = rsi.result().pop()
+  console.log(new Date(parseInt(lastRsi.time)), lastRsi.value);
+});
+```
