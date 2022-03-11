@@ -28,7 +28,7 @@ export type AddShapeInput = {
 
 export type AddSourceInput = {
   key?: InputMaybe<Scalars['String']>;
-  name: Scalars['String'];
+  name: SourceName;
   secret?: InputMaybe<Scalars['String']>;
 };
 
@@ -236,6 +236,11 @@ export type Source = {
   name: Scalars['String'];
   secret?: Maybe<Scalars['String']>;
 };
+
+export enum SourceName {
+  Binance = 'Binance',
+  Tinkoff = 'Tinkoff'
+}
 
 export type Subscription = {
   __typename?: 'Subscription';

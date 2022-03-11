@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Source } from "./source.entity";
+import { Source, SourceName } from "./source.entity";
 
 @Injectable()
 export class SourceService {
@@ -14,7 +14,7 @@ export class SourceService {
     return this.sourceRepository.find();
   }
 
-  find(name: string) {
+  find(name: SourceName) {
     return this.sourceRepository.findOne({
       name,
     });

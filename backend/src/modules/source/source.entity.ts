@@ -1,5 +1,13 @@
-import { Field, ObjectType } from "@nestjs/graphql";
+import { Field, ObjectType, registerEnumType } from "@nestjs/graphql";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+
+export enum SourceName {
+  Tinkoff = "Tinkoff",
+  Binance = "Binance",
+}
+registerEnumType(SourceName, {
+  name: "SourceName",
+});
 
 @Entity()
 @ObjectType()
@@ -10,7 +18,7 @@ export class Source {
 
   @Column()
   @Field()
-  name: string;
+  name: SourceName;
 
   @Column({ nullable: true })
   @Field(() => String, { nullable: true })

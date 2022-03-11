@@ -13,6 +13,7 @@ import {
   useRemoveSourceMutation,
   useSourcesQuery,
   useUpdateSourceMutation,
+  SourceName,
 } from "../../../graphql";
 import { CloseCircleOutlined, EditOutlined } from "@ant-design/icons";
 import { useCallback, useState } from "react";
@@ -75,22 +76,13 @@ export default function Sources() {
           setActiveSource({ name: source });
           setIsAdd(true);
         }}
-        options={[
-          {
-            label: "Tinkoff",
-            value: "Tinkoff",
-            disabled: Boolean(
-              data?.sources?.find((item) => item.name === "Tinkoff")
-            ),
-          },
-          {
-            label: "Binance",
-            value: "Binance",
-            disabled: Boolean(
-              data?.sources?.find((item) => item.name === "Binance")
-            ),
-          },
-        ]}
+        options={Object.values(SourceName).map((source) => ({
+          label: source,
+          value: source,
+          disabled: Boolean(
+            data?.sources?.find((item) => item.name === source)
+          ),
+        }))}
       />
       <List
         loading={loading}

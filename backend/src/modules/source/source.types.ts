@@ -1,9 +1,10 @@
 import { InputType, Field } from "@nestjs/graphql";
+import { SourceName } from "./source.entity";
 
 @InputType()
 export class AddSourceInput {
-  @Field(() => String)
-  name: string;
+  @Field(() => SourceName)
+  name: SourceName;
 
   @Field(() => String, { nullable: true })
   key?: string;

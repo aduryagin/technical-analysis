@@ -8,6 +8,7 @@ import { add, sub } from "date-fns";
 import { Instrument } from "../watchList/watchList.entity";
 import { SourceService } from "../source/source.service";
 import { CandleService } from "../candle/candle.service";
+import { SourceName } from "../source/source.entity";
 
 @Injectable()
 export class TinkoffService {
@@ -31,7 +32,7 @@ export class TinkoffService {
 
   async updateInstance() {
     this.instance = null;
-    const tinkoff = await this.sourceService.find("Tinkoff");
+    const tinkoff = await this.sourceService.find(SourceName.Tinkoff);
 
     if (tinkoff) {
       this.instance = new OpenAPI({
@@ -54,7 +55,7 @@ export class TinkoffService {
       const instrument = new Instrument();
       instrument.figi = item.figi;
       instrument.ticker = item.ticker;
-      instrument.source = "Tinkoff";
+      instrument.source = SourceName.Tinkoff;
       return instrument;
     });
   }

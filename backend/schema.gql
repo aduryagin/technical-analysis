@@ -137,9 +137,14 @@ input WatchInput {
 }
 
 input AddSourceInput {
-  name: String!
+  name: SourceName!
   key: String
   secret: String
+}
+
+enum SourceName {
+  Tinkoff
+  Binance
 }
 
 input UpdateSourceInput {
