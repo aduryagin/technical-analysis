@@ -1,4 +1,4 @@
-import { TechnicalIndicatorTemplate } from "klinecharts";
+import { TechnicalIndicatorTemplate } from "../../../KLineChart/types";
 
 export type ExtendedTechnicalIndicatorTemplate = TechnicalIndicatorTemplate & {
   options?: any;
