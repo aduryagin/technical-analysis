@@ -43,7 +43,10 @@ export default function AlgorithmTrade({ item, onClick }: Props) {
         >
           {item.type === "LONG" ? <LongIcon /> : <ShortIcon />}
         </span>
-        <span onClick={onClick} style={{ width: 50 }}>
+        <span
+          onClick={onClick}
+          style={{ width: 50, overflow: "hidden", textOverflow: "ellipsis" }}
+        >
           {item.instrument.ticker}
         </span>
         <span onClick={onClick} style={{ width: 50 }}>

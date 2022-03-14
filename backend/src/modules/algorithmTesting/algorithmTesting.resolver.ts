@@ -35,8 +35,6 @@ export class AlgorithmTestingResolver {
   }
 
   async init() {
-    if (!this.tinkoffService.instance) return;
-
     const watchList = await this.watchListService.instruments();
 
     for (const instrument of watchList) {
@@ -47,6 +45,7 @@ export class AlgorithmTestingResolver {
 
   async getCandles(instrument: Instrument) {
     if (instrument.source === SourceName.Tinkoff) {
+      if (!this.tinkoffService.instance) return;
       const candlesList = await this.tinkoffService.candles({
         figi: instrument.figi,
         interval: this.interval as any,
@@ -54,6 +53,7 @@ export class AlgorithmTestingResolver {
       });
       this.candlesStorage[instrument.id] = candles(candlesList);
     } else if (instrument.source === SourceName.Binance) {
+      if (!this.binanceService.instance) return;
       const candlesList = await this.binanceService.candles({
         ticker: instrument.ticker,
         interval: this.interval as any,
@@ -97,6 +97,7 @@ export class AlgorithmTestingResolver {
     };
 
     if (instrument.source === SourceName.Tinkoff) {
+      if (!this.tinkoffService.instance) return;
       this.candleUnsubscribe[instrument.id] =
         this.tinkoffService.instance.candle(
           { figi: instrument.figi, interval: this.interval as any },
@@ -111,6 +112,7 @@ export class AlgorithmTestingResolver {
           }
         );
     } else if (instrument.source === SourceName.Binance) {
+      if (!this.binanceService.instance) return;
       this.candleUnsubscribe[instrument.id] =
         this.binanceService.instance.websockets.candlesticks(
           instrument.ticker,
