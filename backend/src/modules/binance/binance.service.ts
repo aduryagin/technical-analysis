@@ -83,7 +83,7 @@ export class BinanceService {
       binanceInterval,
       false,
       {
-        limit: 500,
+        limit: 1000,
         endTime: new Date(to).getTime(),
       }
     );
