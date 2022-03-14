@@ -7,6 +7,7 @@ import {
 import { notification, Popover } from "antd";
 import {
   Instrument,
+  SourceName,
   useUnwatchMutation,
   WatchListSubscriptionHookResult,
 } from "../../../graphql";
@@ -37,7 +38,9 @@ export default function WatchListItem({ item, onClick }: Props) {
           <a
             style={{ marginRight: 5 }}
             target="__blank"
-            href={`/?ticker=${item.ticker}&figi=${item.figi}`}
+            href={`/?ticker=${item.ticker}&source=${item.source}${
+              item.figi ? `&figi=${item.figi}` : ""
+            }`}
           >
             <LinkOutlined />
           </a>
