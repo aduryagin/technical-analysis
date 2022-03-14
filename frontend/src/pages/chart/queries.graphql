@@ -1,5 +1,5 @@
-query candles($figi: String!, $interval: Interval!, $to: String) {
-  candles(figi: $figi, interval: $interval, to: $to) {
+query candles($interval: Interval!, $to: String, $figi: String, $ticker: String, $source: SourceName) {
+  candles(interval: $interval, to: $to, figi: $figi, ticker: $ticker, source: $source) {
     time
     close
     open
@@ -26,10 +26,11 @@ subscription watchList {
     figi
     price
     pricePercentChange
+    source
   }
 }
 
-mutation watch ($input: WatchInput!) {
+mutation watch($input: WatchInput!) {
   watch(input: $input) {
     id
   }
@@ -39,8 +40,8 @@ mutation unwatch($id: Float!) {
   unwatch(id: $id)
 }
 
-subscription candle($figi: String!, $interval: Interval!) {
-  candle(figi: $figi, interval: $interval) {
+subscription candle($interval: Interval!, $ticker: String, $figi: String, $source: SourceName) {
+  candle(interval: $interval, ticker: $ticker, figi: $figi, source: $source) {
     candle {
       time
       close

@@ -15,20 +15,20 @@ type AlgorithmTrade {
   pricePercentChange: Float!
 }
 
-type Instrument {
-  id: Float
-  ticker: String!
-  figi: String!
-  source: String!
-  price: Float
-  pricePercentChange: Float
-}
-
 type Source {
   id: Float
   name: String!
   key: String
   secret: String
+}
+
+type Instrument {
+  id: Float
+  source: String!
+  ticker: String
+  figi: String
+  price: Float
+  pricePercentChange: Float
 }
 
 type Candle {
@@ -94,11 +94,16 @@ type TradingViewIdea {
 type Query {
   searchInstrument(ticker: String!): [Instrument!]!
   sources: [Source!]!
-  candles(to: String, interval: Interval!, figi: String!): [Candle!]!
+  candles(source: SourceName, ticker: String, figi: String, to: String, interval: Interval!): [Candle!]!
   tradingViewIdeas(ticker: String!): [TradingViewIdea!]!
   tipRanksInfo(ticker: String!): TipRanksInfo!
   indicators: [Indicator!]!
   shapes(ticker: String!): [Shape!]!
+}
+
+enum SourceName {
+  Tinkoff
+  Binance
 }
 
 enum Interval {
@@ -110,7 +115,13 @@ enum Interval {
   MIN15
   MIN30
   HOUR
+  HOUR2
+  HOUR4
+  HOUR6
+  HOUR8
+  HOUR12
   DAY
+  DAY3
   WEEK
   MONTH
 }
@@ -140,11 +151,6 @@ input AddSourceInput {
   name: SourceName!
   key: String
   secret: String
-}
-
-enum SourceName {
-  Tinkoff
-  Binance
 }
 
 input UpdateSourceInput {
@@ -181,6 +187,6 @@ input UpdateShapeInput {
 
 type Subscription {
   watchList: [Instrument!]!
-  candle(interval: Interval!, figi: String!): CandleSubscriptionData!
+  candle(source: SourceName, figi: String, ticker: String, interval: Interval!): CandleSubscriptionData!
   trades: [AlgorithmTrade!]!
 }

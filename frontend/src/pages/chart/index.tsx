@@ -11,6 +11,7 @@ import {
   Candle,
   CandleDocument,
   Interval,
+  SourceName,
   useAddShapeMutation,
   useCandlesLazyQuery,
   useRemoveShapeMutation,
@@ -41,6 +42,7 @@ function useChart() {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const unsubscribeFromCandle = useRef<() => void>(() => {});
   const [chart, setChart] = useState<any | null>(null);
+  const source = findGetParameter("source");
   const figi = findGetParameter("figi");
   const ticker = findGetParameter("ticker");
   const interval = findGetParameter("interval") || Interval.Day;
@@ -56,7 +58,7 @@ function useChart() {
   });
 
   const fetchAndSubscribeOnCandles = useCallback(
-    ({ figi, interval, instance }) => {
+    ({ figi, ticker, source, interval, instance }) => {
       const chartInstance = instance || chart;
 
       chartInstance?.clearData();
@@ -64,14 +66,16 @@ function useChart() {
       fetchCandles({
         variables: {
           figi,
+          ticker,
           interval,
+          source,
         },
       });
 
       unsubscribeFromCandle.current();
       unsubscribeFromCandle.current = subscribeToMore({
         document: CandleDocument,
-        variables: { figi, interval },
+        variables: { figi, ticker, source, interval },
         updateQuery: (
           prev,
           {
@@ -82,7 +86,10 @@ function useChart() {
             };
           }
         ) => {
-          if (subscriptionData.data.candle.instrument.figi === figi)
+          if (
+            subscriptionData.data.candle.instrument.figi === figi ||
+            subscriptionData.data.candle.instrument.ticker === ticker
+          )
             chartInstance?.updateData(subscriptionData.data.candle.candle);
 
           // don't update the data
@@ -96,6 +103,8 @@ function useChart() {
         loadMoreCandles({
           variables: {
             figi,
+            ticker,
+            source,
             interval,
             to: new Date(timestamp).toISOString(),
           },
@@ -112,13 +121,7 @@ function useChart() {
   });
 
   // init chart
-  useEffect(() => {
-    const instance = init("chart", CHART_OPTIONS);
-    setChart(instance);
-
-    instance?.addShapeTemplate(MEASURE_GRAPHIC_MARK as any);
-    instance?.addTechnicalIndicatorTemplate(customIndicators);
-
+  const setStyleOptions = useCallback(({ instance, ticker, interval }) => {
     instance?.setStyleOptions({
       candle: {
         tooltip: {
@@ -126,12 +129,24 @@ function useChart() {
           values: [
             {
               label: "",
-              value: `${ticker} (${intervalLabels[interval as Interval]})`,
+              value: `${ticker} (${intervalLabels[interval as Interval]
+                .replace(/\(.*\)/g, "")
+                .trim()})`,
             },
           ],
         },
       },
     });
+  }, []);
+
+  useEffect(() => {
+    const instance = init("chart", CHART_OPTIONS);
+    setChart(instance);
+
+    instance?.addShapeTemplate(MEASURE_GRAPHIC_MARK as any);
+    instance?.addTechnicalIndicatorTemplate(customIndicators);
+
+    setStyleOptions({ instance, ticker, interval });
 
     instance?.setOffsetRightSpace(600);
 
@@ -141,8 +156,10 @@ function useChart() {
     window.addEventListener("resize", resizeCallback);
 
     // initial candles
-    if (figi) {
+    if (figi || ticker) {
       fetchAndSubscribeOnCandles({
+        ticker,
+        source,
         figi,
         interval,
         instance,
@@ -227,11 +244,24 @@ function useChart() {
 
   // ticker select handler
   const onTickerSelect = useCallback(
-    ({ figi: chartFigi, ticker: chartTicker, interval: chartInterval }) => {
-      if (chartFigi === findGetParameter("figi")) return;
+    ({
+      figi: chartFigi,
+      ticker: chartTicker,
+      interval: chartInterval,
+      source: chartSource,
+    }) => {
+      if (
+        chartFigi === findGetParameter("figi") ||
+        chartTicker === findGetParameter("ticker")
+      )
+        return;
 
+      const source = chartSource || findGetParameter("source");
       const ticker = chartTicker || findGetParameter("ticker");
-      const figi = chartFigi || findGetParameter("figi");
+      const figi =
+        source === SourceName.Tinkoff
+          ? chartFigi || findGetParameter("figi")
+          : null;
       const interval =
         chartInterval || findGetParameter("interval") || Interval.Day;
 
@@ -239,11 +269,15 @@ function useChart() {
       window.history.replaceState(
         "",
         ticker,
-        `/?ticker=${ticker}&figi=${figi}&interval=${interval}`
+        `/?ticker=${ticker}&interval=${interval}&source=${source}${
+          figi ? `&figi=${figi}` : ""
+        }`
       );
 
       fetchAndSubscribeOnCandles({
         figi,
+        ticker,
+        source,
         interval,
       });
 
@@ -256,19 +290,7 @@ function useChart() {
         },
       });
 
-      chart?.setStyleOptions({
-        candle: {
-          tooltip: {
-            labels: [""],
-            values: [
-              {
-                label: "",
-                value: `${ticker} (${intervalLabels[interval as Interval]})`,
-              },
-            ],
-          },
-        },
-      });
+      setStyleOptions({ instance: chart, ticker, interval });
     },
     [chart, fetchShapes, fetchAndSubscribeOnCandles]
   );

@@ -3,6 +3,7 @@ import { ConfigModule } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { AlgorithmTestingModule } from "./modules/algorithmTesting/algorithmTesting.module";
+import { BinanceModule } from "./modules/binance/binance.module";
 import { CandleModule } from "./modules/candle/candle.module";
 import { IndicatorModule } from "./modules/indicator/indicator.module";
 import { ShapeModule } from "./modules/shape/shape.module";
@@ -37,6 +38,7 @@ import { WatchListModule } from "./modules/watchList/watchList.module";
     AlgorithmTestingModule,
     SourceModule,
     CandleModule,
+    BinanceModule,
   ],
   controllers: [],
   providers: [],

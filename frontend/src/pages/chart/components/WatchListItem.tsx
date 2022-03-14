@@ -67,7 +67,7 @@ export default function WatchListItem({ item, onClick }: Props) {
           </a>
         </span>
         <span
-          style={{ width: 50 }}
+          style={{ width: 70 }}
           onClick={() => {
             onClick(item);
           }}
@@ -75,7 +75,7 @@ export default function WatchListItem({ item, onClick }: Props) {
           {item.ticker}
         </span>
         <span
-          style={{ width: 90 }}
+          style={{ width: 70 }}
           onClick={() => {
             onClick(item);
           }}

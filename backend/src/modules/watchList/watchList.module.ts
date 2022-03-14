@@ -1,6 +1,7 @@
 import { forwardRef, Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { AlgorithmTestingModule } from "../algorithmTesting/algorithmTesting.module";
+import { BinanceModule } from "../binance/binance.module";
 import { CandleModule } from "../candle/candle.module";
 import { SourceModule } from "../source/source.module";
 import { TinkoffModule } from "../tinkoff/tinkoff.module";
@@ -15,6 +16,7 @@ import { WatchListService } from "./watchList.service";
     forwardRef(() => AlgorithmTestingModule),
     forwardRef(() => CandleModule),
     forwardRef(() => SourceModule),
+    forwardRef(() => BinanceModule),
   ],
   providers: [WatchListResolver, WatchListService],
   exports: [WatchListService],

@@ -38,7 +38,7 @@ function WatchList({ onTickerSelect }: Props) {
         loading={searchInstrumentLoading || watchLoading}
         onSelect={(value) => {
           const instrument = searchInstrumentData?.searchInstrument.find(
-            (item) => item.figi === value
+            (item) => item.figi === value || item.ticker === value
           );
 
           if (instrument) {
@@ -68,7 +68,10 @@ function WatchList({ onTickerSelect }: Props) {
         filterOption={false}
       >
         {searchInstrumentData?.searchInstrument.map((item) => (
-          <Select.Option value={item.figi} key={item.figi}>
+          <Select.Option
+            value={item.figi || item.ticker}
+            key={item.figi || item.ticker}
+          >
             {item.ticker} ({item.source})
           </Select.Option>
         ))}

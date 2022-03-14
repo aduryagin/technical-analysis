@@ -1,6 +1,7 @@
 import { Field, ObjectType } from "@nestjs/graphql";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { AlgorithmTrade } from "../algorithmTesting/algorithmTesting.entity";
+import { SourceName } from "../source/source.entity";
 
 @Entity()
 @ObjectType()
@@ -11,15 +12,15 @@ export class Instrument {
 
   @Column()
   @Field()
-  ticker: string;
-
-  @Column()
-  @Field()
-  figi: string;
+  source: SourceName;
 
   @Column({ nullable: true })
-  @Field()
-  source: string;
+  @Field({ nullable: true })
+  ticker?: string;
+
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  figi?: string;
 
   @Field({ nullable: true })
   price?: number;

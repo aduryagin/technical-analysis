@@ -1,4 +1,5 @@
 import { InputType, Field } from "@nestjs/graphql";
+import { SourceName } from "../source/source.entity";
 
 @InputType()
 export class WatchInput {
@@ -9,5 +10,5 @@ export class WatchInput {
   figi?: string;
 
   @Field(() => String)
-  source: string;
+  source: SourceName;
 }

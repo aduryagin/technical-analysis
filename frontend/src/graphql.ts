@@ -72,17 +72,23 @@ export type Indicator = {
 
 export type Instrument = {
   __typename?: 'Instrument';
-  figi: Scalars['String'];
+  figi?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Float']>;
   price?: Maybe<Scalars['Float']>;
   pricePercentChange?: Maybe<Scalars['Float']>;
   source: Scalars['String'];
-  ticker: Scalars['String'];
+  ticker?: Maybe<Scalars['String']>;
 };
 
 export enum Interval {
   Day = 'DAY',
+  Day3 = 'DAY3',
   Hour = 'HOUR',
+  Hour2 = 'HOUR2',
+  Hour4 = 'HOUR4',
+  Hour6 = 'HOUR6',
+  Hour8 = 'HOUR8',
+  Hour12 = 'HOUR12',
   Min1 = 'MIN1',
   Min2 = 'MIN2',
   Min3 = 'MIN3',
@@ -183,8 +189,10 @@ export type Query = {
 
 
 export type QueryCandlesArgs = {
-  figi: Scalars['String'];
+  figi?: InputMaybe<Scalars['String']>;
   interval: Interval;
+  source?: InputMaybe<SourceName>;
+  ticker?: InputMaybe<Scalars['String']>;
   to?: InputMaybe<Scalars['String']>;
 };
 
@@ -251,8 +259,10 @@ export type Subscription = {
 
 
 export type SubscriptionCandleArgs = {
-  figi: Scalars['String'];
+  figi?: InputMaybe<Scalars['String']>;
   interval: Interval;
+  source?: InputMaybe<SourceName>;
+  ticker?: InputMaybe<Scalars['String']>;
 };
 
 export type TipRanksInfo = {
@@ -306,9 +316,11 @@ export type WatchInput = {
 };
 
 export type CandlesQueryVariables = Exact<{
-  figi: Scalars['String'];
   interval: Interval;
   to?: InputMaybe<Scalars['String']>;
+  figi?: InputMaybe<Scalars['String']>;
+  ticker?: InputMaybe<Scalars['String']>;
+  source?: InputMaybe<SourceName>;
 }>;
 
 
@@ -319,12 +331,12 @@ export type SearchInstrumentQueryVariables = Exact<{
 }>;
 
 
-export type SearchInstrumentQuery = { __typename?: 'Query', searchInstrument: Array<{ __typename?: 'Instrument', ticker: string, id?: number | null | undefined, figi: string, source: string }> };
+export type SearchInstrumentQuery = { __typename?: 'Query', searchInstrument: Array<{ __typename?: 'Instrument', ticker?: string | null | undefined, id?: number | null | undefined, figi?: string | null | undefined, source: string }> };
 
 export type WatchListSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type WatchListSubscription = { __typename?: 'Subscription', watchList: Array<{ __typename?: 'Instrument', ticker: string, id?: number | null | undefined, figi: string, price?: number | null | undefined, pricePercentChange?: number | null | undefined }> };
+export type WatchListSubscription = { __typename?: 'Subscription', watchList: Array<{ __typename?: 'Instrument', ticker?: string | null | undefined, id?: number | null | undefined, figi?: string | null | undefined, price?: number | null | undefined, pricePercentChange?: number | null | undefined, source: string }> };
 
 export type WatchMutationVariables = Exact<{
   input: WatchInput;
@@ -341,12 +353,14 @@ export type UnwatchMutationVariables = Exact<{
 export type UnwatchMutation = { __typename?: 'Mutation', unwatch: boolean };
 
 export type CandleSubscriptionVariables = Exact<{
-  figi: Scalars['String'];
   interval: Interval;
+  ticker?: InputMaybe<Scalars['String']>;
+  figi?: InputMaybe<Scalars['String']>;
+  source?: InputMaybe<SourceName>;
 }>;
 
 
-export type CandleSubscription = { __typename?: 'Subscription', candle: { __typename?: 'CandleSubscriptionData', candle: { __typename?: 'Candle', time: string, close: number, open: number, high: number, low: number, volume: number, timestamp: number }, instrument: { __typename?: 'Instrument', id?: number | null | undefined, ticker: string, figi: string } } };
+export type CandleSubscription = { __typename?: 'Subscription', candle: { __typename?: 'CandleSubscriptionData', candle: { __typename?: 'Candle', time: string, close: number, open: number, high: number, low: number, volume: number, timestamp: number }, instrument: { __typename?: 'Instrument', id?: number | null | undefined, ticker?: string | null | undefined, figi?: string | null | undefined } } };
 
 export type TradingViewIdeasQueryVariables = Exact<{
   ticker: Scalars['String'];
@@ -445,7 +459,7 @@ export type AddShapeMutation = { __typename?: 'Mutation', addShape: { __typename
 export type TradesSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type TradesSubscription = { __typename?: 'Subscription', trades: Array<{ __typename?: 'AlgorithmTrade', id: number, price: number, type: string, closed: boolean, pricePercentChange: number, date: string, instrument: { __typename?: 'Instrument', id?: number | null | undefined, ticker: string, figi: string, source: string } }> };
+export type TradesSubscription = { __typename?: 'Subscription', trades: Array<{ __typename?: 'AlgorithmTrade', id: number, price: number, type: string, closed: boolean, pricePercentChange: number, date: string, instrument: { __typename?: 'Instrument', id?: number | null | undefined, ticker?: string | null | undefined, figi?: string | null | undefined, source: string } }> };
 
 export type CloseTradeMutationVariables = Exact<{
   id: Scalars['Float'];
@@ -456,8 +470,14 @@ export type CloseTradeMutation = { __typename?: 'Mutation', closeTrade: boolean 
 
 
 export const CandlesDocument = gql`
-    query candles($figi: String!, $interval: Interval!, $to: String) {
-  candles(figi: $figi, interval: $interval, to: $to) {
+    query candles($interval: Interval!, $to: String, $figi: String, $ticker: String, $source: SourceName) {
+  candles(
+    interval: $interval
+    to: $to
+    figi: $figi
+    ticker: $ticker
+    source: $source
+  ) {
     time
     close
     open
@@ -481,9 +501,11 @@ export const CandlesDocument = gql`
  * @example
  * const { data, loading, error } = useCandlesQuery({
  *   variables: {
- *      figi: // value for 'figi'
  *      interval: // value for 'interval'
  *      to: // value for 'to'
+ *      figi: // value for 'figi'
+ *      ticker: // value for 'ticker'
+ *      source: // value for 'source'
  *   },
  * });
  */
@@ -544,6 +566,7 @@ export const WatchListDocument = gql`
     figi
     price
     pricePercentChange
+    source
   }
 }
     `;
@@ -634,8 +657,8 @@ export type UnwatchMutationHookResult = ReturnType<typeof useUnwatchMutation>;
 export type UnwatchMutationResult = Apollo.MutationResult<UnwatchMutation>;
 export type UnwatchMutationOptions = Apollo.BaseMutationOptions<UnwatchMutation, UnwatchMutationVariables>;
 export const CandleDocument = gql`
-    subscription candle($figi: String!, $interval: Interval!) {
-  candle(figi: $figi, interval: $interval) {
+    subscription candle($interval: Interval!, $ticker: String, $figi: String, $source: SourceName) {
+  candle(interval: $interval, ticker: $ticker, figi: $figi, source: $source) {
     candle {
       time
       close
@@ -666,8 +689,10 @@ export const CandleDocument = gql`
  * @example
  * const { data, loading, error } = useCandleSubscription({
  *   variables: {
- *      figi: // value for 'figi'
  *      interval: // value for 'interval'
+ *      ticker: // value for 'ticker'
+ *      figi: // value for 'figi'
+ *      source: // value for 'source'
  *   },
  * });
  */

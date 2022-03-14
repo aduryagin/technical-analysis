@@ -74,6 +74,23 @@ export class TinkoffService {
     const instanceError = this.checkInstance();
     if (instanceError) return [];
 
+    const supportedIntervals = [
+      "1min",
+      "2min",
+      "3min",
+      "5min",
+      "10min",
+      "15min",
+      "30min",
+      "hour",
+      "day",
+      "week",
+      "month",
+    ];
+    if (!supportedIntervals.includes(interval)) {
+      throw new Error("Unsupported interval");
+    }
+
     const removeTimeDuplicates = (candles: Candle[]): Candle[] => {
       return candles.filter(
         (thing, index, self) =>

@@ -9,6 +9,8 @@ import { AlgorithmTestingResolver } from "../algorithmTesting/algorithmTesting.r
 import { CandleService } from "../candle/candle.service";
 import { SourceService } from "../source/source.service";
 import { HttpException } from "@nestjs/common";
+import { SourceName } from "../source/source.entity";
+import { BinanceService } from "../binance/binance.service";
 
 @Resolver()
 export class WatchListResolver {
@@ -19,6 +21,7 @@ export class WatchListResolver {
     private readonly tinkoffService: TinkoffService,
     private readonly candleService: CandleService,
     private readonly sourceService: SourceService,
+    private readonly binanceService: BinanceService,
     private readonly algorithmTestingResolver: AlgorithmTestingResolver
   ) {}
 
@@ -88,19 +91,40 @@ export class WatchListResolver {
   }
 
   async getInitialCandles(instrument: Instrument) {
-    if (!this.tinkoffService.instance) return;
+    if (instrument.source === SourceName.Tinkoff) {
+      if (!this.tinkoffService.instance) return;
 
-    const data = await this.tinkoffService.instance.candlesGet({
-      from: sub(new Date(), { days: 2 }).toISOString(),
-      to: new Date().toISOString(),
-      figi: instrument.figi,
-      interval: "day",
-    });
+      const data = await this.tinkoffService.instance.candlesGet({
+        from: sub(new Date(), { days: 5 }).toISOString(),
+        to: new Date().toISOString(),
+        figi: instrument.figi,
+        interval: "day",
+      });
 
-    this.instrumentPrice[instrument.id] = {
-      open: data.candles[data.candles.length - 1]?.o || 0,
-      close: data.candles[data.candles.length - 1]?.c || 0,
-    };
+      this.instrumentPrice[instrument.id] = {
+        open: data.candles[data.candles.length - 1]?.o || 0,
+        close: data.candles[data.candles.length - 1]?.c || 0,
+      };
+    } else if (instrument.source === SourceName.Binance) {
+      if (!this.binanceService.instance) return;
+
+      const data = await this.binanceService.instance.candlesticks(
+        instrument.ticker,
+        "1d",
+        false,
+        {
+          limit: 10,
+          endTime: new Date().getTime(),
+        }
+      );
+
+      const lastCandle = this.binanceService.mapCandle(data[data.length - 1]);
+
+      this.instrumentPrice[instrument.id] = {
+        open: lastCandle?.open || 0,
+        close: lastCandle?.close || 0,
+      };
+    }
   }
 
   @Query(() => [Instrument])
@@ -111,21 +135,36 @@ export class WatchListResolver {
     if (!sources.length)
       return new HttpException("Please add at least one source", 400);
 
-    return this.tinkoffService.searchInstrument(ticker);
+    let instruments = [];
+    if (this.sourceService.find(SourceName.Tinkoff)) {
+      const tinkoffInstruments = await this.tinkoffService.searchInstrument(
+        ticker
+      );
+      instruments = [...instruments, ...tinkoffInstruments];
+    }
+
+    if (this.sourceService.find(SourceName.Binance)) {
+      const binanceInstruments = await this.binanceService.searchInstrument(
+        ticker
+      );
+      instruments = [...instruments, ...binanceInstruments];
+    }
+
+    return instruments;
   }
 
   @Mutation(() => Instrument)
   async watch(@Args("input", { type: () => WatchInput }) input: WatchInput) {
     const instrument = await this.watchListService.addInstrument(input);
     await this.getInitialCandles(instrument);
-    await this.algorithmTestingResolver.subscribe(instrument);
+    // await this.algorithmTestingResolver.subscribe(instrument);
     this.publish();
     return instrument;
   }
 
   @Mutation(() => Boolean)
   async unwatch(@Args("id") id: number) {
-    await this.algorithmTestingResolver.unsubscribe(id);
+    // await this.algorithmTestingResolver.unsubscribe(id);
     await this.watchListService.removeInstrument(id);
     this.publish();
     return true;

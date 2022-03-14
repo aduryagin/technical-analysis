@@ -35,20 +35,23 @@ export class CandleSubscriptionData {
 }
 
 export enum Interval {
-  "MIN1" = "1min",
-  "MIN2" = "2min",
-  "MIN3" = "3min",
-  "MIN5" = "5min",
-  "MIN10" = "10min",
-  "MIN15" = "15min",
-  "MIN30" = "30min",
-  "HOUR" = "hour",
-  // tinkoff doesn't support it
-  // "HOUR2" = "2hour",
-  // "HOUR4" = "4hour",
-  "DAY" = "day",
-  "WEEK" = "week",
-  "MONTH" = "month",
+  "MIN1" = "1min", // tinkoff, binance
+  "MIN2" = "2min", // tinkoff
+  "MIN3" = "3min", // tinkoff, binance
+  "MIN5" = "5min", // tinkoff, binance
+  "MIN10" = "10min", // tinkoff
+  "MIN15" = "15min", // tinkoff, binance
+  "MIN30" = "30min", // tinkoff, binance
+  "HOUR" = "hour", // tinkoff, binance
+  "HOUR2" = "2hour", // binance
+  "HOUR4" = "4hour", // binance
+  "HOUR6" = "6hour", // binance
+  "HOUR8" = "8hour", // binance
+  "HOUR12" = "12hour", // binance
+  "DAY" = "day", // tinkoff, binance
+  "DAY3" = "day3", // binance
+  "WEEK" = "week", // tinkoff, binance
+  "MONTH" = "month", // tinkoff, binance
 }
 registerEnumType(Interval, {
   name: "Interval",
