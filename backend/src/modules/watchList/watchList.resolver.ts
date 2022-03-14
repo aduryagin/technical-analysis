@@ -157,14 +157,14 @@ export class WatchListResolver {
   async watch(@Args("input", { type: () => WatchInput }) input: WatchInput) {
     const instrument = await this.watchListService.addInstrument(input);
     await this.getInitialCandles(instrument);
-    // await this.algorithmTestingResolver.subscribe(instrument);
+    await this.algorithmTestingResolver.subscribe(instrument);
     this.publish();
     return instrument;
   }
 
   @Mutation(() => Boolean)
   async unwatch(@Args("id") id: number) {
-    // await this.algorithmTestingResolver.unsubscribe(id);
+    await this.algorithmTestingResolver.unsubscribe(id);
     await this.watchListService.removeInstrument(id);
     this.publish();
     return true;

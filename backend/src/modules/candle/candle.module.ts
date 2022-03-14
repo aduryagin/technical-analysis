@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { forwardRef, Module } from "@nestjs/common";
 import { BinanceModule } from "../binance/binance.module";
 import { SourceModule } from "../source/source.module";
 import { TinkoffModule } from "../tinkoff/tinkoff.module";
@@ -7,7 +7,12 @@ import { CandleResolver } from "./candle.resolver";
 import { CandleService } from "./candle.service";
 
 @Module({
-  imports: [TinkoffModule, SourceModule, WatchListModule, BinanceModule],
+  imports: [
+    TinkoffModule,
+    SourceModule,
+    WatchListModule,
+    forwardRef(() => BinanceModule),
+  ],
   providers: [CandleResolver, CandleService],
   exports: [CandleService],
 })

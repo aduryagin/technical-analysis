@@ -87,8 +87,12 @@ function useChart() {
           }
         ) => {
           if (
-            subscriptionData.data.candle.instrument.figi === figi ||
-            subscriptionData.data.candle.instrument.ticker === ticker
+            (subscriptionData.data.candle.instrument.source ===
+              SourceName.Tinkoff &&
+              subscriptionData.data.candle.instrument.figi === figi) ||
+            (subscriptionData.data.candle.instrument.source ===
+              SourceName.Binance &&
+              subscriptionData.data.candle.instrument.ticker === ticker)
           )
             chartInstance?.updateData(subscriptionData.data.candle.candle);
 
@@ -251,7 +255,12 @@ function useChart() {
       source: chartSource,
     }) => {
       if (
-        chartFigi === findGetParameter("figi") ||
+        chartSource === SourceName.Tinkoff &&
+        chartFigi === findGetParameter("figi")
+      )
+        return;
+      if (
+        chartSource === SourceName.Binance &&
         chartTicker === findGetParameter("ticker")
       )
         return;

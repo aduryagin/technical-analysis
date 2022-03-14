@@ -67,7 +67,7 @@ export default function WatchListItem({ item, onClick }: Props) {
           </a>
         </span>
         <span
-          style={{ width: 70 }}
+          style={{ width: 80 }}
           onClick={() => {
             onClick(item);
           }}
@@ -86,7 +86,7 @@ export default function WatchListItem({ item, onClick }: Props) {
           style={{
             marginRight: 10,
             textAlign: "right",
-            width: 65,
+            width: 55,
             color:
               (item.pricePercentChange || 0) >= 0
                 ? THEME.colors.green

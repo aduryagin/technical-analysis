@@ -36,6 +36,8 @@ export class BinanceService {
       this.instance = new Binance().options({
         APIKEY: binance.key,
         APISECRET: binance.secret,
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        log: () => {},
       });
     }
   }
