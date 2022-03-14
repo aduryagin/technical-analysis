@@ -56,18 +56,20 @@ export default function WatchListItem({ item, onClick }: Props) {
               <CloudOutlined />
             </Popover>
           </a>
-          <a
-            style={{ marginRight: 7 }}
-            target="__blank"
-            href={`https://www.tipranks.com/stocks/${item.ticker}`}
-          >
-            <Popover
-              placement="left"
-              content={<TipRanksInfo ticker={item.ticker} />}
+          {item.source === SourceName.Tinkoff && (
+            <a
+              style={{ marginRight: 7 }}
+              target="__blank"
+              href={`https://www.tipranks.com/stocks/${item.ticker}`}
             >
-              <BarChartOutlined />
-            </Popover>
-          </a>
+              <Popover
+                placement="left"
+                content={<TipRanksInfo ticker={item.ticker} />}
+              >
+                <BarChartOutlined />
+              </Popover>
+            </a>
+          )}
         </span>
         <span
           style={{ width: 80 }}
