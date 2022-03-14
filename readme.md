@@ -4,7 +4,7 @@ Terminal that gives you an ability to check your algorithm or a strategy.
 
 #### Supported API
 * Tinkoff
-* Binance (WIP)
+* Binance
 
 <img src="./images/screenshot.png" />
 
