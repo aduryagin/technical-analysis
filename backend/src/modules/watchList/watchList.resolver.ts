@@ -26,7 +26,7 @@ export class WatchListResolver {
   ) {}
 
   candleUnsubscribe: {
-    [id: number]: () => void;
+    [id: number]: string | (() => void);
   } = {};
   instrumentPrice: {
     [id: number]: {
@@ -36,41 +36,80 @@ export class WatchListResolver {
   } = {};
 
   async publish() {
-    if (!this.tinkoffService.instance) return;
-
     const watchList = await this.watchListService.instruments();
 
-    Object.values(this.candleUnsubscribe).forEach((unsubscribe) =>
-      unsubscribe()
-    );
+    Object.values(this.candleUnsubscribe).forEach((unsubscribe) => {
+      if (typeof unsubscribe === "function") unsubscribe();
+      else if (typeof unsubscribe === "string")
+        this.binanceService.instance.websockets.terminate(unsubscribe);
+    });
+
+    const publishWatchList = () => {
+      this.pubSub.publish("watchList", {
+        watchList: watchList.map((item) => {
+          const onePercent = this.instrumentPrice[item.id].open / 100;
+          const priceDiff =
+            this.instrumentPrice[item.id].close -
+            this.instrumentPrice[item.id].open;
+          const percentDiff = priceDiff / onePercent;
+
+          return {
+            ...item,
+            price: this.instrumentPrice[item.id].close,
+            pricePercentChange: percentDiff || 0,
+          };
+        }),
+      });
+    };
+
     watchList.forEach((instrument) => {
-      this.candleUnsubscribe[instrument.id] =
-        this.tinkoffService.instance.candle(
-          { figi: instrument.figi, interval: "day" },
-          (streamCandle) => {
-            const candle = this.candleService.mapToCandle(streamCandle);
-            this.instrumentPrice[instrument.id] = {
-              open: candle.open,
-              close: candle.close,
-            };
+      if (instrument.source === SourceName.Tinkoff) {
+        this.candleUnsubscribe[instrument.id] =
+          this.tinkoffService.instance.candle(
+            { figi: instrument.figi, interval: "day" },
+            (streamCandle) => {
+              const candle = this.candleService.mapToCandle(streamCandle);
+              this.instrumentPrice[instrument.id] = {
+                open: candle.open,
+                close: candle.close,
+              };
 
-            this.pubSub.publish("watchList", {
-              watchList: watchList.map((item) => {
-                const onePercent = this.instrumentPrice[item.id].open / 100;
-                const priceDiff =
-                  this.instrumentPrice[item.id].close -
-                  this.instrumentPrice[item.id].open;
-                const percentDiff = priceDiff / onePercent;
+              publishWatchList();
+            }
+          );
+      } else if (instrument.source === SourceName.Binance) {
+        this.candleUnsubscribe[instrument.id] =
+          this.binanceService.instance.websockets.candlesticks(
+            instrument.ticker,
+            "1d",
+            (candlesticks) => {
+              const { k: ticks } = candlesticks;
+              const {
+                o: open,
+                h: high,
+                l: low,
+                c: close,
+                v: volume,
+                t: time,
+              } = ticks;
+              const candle = {
+                time: time,
+                timestamp: new Date(time).getTime(),
+                open,
+                close,
+                high,
+                low,
+                volume,
+              };
+              this.instrumentPrice[instrument.id] = {
+                open: candle.open,
+                close: candle.close,
+              };
 
-                return {
-                  ...item,
-                  price: this.instrumentPrice[item.id].close,
-                  pricePercentChange: percentDiff || 0,
-                };
-              }),
-            });
-          }
-        );
+              publishWatchList();
+            }
+          );
+      }
     });
 
     this.pubSub.publish("watchList", {

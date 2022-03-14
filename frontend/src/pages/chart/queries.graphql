@@ -55,6 +55,7 @@ subscription candle($interval: Interval!, $ticker: String, $figi: String, $sourc
       id
       ticker
       figi
+      source
     }
   }
 }

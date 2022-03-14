@@ -360,7 +360,7 @@ export type CandleSubscriptionVariables = Exact<{
 }>;
 
 
-export type CandleSubscription = { __typename?: 'Subscription', candle: { __typename?: 'CandleSubscriptionData', candle: { __typename?: 'Candle', time: string, close: number, open: number, high: number, low: number, volume: number, timestamp: number }, instrument: { __typename?: 'Instrument', id?: number | null | undefined, ticker?: string | null | undefined, figi?: string | null | undefined } } };
+export type CandleSubscription = { __typename?: 'Subscription', candle: { __typename?: 'CandleSubscriptionData', candle: { __typename?: 'Candle', time: string, close: number, open: number, high: number, low: number, volume: number, timestamp: number }, instrument: { __typename?: 'Instrument', id?: number | null | undefined, ticker?: string | null | undefined, figi?: string | null | undefined, source: string } } };
 
 export type TradingViewIdeasQueryVariables = Exact<{
   ticker: Scalars['String'];
@@ -672,6 +672,7 @@ export const CandleDocument = gql`
       id
       ticker
       figi
+      source
     }
   }
 }
