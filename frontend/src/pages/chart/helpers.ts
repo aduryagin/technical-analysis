@@ -22,7 +22,7 @@ export const intervalLabels = {
   [Interval.Min10]: "10 Min (Tinkoff)",
   [Interval.Min15]: "15 Min (Tinkoff, Binance)",
   [Interval.Min30]: "30 Min (Tinkoff, Binance)",
-  [Interval.Hour]: "Hour (Tinkoff)",
+  [Interval.Hour]: "Hour (Tinkoff, Binance)",
   [Interval.Hour2]: "2 Hour (Binance)",
   [Interval.Hour4]: "4 Hour (Binance)",
   [Interval.Hour6]: "6 Hour (Binance)",
