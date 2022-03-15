@@ -195,7 +195,7 @@ function useChart() {
 
   useEffect(() => {
     if (data?.candles?.length) chart?.applyNewData(data?.candles || []);
-    if (data?.candles?.[data?.candles?.length - 1]?.close <= 1) {
+    if (data?.candles?.[data?.candles?.length - 1]?.close <= 5) {
       chart?.setPriceVolumePrecision(5, 0);
     } else chart?.setPriceVolumePrecision(2, 0);
   }, [data, chart]);
