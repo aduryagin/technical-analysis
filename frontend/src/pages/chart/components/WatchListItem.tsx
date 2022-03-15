@@ -72,7 +72,7 @@ export default function WatchListItem({ item, onClick }: Props) {
           )}
         </span>
         <span
-          style={{ width: 80 }}
+          style={{ width: 80, overflow: "hidden", textOverflow: "ellipsis" }}
           onClick={() => {
             onClick(item);
           }}
