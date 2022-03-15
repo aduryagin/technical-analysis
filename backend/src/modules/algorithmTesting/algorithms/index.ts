@@ -31,10 +31,7 @@ export async function algorithm({
       }
     );
 
-    const today = new Date();
-
-    // todo: fix
-    if (isNewCandle && today.getHours() >= 17 && today.getHours() < 21) {
+    if (isNewCandle) {
       const previousIndicatorValue = data[data.length - 3];
       const indicatorValue = data[data.length - 2];
 
