@@ -197,7 +197,7 @@ export class WatchListResolver {
     const instrument = await this.watchListService.addInstrument(input);
     await this.getInitialCandles(instrument);
     await this.algorithmTestingResolver.subscribe(instrument);
-    this.publish();
+    await this.publish();
     return instrument;
   }
 
@@ -205,7 +205,7 @@ export class WatchListResolver {
   async unwatch(@Args("id") id: number) {
     await this.algorithmTestingResolver.unsubscribe(id);
     await this.watchListService.removeInstrument(id);
-    this.publish();
+    await this.publish();
     return true;
   }
 
