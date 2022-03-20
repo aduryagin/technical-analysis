@@ -38,10 +38,16 @@ export class WatchListResolver {
   async publish() {
     const watchList = await this.watchListService.instruments();
 
-    Object.values(this.candleUnsubscribe).forEach((unsubscribe) => {
-      if (typeof unsubscribe === "function") unsubscribe();
-      else if (typeof unsubscribe === "string")
+    Object.keys(this.candleUnsubscribe).forEach((id) => {
+      const unsubscribe = this.candleUnsubscribe[id];
+
+      if (typeof unsubscribe === "function") {
+        unsubscribe();
+      } else if (typeof unsubscribe === "string") {
         this.binanceService.instance.websockets.terminate(unsubscribe);
+      }
+
+      delete this.candleUnsubscribe[id];
     });
 
     const publishWatchList = () => {
