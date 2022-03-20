@@ -1,7 +1,6 @@
 import { CloseCircleOutlined } from "@ant-design/icons";
 import { Collapse, List, notification, Select, Typography } from "antd";
 import { useCallback, useEffect } from "react";
-import styled from "styled-components";
 import {
   IndicatorsDocument,
   useAddIndicatorMutation,
@@ -9,33 +8,12 @@ import {
   useRemoveIndicatorMutation,
 } from "../../../graphql";
 import { INDICATORS, INDICATORS_GROUPS } from "../indicators";
+import CollapseBlock, { CollapseWrapper } from "./CollapseBlock";
 import IndicatorSettingsForm from "./IndicatorSettingsForm";
 
 interface Props {
   chart: any | null;
 }
-
-export const CollapseWrapper = styled.div`
-  width: 100%;
-
-  .ant-collapse-header {
-    padding: 0 !important;
-  }
-
-  .ant-collapse-content-box {
-    padding-left: 0;
-    padding-right: 0;
-    padding-bottom: 0 !important;
-  }
-
-  .ant-form-item {
-    margin-bottom: 12px;
-  }
-
-  .ant-input-number {
-    width: 100%;
-  }
-`;
 
 const paneIds = {};
 
@@ -105,10 +83,7 @@ export default function Indicators({ chart }: Props) {
     });
 
   return (
-    <>
-      <Typography.Title style={{ fontSize: 16, marginBottom: 3 }} level={4}>
-        Indicators
-      </Typography.Title>
+    <CollapseBlock title="Indicators">
       <Select
         // @ts-ignore
         value={null}
@@ -183,6 +158,6 @@ export default function Indicators({ chart }: Props) {
           </List.Item>
         )}
       />
-    </>
+    </CollapseBlock>
   );
 }

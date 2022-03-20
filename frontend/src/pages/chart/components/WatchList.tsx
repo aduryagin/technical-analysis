@@ -6,6 +6,7 @@ import {
   useWatchListSubscription,
   useWatchMutation,
 } from "../../../graphql";
+import CollapseBlock from "./CollapseBlock";
 
 interface Props {
   onTickerSelect: (instrument: Instrument) => void;
@@ -25,7 +26,7 @@ function WatchList({ onTickerSelect }: Props) {
   const [watch, { loading: watchLoading }] = useWatchMutation();
 
   return (
-    <>
+    <CollapseBlock title="Watch List">
       <Typography.Title style={{ fontSize: 16, marginBottom: 3 }} level={4}>
         Watch list
       </Typography.Title>
@@ -87,7 +88,7 @@ function WatchList({ onTickerSelect }: Props) {
           </List.Item>
         )}
       />
-    </>
+    </CollapseBlock>
   );
 }
 

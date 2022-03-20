@@ -1,7 +1,8 @@
-import { Button, notification, Typography } from "antd";
+import { Button, notification } from "antd";
 import { useAddShapeMutation } from "../../../graphql";
 import { DRAWINGS } from "../drawings";
 import { findGetParameter } from "../helpers";
+import CollapseBlock from "./CollapseBlock";
 
 interface Props {
   chart: any | null;
@@ -21,10 +22,7 @@ export default function Drawing({
   });
 
   return (
-    <>
-      <Typography.Title style={{ fontSize: 16, marginBottom: 3 }} level={4}>
-        Drawing
-      </Typography.Title>
+    <CollapseBlock title="Drawing">
       <div
         style={{
           marginBottom: 10,
@@ -90,6 +88,6 @@ export default function Drawing({
           />
         ))}
       </div>
-    </>
+    </CollapseBlock>
   );
 }

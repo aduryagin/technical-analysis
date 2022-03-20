@@ -17,6 +17,7 @@ import {
 } from "../../../graphql";
 import { CloseCircleOutlined, EditOutlined } from "@ant-design/icons";
 import { useCallback, useState } from "react";
+import CollapseBlock from "./CollapseBlock";
 
 export default function Sources() {
   const [isSettingsModalVisible, setIsSettingsModalVisible] = useState(false);
@@ -62,10 +63,7 @@ export default function Sources() {
   });
 
   return (
-    <>
-      <Typography.Title style={{ fontSize: 16, marginBottom: 3 }} level={4}>
-        Sources
-      </Typography.Title>
+    <CollapseBlock title="Sources">
       <Select
         value={null}
         showSearch
@@ -177,6 +175,6 @@ export default function Sources() {
           </Form.Item>
         </Form>
       </Modal>
-    </>
+    </CollapseBlock>
   );
 }

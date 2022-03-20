@@ -23,6 +23,7 @@ import AlgorithmTesting from "./components/AlgorithmTesing";
 import { customIndicators } from "./indicators";
 import Sources from "./components/Sources";
 import Drawing from "./components/Drawing";
+import CollapseBlock from "./components/CollapseBlock";
 
 const WrapperChart = styled.div`
   display: flex;
@@ -346,26 +347,25 @@ export default function Chart() {
         </Spin>
         <SideBarWrapper>
           <Sources />
-          <Typography.Title style={{ fontSize: 16, marginBottom: 3 }} level={4}>
-            Interval
-          </Typography.Title>
-          <Select
-            size="small"
-            defaultValue={interval}
-            disabled={!window.location.search}
-            options={Object.keys(intervalLabels).map((item) => ({
-              label: intervalLabels[item as Interval] as string,
-              value: item,
-            }))}
-            style={{ width: "100%", marginBottom: 10 }}
-            onChange={(value) => {
-              onTickerSelect({
-                interval: value,
-              });
-            }}
-          >
-            1m
-          </Select>
+          <CollapseBlock title="Interval">
+            <Select
+              size="small"
+              defaultValue={interval}
+              disabled={!window.location.search}
+              options={Object.keys(intervalLabels).map((item) => ({
+                label: intervalLabels[item as Interval] as string,
+                value: item,
+              }))}
+              style={{ width: "100%", marginBottom: 10 }}
+              onChange={(value) => {
+                onTickerSelect({
+                  interval: value,
+                });
+              }}
+            >
+              1m
+            </Select>
+          </CollapseBlock>
           <WatchList onTickerSelect={onTickerSelect} />
           <Drawing
             removeShape={removeShape}
