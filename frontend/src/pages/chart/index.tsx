@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Button, notification, Select, Spin, Typography } from "antd";
+import { notification, Select, Spin } from "antd";
 import styled from "styled-components";
 import Helmet from "react-helmet";
 import { init, dispose } from "../../KLineChart/src";

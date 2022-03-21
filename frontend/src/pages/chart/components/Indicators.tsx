@@ -1,5 +1,5 @@
 import { CloseCircleOutlined } from "@ant-design/icons";
-import { Collapse, List, notification, Select, Typography } from "antd";
+import { Collapse, List, notification, Select } from "antd";
 import { useCallback, useEffect } from "react";
 import {
   IndicatorsDocument,
