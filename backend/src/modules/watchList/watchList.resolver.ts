@@ -36,8 +36,6 @@ export class WatchListResolver {
   } = {};
 
   async publish() {
-    const watchList = await this.watchListService.instruments();
-
     Object.keys(this.candleUnsubscribe).forEach((id) => {
       const unsubscribe = this.candleUnsubscribe[id];
 
@@ -49,6 +47,8 @@ export class WatchListResolver {
 
       delete this.candleUnsubscribe[id];
     });
+
+    const watchList = await this.watchListService.instruments();
 
     const publishWatchList = () => {
       this.pubSub.publish("watchList", {
