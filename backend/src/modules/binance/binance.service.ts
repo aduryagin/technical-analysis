@@ -38,6 +38,7 @@ export class BinanceService {
         APISECRET: binance.secret,
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         log: () => {},
+        reconnect: false,
       });
     }
   }
