@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { notification, Select, Spin } from "antd";
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 import Helmet from "react-helmet";
 import { init, dispose } from "../../KLineChart/src";
 import { findGetParameter, intervalLabels } from "./helpers";
@@ -24,6 +24,7 @@ import { customIndicators } from "./indicators";
 import Sources from "./components/Sources";
 import Drawing from "./components/Drawing";
 import CollapseBlock from "./components/CollapseBlock";
+import { useHotkeys } from "react-hotkeys-hook";
 
 const WrapperChart = styled.div`
   display: flex;
@@ -33,6 +34,11 @@ const SideBarWrapper = styled.div`
   width: 100%;
   height: calc(100vh - 64px);
   overflow-y: auto;
+`;
+const GlobalStyle = createGlobalStyle`
+  .ant-layout-header {
+    display: none;
+  }
 `;
 
 // constants
@@ -307,7 +313,19 @@ function useChart() {
     [chart, fetchShapes, fetchAndSubscribeOnCandles]
   );
 
+  // sidebar visibility
+  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+  useHotkeys(
+    "ctrl+q",
+    () => {
+      setIsSidebarVisible((prevValue) => !prevValue);
+      chart?.resize?.();
+    },
+    [chart]
+  );
+
   return {
+    isSidebarVisible,
     removeShape,
     updateShape,
     onUpdateShape,
@@ -328,6 +346,7 @@ export default function Chart() {
     interval,
     ticker,
     chart,
+    isSidebarVisible,
   } = useChart();
 
   return (
@@ -335,17 +354,22 @@ export default function Chart() {
       <Helmet>
         <title>{ticker || "Chart"}</title>
       </Helmet>
+      {!isSidebarVisible && <GlobalStyle />}
       <WrapperChart>
         <Spin spinning={loading} size="large">
           <div
             id="chart"
             style={{
-              width: `calc(100vw - ${WATCH_LIST_WIDTH}px)`,
-              height: "calc(100vh - 64px)",
+              width: `calc(100vw - ${
+                isSidebarVisible ? WATCH_LIST_WIDTH : 0
+              }px)`,
+              height: `calc(100vh - ${isSidebarVisible ? "64px" : "0px"})`,
             }}
           />
         </Spin>
-        <SideBarWrapper>
+        <SideBarWrapper
+          style={{ display: isSidebarVisible ? "block" : "none" }}
+        >
           <Sources />
           <CollapseBlock title="Interval">
             <Select

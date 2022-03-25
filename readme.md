@@ -11,6 +11,9 @@ Terminal that gives you an ability to check your algorithm or a strategy.
 ### Algorithm Testing
 With this functionality you can easily test your strategy. Just change the algoritm here backend/src/modules/algorithmTesting/algorithms/index.ts Also you can add notifications there if you need this.
 
+### Hotkeys
+Ctrl + Q - Fullscreen mode
+
 ### How to run
 You have to install python, poetry, node.js
 
