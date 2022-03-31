@@ -2,6 +2,8 @@
 
 Terminal that gives you an ability to check your algorithm or a strategy.
 
+[Technical Indicators library](https://github.com/aduryagin/technical-analysis/tree/main/packages/technical-indicators)
+
 #### Supported API
 * Tinkoff
 * Binance
