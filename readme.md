@@ -6,7 +6,7 @@ Terminal that gives you an ability to check your algorithm or a strategy.
 * Tinkoff
 * Binance
 
-<img src="./images/screenshot.png" />
+<img src="./images/screenshot.gif" />
 
 ### Algorithm Testing
 With this functionality you can easily test your strategy. Just change the algoritm here backend/src/modules/algorithmTesting/algorithms/index.ts Also you can add notifications there if you need this.
