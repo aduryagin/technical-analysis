@@ -46,6 +46,8 @@ def calculator(request):
     indicator_result = df.ta.heatmap_volume(volume=df["Volume"], **indicator['parameters'])
   elif indicator['name'] == "vader":
     indicator_result = df.ta.vader(high=df["High"], low=df["Low"], close=df["Close"], volume=df["Volume"])
+  elif indicator['name'] == "rvi":
+    indicator_result = df.ta.rvi(open=df["Open"], close=df["Close"], length=indicator.get('parameters', {}).get('length', 14))
   else:
     indicator_result = df.ta(kind=indicator['name'])
 
